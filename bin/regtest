@@ -1,0 +1,4 @@
+#!/usr/bin/ruby
+ENV['RUBYLIB'] = "../lib"   # File.dirname(__FILE__)
+command = 'ruby "${RUBYLIB}/regtest.rb" ' + $*.map{|e| e.inspect}.join(" ")
+system command
