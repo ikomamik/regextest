@@ -12,7 +12,7 @@ rule
            
   # a sequence of elements
   brc_sq2: brc_elm
-           {Selectable.new(val[0])}
+           {CharClass.new(val[0])}
          | brc_sq2 brc_elm
            {val[0].add(val[1])}
            
@@ -53,14 +53,14 @@ end
 require 'regtest/front/bracket-scanner'  # scanner class (for splitting the string)
 require 'regtest/front/letter'           # parser class for a letter
 require 'regtest/front/range'            # parser class for a range of letters
-require 'regtest/front/selectable'       # parser class for a selectable element
-require 'regtest/front/bracket'          # parser class for a character class (bracket)
+require 'regtest/front/char-class'       # parser class for a char-class element
+require 'regtest/front/bracket'          # parser class for a bracket
 
 ---- inner
 # modules for sharing procedures with main (regex) parser
 include Regtest::Front::Range
 include Regtest::Front::Letter
-include Regtest::Front::Selectable
+include Regtest::Front::CharClass
 include Regtest::Front::Bracket
 
 # execute to parse

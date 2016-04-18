@@ -49,8 +49,8 @@ def parse(str, options)
   # initialize management class of parentheses
   @options[:parens] = Parens.new()
 
-  # bracket parser
-  @bracket_parser = RegtestFrontBracketParser.new  # @options[:bracket_parser] 
+  # bracket parser (class name is strange because of racc's restriction)
+  @bracket_parser = RegtestFrontBracketParser.new
   
   # delete comments (since it is complecated to handle comments)
   @q = @q.delete_if{|token| token[0] == :LEX_COMMENT}

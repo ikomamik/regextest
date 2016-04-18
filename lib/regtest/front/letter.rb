@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-require 'regtest/front/selectable'     # 選択肢を許す要素
-require 'regtest/front/range'          # 文字要素のレンジ
+require 'regtest/front/char-class'     # character class element
+require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'
 
-# 一文字の要素
+# A letter
 module Regtest::Front::Letter
   class TLetter
     include Regtest::Common
-    include Regtest::Front::Selectable
+    include Regtest::Front::CharClass
     include Regtest::Front::Range
     @@id = 0   # a class variable for generating unique name of element
     @@unicode_ranges = {}
@@ -54,11 +54,11 @@ module Regtest::Front::Letter
     # 全ての文字生成
     def generate_any_char(val)
       if( @reg_options.is_multiline? )
-        @obj = Selectable.new(
+        @obj = CharClass.new(
                  [ TRange.new("\x20", "\x7e"),  TRange.new("\n")]
                )
       else
-        @obj = Selectable.new(
+        @obj = CharClass.new(
                  [ TRange.new("\x20", "\x7e") ]
                )
       end
@@ -69,35 +69,35 @@ module Regtest::Front::Letter
       obj = nil
       case val
       when "\\w"
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
                   TRange.new('0', '9'), TRange.new('_') ]
               )
       when "\\W"
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new("\x20", "\x2f"), TRange.new("\x3a", "\x40"),
                   TRange.new("\x5b", "\x5e"), TRange.new("\x60"),
                   TRange.new("\x7b", "\x7e") ]
               )
       when "\\d"
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('0', '9') ]
               )
       when "\\D"
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new("\x20", "\x2f"), TRange.new("\x3a", "\x7e") ]
               )
       when "\\s"
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new(' '), TRange.new("\x9"), TRange.new("\xa"), 
                   TRange.new("\xc"), TRange.new("\xd") ]
               )
       when "\\S"
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new("\x21", "\x7e") ]
               )
       when "\\n", "\\r", "\\t", "\\f", "\\a", "\\e", "\\v"
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new(eval("\""+ string + "\"")) ]
               )
       when "\\b", "\\z", "\\A", "\\B", "\\G", "\\Z"
@@ -131,54 +131,54 @@ module Regtest::Front::Letter
       obj = nil
       case val
       when '[:alnum:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
                   TRange.new('0', '9') ]
               )
       when '[:cntrl:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new("\x00", "\x1f"), TRange.new("\x7f") ]
               )
       when '[:lower:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('a', 'z') ]
               )
       when '[:space:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new(' '), TRange.new("\n"), TRange.new("\r"), 
                   TRange.new("\t"), TRange.new("\f"), TRange.new("\v") ]
               )
       when '[:alpha:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('a', 'z'), TRange.new('A', 'Z') ]
               )
       when '[:digit:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('0', '9') ]
               )
       when '[:print:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new("\x20", "\x7e") ]
               )
       when '[:upper:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('A', 'Z') ]
               )
       when '[:blank:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new(' '), TRange.new("\t")  ]
               )
       when '[:graph:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new("\x21", "\x7e") ]
               )
       when '[:punct:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new("\x21", "\x2f"), TRange.new("\x3a", "\x40"),
                   TRange.new("\x5b", "\x60"), TRange.new("\x7b", "\x7e") ]
               )
       when '[:xdigit:]'
-        obj = Selectable.new(
+        obj = CharClass.new(
                 [ TRange.new('a', 'f'), TRange.new('A', 'F'),
                   TRange.new('0', '9') ]
               )

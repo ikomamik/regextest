@@ -248,15 +248,14 @@ class Regtest::Back
           result = generate_string
         end
       end
-    when "LEX_BRACKET"
-      select_obj = target["value"]
+    when "LEX_CHAR_CLASS"
       results = Regtest::Back::Element.new({cmd: :CMD_SELECT, data: []})
-      select_obj["value"].each do | elem |
+      target["value"].each do | elem |
         sub_results = generate_matched_string({json: elem, regopt: reg_options})
         results.union sub_results
       end
       result = results
-    when "LEX_SIMPLIFIED_CLASS", "LEX_ANY_LETTER", "LEX_POSIX_CHAR_CLASS", "LEX_UNICODE_CLASS"
+    when "LEX_BRACKET", "LEX_SIMPLIFIED_CLASS", "LEX_ANY_LETTER", "LEX_POSIX_CHAR_CLASS", "LEX_UNICODE_CLASS"
       result = generate_matched_string({json: target["value"], regopt: reg_options})
     when "LEX_REPEAT"
       if(@quit_mode)

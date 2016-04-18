@@ -109,7 +109,7 @@ end
 def puts_unicode_ranges(unicode_file, ranges)
   ranges_source = ranges.keys.map { |class_name|
     (" "*12) +
-    "hash[\"#{class_name}\"] = Selectable.new([" +
+    "hash[\"#{class_name}\"] = CharClass.new([" +
     ( ranges[class_name].map{|range| "TRange.new(#{range[0]}, #{range[1]})"}.join(", ") ) +
     "])"
   }.join("\n")

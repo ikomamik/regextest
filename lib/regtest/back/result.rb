@@ -64,7 +64,6 @@ class Regtest::Back::Result
       offset = elem[:offset]
       sub_results = elem[:results]
       command = elem[:cmd]
-      pp @results
       
       merge_anchors(offset, sub_results)
       case command
@@ -90,7 +89,6 @@ class Regtest::Back::Result
     # intersect elems
     offset.step(term_offset-1) do | i |
       sub_elem = sub_results[i-offset]
-      puts "i=#{i}, #{sub_elem.nominates}"
       
       if i < @end_offset
         if(!@results[i].intersect(sub_elem))

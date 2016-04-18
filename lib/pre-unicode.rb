@@ -73,7 +73,7 @@ class RegtestPreUnicode
   def self.puts_unicode_ranges(unicode_file, ranges)
     ranges_source = ranges.keys.map { |prop_name|
       (" "*14) + "when \"#{prop_name}\"\n" +
-      (" "*16) + "Selectable.new([" +
+      (" "*16) + "CharClass.new([" +
       ( ranges[prop_name].map{|range| "TRange.new(#{range.begin}, #{range.end})"}.join(", ") ) +
       "])"
     }.join("\n")
@@ -85,7 +85,7 @@ class RegtestPreUnicode
       # Unicodeのレンジ
       module Regtest::Front::Unicode
         class Unicode
-          include Regtest::Front::Selectable
+          include Regtest::Front::CharClass
           include Regtest::Front::Range
           
           # ハッシュの生成
