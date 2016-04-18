@@ -4,7 +4,7 @@ require 'regtest/front/repeat'
 # 文字単位の選択（ブラケット）
 module Regtest::Front::Bracket
   class Bracket
-    @@id = 0   # 一意の名称を生成するための番号
+    @@id = 0   # a class variable for generating unique name of element
 
     # コンストラクタ
     def initialize(value, elem)

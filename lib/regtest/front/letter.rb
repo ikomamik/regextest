@@ -10,7 +10,7 @@ module Regtest::Front::Letter
     include Regtest::Common
     include Regtest::Front::Selectable
     include Regtest::Front::Range
-    @@id = 0   # 一意の名称を生成するための番号
+    @@id = 0   # a class variable for generating unique name of element
     @@unicode_ranges = {}
       
     # コンストラクタ

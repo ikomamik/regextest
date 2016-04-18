@@ -5,7 +5,7 @@ module Regtest::Front::Parenthesis
   
   class Paren
     include Regtest::Common
-    @@id = 0   # 一意の名称を生成するための番号
+    @@id = 0   # a class variable for generating unique name of element
     
     # コンストラクタ
     def initialize(paren_start, element, paren_end)

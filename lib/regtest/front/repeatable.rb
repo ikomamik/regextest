@@ -5,7 +5,7 @@ require 'regtest/front/repeat'
 module Regtest::Front::Repeatable
   class Repeatable
     include Regtest::Front::Repeat
-    @@id = 0   # 一意の名称を生成するための番号
+    @@id = 0   # a class variable for generating unique name of element
 
     # コンストラクタ
     def initialize(value)

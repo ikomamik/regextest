@@ -4,7 +4,7 @@ require 'regtest/front/repeat'
 # 要素のシーケンス
 module Regtest::Front::Sequence
   class Sequence
-    @@id = 0   # 一意の名称を生成するための番号
+    @@id = 0   # a class variable for generating unique name of element
 
     # コンストラクタ
     def initialize(elem)

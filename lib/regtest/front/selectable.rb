@@ -1,14 +1,14 @@
 # encoding: utf-8
 
-require 'regtest/front/range'          # 文字要素のレンジ
-require 'regtest/regex-option'         # 正規表現のオプション
+require 'regtest/front/range'          # Range of character
+require 'regtest/regex-option'         # Options of regex
 
-# 選択肢を許す要素
+# selectable elements
 module Regtest::Front::Selectable
   class Selectable
     include Regtest::Common
     include Regtest::Front::Range
-    @@id = 0   # 一意の名称を生成するための番号
+    @@id = 0   # a class variable for generating unique name of element
     
     attr_reader :nominates, :offset, :length
 

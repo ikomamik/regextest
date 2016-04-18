@@ -4,7 +4,7 @@
 module Regtest::Front::BackRefer
   class BackRefer
     include Regtest::Common
-    @@id = 0   # 一意の名称を生成するための番号
+    @@id = 0   # a class variable for generating unique name of element
     
     # コンストラクタ
     def initialize(type, value)
