@@ -179,19 +179,21 @@ class Regtest::Back::Result
       # @results = sub_results[0..(unshift_length-1)] + @results
       unshift_params(unshift_length, sub_results)
     end
-    
+
     # intersect elems
     results_offset = (unshift_length > 0)?0:(offset-sub_results.end_offset)
+    pre_part = []
     0.step(sub_results.end_offset-1) do | i |
       sub_elem = sub_results[i]
       if i < unshift_length
-        @results.unshift sub_elem
+        pre_part.push sub_elem
       else
-        if(!@results[results_offset+i].intersect(sub_results[i]))
+        if(!@results[i-unshift_length].intersect(sub_elem))
           return nil
         end
       end
     end
+    @results = pre_part + @results
     true
   end
 
