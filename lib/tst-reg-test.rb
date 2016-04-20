@@ -17,13 +17,13 @@ class Regtest::Test
   end
   
   def print_results(results)
+    pp results[:failed]
+
     puts "======"
     puts "success:   #{results[:success].size}"
     puts "failed:    #{results[:failed].size}"
     puts "others:    #{results[:others].size}"
     puts "not_scope: #{results[:not_scope].size}"
-    
-    pp results[:failed]
   end
   
   def do_test(results, max_tests)
@@ -61,8 +61,8 @@ class Regtest::Test
 
   def get_lines
     lines = []
-    # py_source = IO.read("./Onigmo/testpy.py")
-    File::open("./Onigmo/testpy.py") do |f|
+    # py_source = IO.read("../contrib/Onigmo/testpy.py")
+    File::open("../contrib/Onigmo/testpy.py") do |f|
       f.each do |line|
         if(md = line.match(/^\s*(?:x|x2|n)\s*\(.+?$/u) rescue nil)
           line.sub!(/,\s*\".+?$/, ")") rescue nil
