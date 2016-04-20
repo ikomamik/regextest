@@ -172,6 +172,7 @@ class Regtest::Back
       target["value"].each do |elem|
         generated_string = generate_matched_string({json: elem, regopt: cur_options})
         if(Array === generated_string)
+          generated_string.flatten!(1)
           results += generated_string
         else
           results.push generated_string
