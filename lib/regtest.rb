@@ -10,6 +10,7 @@ require 'regtest/front'
 require 'regtest/front/parser'
 require 'regtest/regex-option'
 require 'regtest/back'
+require 'regtest/regexp'
 
 class Regtest
   include Regtest::Common
