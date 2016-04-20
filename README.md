@@ -24,7 +24,7 @@ Or install it yourself as:
   /\d{5}/.sample                 #=> "62853"
   /\w{5}/.samples(3)             #=> ["50183", "10646", "35114", "93966", "20186"]
   /(?<=pre)body(?=post)/.sample  #=> "prebodypost"
-  /(?<=pre)body(?=post)/.md      #=> #<MatchData "body">
+  /(?<=pre)body(?=post)/.match_data              #=> #<MatchData "body">
   /\A(?<a>|.|(?:(?<b>.)\g<a>\k<b+0>))\z/.sample  #=> "a]r\\CC\\r]a"
 ```
 
