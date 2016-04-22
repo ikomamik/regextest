@@ -84,7 +84,7 @@ class Regtest::Back
           return nil
         end
       when :CMD_ANC_LINE_BEGIN, :CMD_ANC_LINE_END, :CMD_ANC_WORD_BOUND, :CMD_ANC_WORD_UNBOUND,
-           :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2  
+           :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START  
         results.add_anchor(command)
       else
         raise "invalid command: #{command}"
@@ -125,7 +125,7 @@ class Regtest::Back
           return nil
         end
       when :CMD_ANC_LINE_BEGIN, :CMD_ANC_LINE_END, :CMD_ANC_WORD_BOUND, :CMD_ANC_WORD_UNBOUND,
-           :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END,:CMD_ANC_STRING_END2  
+           :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END,:CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START  
         results.add_anchor(elem.command)
       else
         raise "invalid command: #{elem.command}"
@@ -323,6 +323,8 @@ class Regtest::Back
       result = Regtest::Back::Element.new({cmd: :CMD_ANC_STRING_END})
     when "LEX_ANC_STRING_END2"
       result = Regtest::Back::Element.new({cmd: :CMD_ANC_STRING_END2})
+    when "LEX_ANC_MATCH_START"
+      result = Regtest::Back::Element.new({cmd: :CMD_ANC_MATCH_START})
     when "LEX_ANC_LOOK_BEHIND2"
       result = Regtest::Back::Element.new({cmd: :CMD_ANC_LOOK_BEHIND2})
     when "LEX_EMPTY"

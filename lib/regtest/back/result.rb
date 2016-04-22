@@ -263,7 +263,7 @@ class Regtest::Back::Result
   def narrow_down
     @positional_anchors.each do | cmd, offsets |
       case cmd
-      when :CMD_ANC_STRING_BEGIN
+      when :CMD_ANC_STRING_BEGIN, :CMD_ANC_MATCH_START
         return false if offsets.max > 0
       when :CMD_ANC_STRING_END
         return false if offsets.min < (@results.size() - 1)

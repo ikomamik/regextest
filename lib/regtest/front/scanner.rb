@@ -69,8 +69,8 @@ class Regtest::Front::Scanner
      %r!\\Z! ],
     [:LEX_ANC_LOOK_BEHIND2,   # included in Ruby but not in Onigmo
      %r!\\K! ],
-    # [:LEX_ANC_MATCH_START,  # included in Onigmo but not in Ruby
-    #  %r!\\G! ],
+    [:LEX_ANC_MATCH_START,
+     %r!\\G! ],
     [:LEX_SPECIAL_LETTER,
      %r!\\[RX]! ],
     [:LEX_ANY_LETTER,

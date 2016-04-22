@@ -56,7 +56,7 @@ rule
          | LEX_ANC_STRING_END     {Anchor.new(:LEX_ANC_STRING_END,  val[0])}
          | LEX_ANC_STRING_END2    {Anchor.new(:LEX_ANC_STRING_END2, val[0])}
          | LEX_ANC_LOOK_BEHIND2   {Anchor.new(:LEX_ANC_LOOK_BEHIND2, val[0])}
-        #| LEX_ANC_MATCH_START    {Anchor.new(:LEX_ANC_MATCH_START, val[0])}  # included in Onigmo but not in Ruby
+         | LEX_ANC_MATCH_START    {Anchor.new(:LEX_ANC_MATCH_START, val[0])}
          | LEX_SPECIAL_LETTER     {TLetter.new(:LEX_SPECIAL_LETTER, val[0])}
          | LEX_MINUS              {TLetter.new(:LEX_CHAR,           val[0])}
          | LEX_AND_AND            {TLetter.new(:LEX_AND_AND,        val[0])}
