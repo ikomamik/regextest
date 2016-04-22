@@ -8,7 +8,7 @@ module Regtest::Front::Selectable
     include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
     
-    attr_reader :offset, :length
+    attr_reader :nominates, :offset, :length
 
     # コンストラクタ
     def initialize(value)
