@@ -188,7 +188,12 @@ class Regtest::Back
     when "LEX_SELECT"
       if param[:forced_select]
         # index is specified by condition 
-        result = generate_matched_string({json: target["value"][param[:forced_select]], regopt: reg_options})
+        if target["value"][param[:forced_select]]
+          result = generate_matched_string({json: target["value"][param[:forced_select]], regopt: reg_options})
+        else
+          # regexp such as /^(?:b|(a))(?(1)1)$/ match "b"!
+          result = []
+        end
       else
         # 一つでも値を生成するエントリがあればそれを使う
         offsets = (0 ... target["value"].size).to_a.shuffle
