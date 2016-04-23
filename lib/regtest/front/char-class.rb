@@ -64,17 +64,19 @@ module Regtest::Front::CharClass
       
       # 隣り合ったコードポイントの文字はTRangeとして再構成する
       new_nominates = []
-      range_start = range_end = code_points.shift
-      while(codepoint = code_points.shift)
-        if(codepoint == range_end + 1)
-          range_end = codepoint
-        else
-          new_nominates.push TRange.new([range_start].pack("U*"), [range_end].pack("U*"))
-          range_start = range_end = codepoint
+      if code_points.size > 0
+        range_start = range_end = code_points.shift
+        while(codepoint = code_points.shift)
+          if(codepoint == range_end + 1)
+            range_end = codepoint
+          else
+            new_nominates.push TRange.new([range_start].pack("U*"), [range_end].pack("U*"))
+            range_start = range_end = codepoint
+          end
         end
+        new_nominates.push TRange.new([range_start].pack("U*"), [range_end].pack("U*"))
       end
-      new_nominates.push TRange.new([range_start].pack("U*"), [range_end].pack("U*"))
-      @nominates = new_nominates
+      new_nominates
     end
     
     # 選択肢のAND
@@ -86,8 +88,6 @@ module Regtest::Front::CharClass
       
       # 隣り合ったコードポイントの文字はTRangeとして再構成する
       @nominates = reconstruct_nominates(char_set)
-
-      pp @nominates
       self
     end
     

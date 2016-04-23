@@ -53,11 +53,15 @@ class Regtest::Back
     seek_parens(@json_obj)
     
     pre_result = generate_matched_string({json: @json_obj, regopt: @reg_options})
-    if(result = check_look_ahead_behind(pre_result))
-      if !result.narrow_down
-        return nil
+    if pre_result
+      if(result = check_look_ahead_behind(pre_result))
+        if !result.narrow_down
+          return nil
+        end
+        result.fix
       end
-      result.fix
+    else
+      result = nil
     end
     result
   end
@@ -260,7 +264,11 @@ class Regtest::Back
         sub_results = generate_matched_string({json: elem, regopt: reg_options})
         results.union sub_results
       end
-      result = results
+      if results.size > 0
+        result = results
+      else
+        result = nil
+      end
     when "LEX_BRACKET", "LEX_SIMPLIFIED_CLASS", "LEX_ANY_LETTER", "LEX_POSIX_CHAR_CLASS", "LEX_UNICODE_CLASS"
       result = generate_matched_string({json: target["value"], regopt: reg_options})
     when "LEX_REPEAT"
