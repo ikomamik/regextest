@@ -5,7 +5,7 @@ module Regtest::Front::Range
   class TRange
     @@id = 0   # a class variable for generating unique name of element
 
-    # コンストラクタ
+    # Constructor
     def initialize(letter_begin, letter_end = nil)
       @begin = parse_letter(letter_begin)
       if(letter_end)
@@ -69,7 +69,7 @@ module Regtest::Front::Range
   end
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end
 

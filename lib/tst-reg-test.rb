@@ -106,7 +106,7 @@ class Regtest::Test
 
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0
   max_test = ARGV[0] && ARGV[0].to_i
   Regtest::Test.new(max_test)

@@ -13,7 +13,7 @@ module Regtest::Front::Letter
     @@id = 0   # a class variable for generating unique name of element
     @@unicode_ranges = {}
       
-    # コンストラクタ
+    # Constructor
     def initialize(type, val)
       TstLog("TLetter: type:#{type}, value:#{val}")
       @reg_options = @@parse_options[:reg_options]
@@ -236,7 +236,7 @@ module Regtest::Front::Letter
 end
 
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end
 

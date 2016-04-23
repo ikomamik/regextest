@@ -1,19 +1,19 @@
 #encoding: utf-8
 
-# カッコを処理するクラス
+# Class for parsing parenthesis
 module Regtest::Front::Parenthesis
   
   class Paren
     include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
     
-    # コンストラクタ
+    # Constructor
     def initialize(paren_start, element, paren_end)
       @options = @@parse_options
       @paren_type = paren_start[0]
       @offset = paren_start[1]
       @length = (paren_end[1] - paren_start[1]) + paren_end[2]
-      @prefix = @paren_type.sub(/^\(\??/, "")    # 先頭の（と？は削除
+      @prefix = @paren_type.sub(/^\(\??/, "")    # delete head '(' and '?'
       @name = get_name(@prefix)
       @condition = nil  # set at generating json
       @refer_name = nil
@@ -113,7 +113,7 @@ module Regtest::Front::Parenthesis
   end
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end
 

@@ -12,7 +12,7 @@ module Regtest::Front::CharClass
     
     attr_reader :nominates, :offset, :length
 
-    # コンストラクタ
+    # Constructor
     def initialize(value)
       TstLog("Selectlable: #{value}")
       @reg_options = @@parse_options[:reg_options]
@@ -140,7 +140,7 @@ module Regtest::Front::CharClass
   end
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end
 

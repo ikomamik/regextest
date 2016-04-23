@@ -7,7 +7,7 @@ module Regtest::Front::Repeatable
     include Regtest::Front::Repeat
     @@id = 0   # a class variable for generating unique name of element
 
-    # コンストラクタ
+    # Constructor
     def initialize(value)
       TstLog("Repeatable: #{value}")
       @value = value
@@ -49,6 +49,6 @@ module Regtest::Front::Repeatable
   end
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end

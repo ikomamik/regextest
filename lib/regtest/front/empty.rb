@@ -5,7 +5,7 @@ module Regtest::Front::Empty
   class TEmpty
     @@id = 0   # a class variable for generating unique name of element
 
-    # コンストラクタ
+    # Constructor
     def initialize
       @offset = -1
       @length = 0
@@ -24,7 +24,7 @@ module Regtest::Front::Empty
   end
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end
 

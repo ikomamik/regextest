@@ -10,7 +10,7 @@ module Regtest::Front::Repeat
     TstOptReluctant   =  2
     TstOptPossessive  =  4
     
-    # コンストラクタ
+    # Constructor
     def initialize(param)
       @min_value = 1
       @max_value = 1
@@ -78,6 +78,6 @@ module Regtest::Front::Repeat
   end
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end

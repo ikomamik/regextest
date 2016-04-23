@@ -9,7 +9,7 @@ require 'regtest/back/result'
 class Regtest::Back
   include Regtest::Common
   
-  # コンストラクタ
+  # Constructor
   def initialize(json_obj)
     @reg_options = @@parse_options[:reg_options]
     @reg_source = @@parse_options[:reg_source]
@@ -362,7 +362,7 @@ class Regtest::Back
   
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0
 
 end

@@ -6,7 +6,7 @@ module Regtest::Front::BackRefer
     include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
     
-    # コンストラクタ
+    # Constructor
     def initialize(type, value)
       TstLog("BackRefer: #{type} #{value}")
       @type = type
@@ -102,7 +102,7 @@ module Regtest::Front::BackRefer
   end
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end
 

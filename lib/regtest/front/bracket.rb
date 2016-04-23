@@ -6,7 +6,7 @@ module Regtest::Front::Bracket
   class Bracket
     @@id = 0   # a class variable for generating unique name of element
 
-    # コンストラクタ
+    # Constructor
     def initialize(value, elem)
       @value = value[0]
       @offset = value[1]
@@ -57,6 +57,6 @@ module Regtest::Front::Bracket
 
 end
 
-# テストスィート（このファイルがコマンド指定されたときだけ実行）
+# Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end

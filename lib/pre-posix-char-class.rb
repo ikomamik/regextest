@@ -130,7 +130,7 @@ def puts_unicode_ranges(unicode_file, ranges)
       end
     end
 
-    # テストスィート（このファイルがコマンド指定されたときだけ実行）
+    # Test suite (execute when this file is specified in command line)
     if __FILE__ == $0 
     end
   END_OF_TEMPLATE
