@@ -15,7 +15,7 @@ require 'regtest/front/bracket'          # parser class for a bracket
 
 class RegtestFrontBracketParser < Racc::Parser
 
-module_eval(<<'...end bracket-parser.y/module_eval...', 'bracket-parser.y', 60)
+module_eval(<<'...end bracket-parser.y/module_eval...', 'bracket-parser.y', 61)
 # modules for sharing procedures with main (regex) parser
 include Regtest::Front::Range
 include Regtest::Front::Letter
@@ -64,81 +64,84 @@ end
 ##### State transition tables begin ###
 
 racc_action_table = [
-     7,    22,     8,     9,    10,    11,    12,    13,    14,    15,
-    16,    17,    18,     7,    25,     8,     9,    10,    11,    12,
-    13,    14,    15,    16,    17,    18,     7,   nil,     8,     9,
-    10,    11,    12,    13,    14,    15,    16,    17,    18,     7,
-   nil,     8,     9,    10,    11,    12,    13,    14,    15,    16,
-    17,    18,     7,   nil,     8,     9,    10,    11,    12,    13,
-    14,    15,    16,    17,    18,     7,   nil,     8,     9,    10,
-    11,    12,    13,    14,    15,    16,    17,    18,     9,    10,
-    11,    12,    13,    20,    20,   nil,    28,    29,    19,   nil,
-    20 ]
+     7,    23,     8,     9,    10,    11,    12,    13,    14,    15,
+    16,    17,    18,    19,     7,    26,     8,     9,    10,    11,
+    12,    13,    14,    15,    16,    17,    18,    19,     7,   nil,
+     8,     9,    10,    11,    12,    13,    14,    15,    16,    17,
+    18,    19,     7,   nil,     8,     9,    10,    11,    12,    13,
+    14,    15,    16,    17,    18,    19,     7,   nil,     8,     9,
+    10,    11,    12,    13,    14,    15,    16,    17,    18,    19,
+     7,   nil,     8,     9,    10,    11,    12,    13,    14,    15,
+    16,    17,    18,    19,     9,    10,    11,    12,    13,    14,
+    21,    21,   nil,    29,    30,    20,   nil,    21 ]
 
 racc_action_check = [
      0,     4,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,    20,    19,    20,    20,    20,    20,    20,
-    20,    20,    20,    20,    20,    20,     2,   nil,     2,     2,
-     2,     2,     2,     2,     2,     2,     2,     2,     2,     8,
-   nil,     8,     8,     8,     8,     8,     8,     8,     8,     8,
-     8,     8,     7,   nil,     7,     7,     7,     7,     7,     7,
-     7,     7,     7,     7,     7,    26,   nil,    26,    26,    26,
-    26,    26,    26,    26,    26,    26,    26,    26,    22,    22,
-    22,    22,    22,    23,    24,   nil,    23,    24,     1,   nil,
-     1 ]
+     0,     0,     0,     0,    21,    20,    21,    21,    21,    21,
+    21,    21,    21,    21,    21,    21,    21,    21,     2,   nil,
+     2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+     2,     2,     8,   nil,     8,     8,     8,     8,     8,     8,
+     8,     8,     8,     8,     8,     8,     7,   nil,     7,     7,
+     7,     7,     7,     7,     7,     7,     7,     7,     7,     7,
+    27,   nil,    27,    27,    27,    27,    27,    27,    27,    27,
+    27,    27,    27,    27,    23,    23,    23,    23,    23,    23,
+    24,    25,   nil,    24,    25,     1,   nil,     1 ]
 
 racc_action_pointer = [
-    -4,    88,    22,   nil,    -2,   nil,   nil,    48,    35,   nil,
-   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,    14,
-     9,   nil,    71,    81,    82,   nil,    61,   nil,   nil,   nil ]
+    -4,    95,    24,   nil,    -2,   nil,   nil,    52,    38,   nil,
+   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,
+    15,    10,   nil,    77,    88,    89,   nil,    66,   nil,   nil,
+   nil ]
 
 racc_action_default = [
-   -21,   -21,    -1,    -3,    -6,    -7,    -8,   -21,   -21,   -11,
+   -22,   -22,    -1,    -3,    -6,    -7,    -8,   -22,   -22,   -11,
    -12,   -13,   -14,   -15,   -16,   -17,   -18,   -19,   -20,   -21,
-   -21,    -4,   -21,   -21,   -21,    30,    -2,    -5,    -9,   -10 ]
+   -22,   -22,    -4,   -22,   -22,   -22,    31,    -2,    -5,    -9,
+   -10 ]
 
 racc_goto_table = [
-    21,     1,    26,    27,   nil,   nil,   nil,   nil,    23,    24,
+    22,     1,    27,    28,   nil,   nil,   nil,   nil,    24,    25,
    nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,
-   nil,   nil,   nil,   nil,    21 ]
+   nil,   nil,   nil,   nil,   nil,    22 ]
 
 racc_goto_check = [
      3,     1,     2,     4,   nil,   nil,   nil,   nil,     1,     1,
    nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,
-   nil,   nil,   nil,   nil,     3 ]
+   nil,   nil,   nil,   nil,   nil,     3 ]
 
 racc_goto_pointer = [
-   nil,     1,   -18,    -2,   -19,   nil,   nil ]
+   nil,     1,   -19,    -2,   -20,   nil,   nil ]
 
 racc_goto_default = [
    nil,   nil,     2,     3,     4,     5,     6 ]
 
 racc_reduce_table = [
   0, 0, :racc_error,
-  1, 18, :_reduce_1,
-  3, 18, :_reduce_2,
-  1, 19, :_reduce_3,
-  2, 19, :_reduce_4,
-  3, 20, :_reduce_5,
-  1, 20, :_reduce_6,
-  1, 20, :_reduce_7,
-  1, 20, :_reduce_8,
-  3, 23, :_reduce_9,
-  3, 23, :_reduce_10,
-  1, 21, :_reduce_11,
-  1, 21, :_reduce_12,
-  1, 21, :_reduce_13,
-  1, 21, :_reduce_14,
-  1, 21, :_reduce_15,
+  1, 19, :_reduce_1,
+  3, 19, :_reduce_2,
+  1, 20, :_reduce_3,
+  2, 20, :_reduce_4,
+  3, 21, :_reduce_5,
+  1, 21, :_reduce_6,
+  1, 21, :_reduce_7,
+  1, 21, :_reduce_8,
+  3, 24, :_reduce_9,
+  3, 24, :_reduce_10,
+  1, 22, :_reduce_11,
+  1, 22, :_reduce_12,
+  1, 22, :_reduce_13,
+  1, 22, :_reduce_14,
+  1, 22, :_reduce_15,
   1, 22, :_reduce_16,
-  1, 22, :_reduce_17,
-  1, 22, :_reduce_18,
-  1, 22, :_reduce_19,
-  1, 22, :_reduce_20 ]
+  1, 23, :_reduce_17,
+  1, 23, :_reduce_18,
+  1, 23, :_reduce_19,
+  1, 23, :_reduce_20,
+  1, 23, :_reduce_21 ]
 
-racc_reduce_n = 21
+racc_reduce_n = 22
 
-racc_shift_n = 30
+racc_shift_n = 31
 
 racc_token_table = {
   false => 0,
@@ -149,17 +152,18 @@ racc_token_table = {
   :LEX_BRACKET_END => 5,
   :LEX_BRACKET_START2 => 6,
   :LEX_CHAR => 7,
-  :LEX_CODE_LITERAL => 8,
-  :LEX_CONTROL_LETTER => 9,
-  :LEX_ESCAPED_LETTER => 10,
-  :LEX_UNICODE => 11,
-  :LEX_POSIX_CHAR_CLASS => 12,
-  :LEX_SIMPLIFIED_CLASS => 13,
-  :LEX_UNICODE_CLASS => 14,
-  :LEX_SPECIAL_LETTER => 15,
-  :LEX_SPACE => 16 }
+  :LEX_SIMPLE_ESCAPE => 8,
+  :LEX_CODE_LITERAL => 9,
+  :LEX_CONTROL_LETTER => 10,
+  :LEX_ESCAPED_LETTER => 11,
+  :LEX_UNICODE => 12,
+  :LEX_POSIX_CHAR_CLASS => 13,
+  :LEX_SIMPLIFIED_CLASS => 14,
+  :LEX_UNICODE_CLASS => 15,
+  :LEX_SPECIAL_LETTER => 16,
+  :LEX_SPACE => 17 }
 
-racc_nt_base = 17
+racc_nt_base = 18
 
 racc_use_result_var = false
 
@@ -188,6 +192,7 @@ Racc_token_to_s_table = [
   "LEX_BRACKET_END",
   "LEX_BRACKET_START2",
   "LEX_CHAR",
+  "LEX_SIMPLE_ESCAPE",
   "LEX_CODE_LITERAL",
   "LEX_CONTROL_LETTER",
   "LEX_ESCAPED_LETTER",
@@ -279,54 +284,60 @@ module_eval(<<'.,.,', 'bracket-parser.y', 35)
 
 module_eval(<<'.,.,', 'bracket-parser.y', 36)
   def _reduce_12(val, _values)
-    TLetter.new(:LEX_CODE_LITERAL,   val[0])
+    TLetter.new(:LEX_CHAR,           val[0][1..1])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 37)
   def _reduce_13(val, _values)
-    TLetter.new(:LEX_CONTROL_LETTER, val[0])
+    TLetter.new(:LEX_CODE_LITERAL,   val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 38)
   def _reduce_14(val, _values)
-    TLetter.new(:LEX_ESCAPED_LETTER, val[0])
+    TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 39)
   def _reduce_15(val, _values)
-    TLetter.new(:LEX_UNICODE,        val[0])
+    TLetter.new(:LEX_ESCAPED_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 42)
+module_eval(<<'.,.,', 'bracket-parser.y', 40)
   def _reduce_16(val, _values)
-    TLetter.new(:LEX_POSIX_CHAR_CLASS, val[0])
+    TLetter.new(:LEX_UNICODE,        val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 43)
   def _reduce_17(val, _values)
-    TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])
+    TLetter.new(:LEX_POSIX_CHAR_CLASS, val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 44)
   def _reduce_18(val, _values)
-    TLetter.new(:LEX_UNICODE_CLASS,  val[0])
+    TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 45)
   def _reduce_19(val, _values)
-    TLetter.new(:LEX_SPECIAL_LETTER, val[0])
+    TLetter.new(:LEX_UNICODE_CLASS,  val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 46)
   def _reduce_20(val, _values)
+    TLetter.new(:LEX_SPECIAL_LETTER, val[0])
+  end
+.,.,
+
+module_eval(<<'.,.,', 'bracket-parser.y', 47)
+  def _reduce_21(val, _values)
     TLetter.new(:LEX_SPACE,          val[0])
   end
 .,.,

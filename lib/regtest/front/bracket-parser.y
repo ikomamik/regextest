@@ -34,6 +34,7 @@ rule
 
   # a letter (can be expressed as x-y)
   brc_lt1: LEX_CHAR               {TLetter.new(:LEX_CHAR,           val[0])}
+         | LEX_SIMPLE_ESCAPE      {TLetter.new(:LEX_CHAR,           val[0][1..1])}
          | LEX_CODE_LITERAL       {TLetter.new(:LEX_CODE_LITERAL,   val[0])}
          | LEX_CONTROL_LETTER     {TLetter.new(:LEX_CONTROL_LETTER, val[0])}
          | LEX_ESCAPED_LETTER     {TLetter.new(:LEX_ESCAPED_LETTER, val[0])}

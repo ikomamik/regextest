@@ -43,6 +43,8 @@ class Regtest::Front::BracketScanner
       %r!\\.! ],    # 文字クラスでは\bは有効
     [:LEX_SPACE,
       %r!\s!m ],
+    [:LEX_SIMPLE_ESCAPE,      # redundant escape \@, \", etc.
+     %r!\\.! ],
     [:LEX_CHAR,
       %r!.! ],
 

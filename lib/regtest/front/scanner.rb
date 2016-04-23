@@ -49,8 +49,8 @@ class Regtest::Front::Scanner
        !x ],
     [:LEX_PAREN_END,
      %r!\)! ],
-    [:LEX_BRACKET,     # condidering nested bracket
-     %r!(?<bs>\[(?:\[:\^?\w+:\]|\\\]|[^\]\[]|\g<bs>)+\])! ],
+    [:LEX_BRACKET,     # considering nested bracket
+     %r!(?<bs>\[(?:\[:\^?\w+:\]|\\\]|\\.|[^\]\[]|\g<bs>)+\])! ],
     [:LEX_OR,
      %r!\|! ],
     [:LEX_ANC_LINE_BEGIN,
@@ -81,6 +81,8 @@ class Regtest::Front::Scanner
      %r!\s!m ],
     [:LEX_ERROR,
      %r![\{\}\[\]]! ],
+    [:LEX_SIMPLE_ESCAPE,      # redundant escape \@, \", etc.
+     %r!\\.! ],
     [:LEX_CHAR,
      %r!.! ],
   ]
