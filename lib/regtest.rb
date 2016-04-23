@@ -19,14 +19,15 @@ class Regtest
   def initialize(param, options = {})
     @@parse_options = options
     @@parse_options[:reg_options] = Regtest::RegexOption.new
-    @regex = get_regex(param)
-    @@parse_options[:reg_source] = @regex
+    @reg_string = nil
+    @reg_exp = nil
+    set_regex(param)
         
     # Prepare parsers (for whole regex and bracket)
     @parser = RegtestFrontParser.new
     
     # Do parse
-    @obj = @parser.parse(@regex, @@parse_options)
+    @obj = @parser.parse(@reg_string, @@parse_options)
     
     # To json
     @json_obj = get_json_obj(@obj)
@@ -41,17 +42,24 @@ class Regtest
   attr_reader :reason
   
   # Covert to source string if necessary
-  def get_regex(param)
+  def set_regex(param)
     case param
     when String
-      reg_string = param
+      if param.match(/^\/.*\/$/)
+        @reg_exp = eval(param)
+        @reg_string = @reg_exp.source
+      else
+        @reg_string = param
+        @reg_exp = /#{@reg_string}/
+      end
+      @@parse_options[:reg_source] = @reg_string
     when Regexp
-      @@parse_options[:reg_options].set(param.options)   # inner regex options have priorty
-      reg_string = param.source
+      @reg_exp = param
+      @@parse_options[:reg_options].set(@reg_exp.options)   # inner regex options have priorty
+      @reg_string = @reg_exp.source
     else
       raise "Error: string or regular expression required"
     end
-    reg_string
   end
 
   # genetate string to be matched with specified regular expression
@@ -70,8 +78,7 @@ class Regtest
   def verify
     return nil unless(@result)
     result_string = @result.pre_match + @result.match + @result.post_match
-    reg = /#{@regex}/
-    if(md = reg.match(result_string))
+    if(md = @reg_exp.match(result_string))
       if md.pre_match  == @result.pre_match && 
          md.to_a[0]    == @result.match &&
          md.post_match == @result.post_match
@@ -86,7 +93,7 @@ class Regtest
       end
     else
       @reason = { rc: :not_matched, string: result_string}
-      puts "NG: not matched. regex(#{@regex}) string(#{result_string.inspect})"
+      puts "NG: not matched. regex(#{@reg_string}) string(#{result_string.inspect})"
       nil
     end
     # @result = @back_end.generate
@@ -152,7 +159,7 @@ if __FILE__ == $0
     exit(1)
 
   rescue RuntimeError => ex
-    # エラー時の処理。エラーメッセージを出力して終了
+    # Error process. put error message and exit
     $stderr.puts ex.message
     exit(1)
   end
