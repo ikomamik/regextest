@@ -33,6 +33,8 @@ module Regtest::Front::Letter
       case type
       when :LEX_CHAR, :LEX_SPACE, :LEX_AND_AND
         @obj = val
+      when :LEX_CONTROL_LETTER, :LEX_META_LETTER
+        @obj = eval('"'+ val + '"')   # convert using ruby's eval
       when :LEX_BRACKET
         require 'regtest/front/bracket'
         @obj = Regtest::Front::Bracket.new(val)

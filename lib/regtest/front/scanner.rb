@@ -19,7 +19,8 @@ class Regtest::Front::Scanner
     [:LEX_CONTROL_LETTER,
      %r!\\c[a-z]|\\C-[a-z]! ],
     [:LEX_META_LETTER,
-     %r!\\M-(?:\\w|#{LexCodeLiteral.source})! ],
+     # %r!\\M-(?:\\w|#{LexCodeLiteral.source})! ],
+     %r!\\M-(?:[a-z]|\\C-[a-z])! ],
     [:LEX_ESCAPED_LETTER,
      %r!\\[tvnrfae #\{\}\[\]\(\)]! ],      # \bは文字クラス外ではアンカー
     [:LEX_UNICODE,
