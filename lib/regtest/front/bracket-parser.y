@@ -35,6 +35,7 @@ rule
   # a letter (can be expressed as x-y)
   brc_lt1: LEX_CHAR               {TLetter.new(:LEX_CHAR,           val[0])}
          | LEX_SIMPLE_ESCAPE      {TLetter.new(:LEX_CHAR,           val[0][1..1])}
+         | LEX_MINUS              {TLetter.new(:LEX_CHAR,           val[0])}   # minus as a first letter
          | LEX_CODE_LITERAL       {TLetter.new(:LEX_CODE_LITERAL,   val[0])}
          | LEX_CONTROL_LETTER     {TLetter.new(:LEX_CONTROL_LETTER, val[0])}
          | LEX_META_LETTER        {TLetter.new(:LEX_CONTROL_LETTER, val[0])}
@@ -99,8 +100,8 @@ def next_token
 end
 
 # error handling routine
-def on_error(t, val, vstack)
-  # warn "t=#{t}, val=#{val}, vstack=#{vstack}"
-  raise "Bracket Parse error. str=#{@bracket_str} offset=#{val[1]}, letter=#{val[0]}, stack=#{vstack}"
-end
+#def on_error(t, val, vstack)
+  ## warn "t=#{t}, val=#{val}, vstack=#{vstack}"
+  #raise "Bracket Parse error. str=#{@bracket_str} offset=#{val[1]}, letter=#{val[0]}, stack=#{vstack}"
+#end
 

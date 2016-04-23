@@ -33,7 +33,7 @@ class Regtest::Front::BracketScanner
     [:LEX_UNICODE_CLASS,
       %r!(?:\\p\{\^?|\\P\{)\w+\}! ],
     [:LEX_MINUS,
-      %r!-! ],
+      %r!-(?\!\]|\z)! ],     # a letter must succeeds to minus
     [:LEX_AND_AND,
       %r!\&\&! ],
     [:LEX_SPECIAL_LETTER,
@@ -68,7 +68,6 @@ class Regtest::Front::BracketScanner
       @lex_table = LexTable.delete_if{|elem| elem[0] == :LEX_EXTENDED_COMMENT}
     end
     whole_lex = @lex_table.map{|lex| "(?<#{lex[0]}>" + lex[1].source + ")"}.join('|')
-    puts whole_lex
     @reg = /^#{whole_lex}/mx
   end
     

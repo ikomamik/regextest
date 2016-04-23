@@ -15,7 +15,7 @@ require 'regtest/front/bracket'          # parser class for a bracket
 
 class RegtestFrontBracketParser < Racc::Parser
 
-module_eval(<<'...end bracket-parser.y/module_eval...', 'bracket-parser.y', 62)
+module_eval(<<'...end bracket-parser.y/module_eval...', 'bracket-parser.y', 63)
 # modules for sharing procedures with main (regex) parser
 include Regtest::Front::Range
 include Regtest::Front::Letter
@@ -56,63 +56,65 @@ def next_token
 end
 
 # error handling routine
-def on_error(t, val, vstack)
-  # warn "t=#{t}, val=#{val}, vstack=#{vstack}"
-  raise "Bracket Parse error. str=#{@bracket_str} offset=#{val[1]}, letter=#{val[0]}, stack=#{vstack}"
-end
+#def on_error(t, val, vstack)
+  ## warn "t=#{t}, val=#{val}, vstack=#{vstack}"
+  #raise "Bracket Parse error. str=#{@bracket_str} offset=#{val[1]}, letter=#{val[0]}, stack=#{vstack}"
+#end
 ...end bracket-parser.y/module_eval...
 ##### State transition tables begin ###
 
 racc_action_table = [
-     7,    24,     8,     9,    10,    11,    12,    13,    14,    15,
-    16,    17,    18,    19,    20,     7,    27,     8,     9,    10,
-    11,    12,    13,    14,    15,    16,    17,    18,    19,    20,
-     7,   nil,     8,     9,    10,    11,    12,    13,    14,    15,
-    16,    17,    18,    19,    20,     7,   nil,     8,     9,    10,
-    11,    12,    13,    14,    15,    16,    17,    18,    19,    20,
-     7,   nil,     8,     9,    10,    11,    12,    13,    14,    15,
-    16,    17,    18,    19,    20,     7,   nil,     8,     9,    10,
-    11,    12,    13,    14,    15,    16,    17,    18,    19,    20,
-     9,    10,    11,    12,    13,    14,    15,    22,    22,   nil,
-    30,    31,    21,   nil,    22 ]
+    11,     7,    25,     8,     9,    10,    12,    13,    14,    15,
+    16,    17,    18,    19,    20,    21,    11,     7,    28,     8,
+     9,    10,    12,    13,    14,    15,    16,    17,    18,    19,
+    20,    21,    11,     7,   nil,     8,     9,    10,    12,    13,
+    14,    15,    16,    17,    18,    19,    20,    21,    11,     7,
+   nil,     8,     9,    10,    12,    13,    14,    15,    16,    17,
+    18,    19,    20,    21,    11,     7,   nil,     8,     9,    10,
+    12,    13,    14,    15,    16,    17,    18,    19,    20,    21,
+    11,     7,   nil,     8,     9,    10,    12,    13,    14,    15,
+    16,    17,    18,    19,    20,    21,    11,    22,   nil,    23,
+     9,    10,    12,    13,    14,    15,    16,    23,    23,   nil,
+    31,    32 ]
 
 racc_action_check = [
-     0,     4,     0,     0,     0,     0,     0,     0,     0,     0,
-     0,     0,     0,     0,     0,    22,    21,    22,    22,    22,
-    22,    22,    22,    22,    22,    22,    22,    22,    22,    22,
-     2,   nil,     2,     2,     2,     2,     2,     2,     2,     2,
-     2,     2,     2,     2,     2,     8,   nil,     8,     8,     8,
-     8,     8,     8,     8,     8,     8,     8,     8,     8,     8,
-     7,   nil,     7,     7,     7,     7,     7,     7,     7,     7,
-     7,     7,     7,     7,     7,    28,   nil,    28,    28,    28,
-    28,    28,    28,    28,    28,    28,    28,    28,    28,    28,
-    24,    24,    24,    24,    24,    24,    24,    25,    26,   nil,
-    25,    26,     1,   nil,     1 ]
+     0,     0,     4,     0,     0,     0,     0,     0,     0,     0,
+     0,     0,     0,     0,     0,     0,    23,    23,    22,    23,
+    23,    23,    23,    23,    23,    23,    23,    23,    23,    23,
+    23,    23,     2,     2,   nil,     2,     2,     2,     2,     2,
+     2,     2,     2,     2,     2,     2,     2,     2,     8,     8,
+   nil,     8,     8,     8,     8,     8,     8,     8,     8,     8,
+     8,     8,     8,     8,     7,     7,   nil,     7,     7,     7,
+     7,     7,     7,     7,     7,     7,     7,     7,     7,     7,
+    29,    29,   nil,    29,    29,    29,    29,    29,    29,    29,
+    29,    29,    29,    29,    29,    29,    25,     1,   nil,     1,
+    25,    25,    25,    25,    25,    25,    25,    26,    27,   nil,
+    26,    27 ]
 
 racc_action_pointer = [
-    -4,   102,    26,   nil,    -2,   nil,   nil,    56,    41,   nil,
+    -3,    97,    29,   nil,    -1,   nil,   nil,    61,    45,   nil,
    nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,
-   nil,    16,    11,   nil,    83,    95,    96,   nil,    71,   nil,
-   nil,   nil ]
+   nil,   nil,    18,    13,   nil,    93,   105,   106,   nil,    77,
+   nil,   nil,   nil ]
 
 racc_action_default = [
-   -23,   -23,    -1,    -3,    -6,    -7,    -8,   -23,   -23,   -11,
+   -24,   -24,    -1,    -3,    -6,    -7,    -8,   -24,   -24,   -11,
    -12,   -13,   -14,   -15,   -16,   -17,   -18,   -19,   -20,   -21,
-   -22,   -23,   -23,    -4,   -23,   -23,   -23,    32,    -2,    -5,
-    -9,   -10 ]
+   -22,   -23,   -24,   -24,    -4,   -24,   -24,   -24,    33,    -2,
+    -5,    -9,   -10 ]
 
 racc_goto_table = [
-    23,     1,    28,    29,   nil,   nil,   nil,   nil,    25,    26,
+    24,     1,    29,    30,   nil,   nil,   nil,   nil,    26,    27,
    nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,
-   nil,   nil,   nil,   nil,   nil,   nil,    23 ]
+   nil,   nil,   nil,   nil,   nil,   nil,   nil,    24 ]
 
 racc_goto_check = [
      3,     1,     2,     4,   nil,   nil,   nil,   nil,     1,     1,
    nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,   nil,
-   nil,   nil,   nil,   nil,   nil,   nil,     3 ]
+   nil,   nil,   nil,   nil,   nil,   nil,   nil,     3 ]
 
 racc_goto_pointer = [
-   nil,     1,   -20,    -2,   -21,   nil,   nil ]
+   nil,     1,   -21,    -2,   -22,   nil,   nil ]
 
 racc_goto_default = [
    nil,   nil,     2,     3,     4,     5,     6 ]
@@ -136,15 +138,16 @@ racc_reduce_table = [
   1, 23, :_reduce_15,
   1, 23, :_reduce_16,
   1, 23, :_reduce_17,
-  1, 24, :_reduce_18,
+  1, 23, :_reduce_18,
   1, 24, :_reduce_19,
   1, 24, :_reduce_20,
   1, 24, :_reduce_21,
-  1, 24, :_reduce_22 ]
+  1, 24, :_reduce_22,
+  1, 24, :_reduce_23 ]
 
-racc_reduce_n = 23
+racc_reduce_n = 24
 
-racc_shift_n = 32
+racc_shift_n = 33
 
 racc_token_table = {
   false => 0,
@@ -295,13 +298,13 @@ module_eval(<<'.,.,', 'bracket-parser.y', 36)
 
 module_eval(<<'.,.,', 'bracket-parser.y', 37)
   def _reduce_13(val, _values)
-    TLetter.new(:LEX_CODE_LITERAL,   val[0])
+    TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 38)
   def _reduce_14(val, _values)
-    TLetter.new(:LEX_CONTROL_LETTER, val[0])
+    TLetter.new(:LEX_CODE_LITERAL,   val[0])
   end
 .,.,
 
@@ -313,42 +316,48 @@ module_eval(<<'.,.,', 'bracket-parser.y', 39)
 
 module_eval(<<'.,.,', 'bracket-parser.y', 40)
   def _reduce_16(val, _values)
-    TLetter.new(:LEX_ESCAPED_LETTER, val[0])
+    TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 41)
   def _reduce_17(val, _values)
-    TLetter.new(:LEX_UNICODE,        val[0])
+    TLetter.new(:LEX_ESCAPED_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 44)
+module_eval(<<'.,.,', 'bracket-parser.y', 42)
   def _reduce_18(val, _values)
-    TLetter.new(:LEX_POSIX_CHAR_CLASS, val[0])
+    TLetter.new(:LEX_UNICODE,        val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 45)
   def _reduce_19(val, _values)
-    TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])
+    TLetter.new(:LEX_POSIX_CHAR_CLASS, val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 46)
   def _reduce_20(val, _values)
-    TLetter.new(:LEX_UNICODE_CLASS,  val[0])
+    TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 47)
   def _reduce_21(val, _values)
-    TLetter.new(:LEX_SPECIAL_LETTER, val[0])
+    TLetter.new(:LEX_UNICODE_CLASS,  val[0])
   end
 .,.,
 
 module_eval(<<'.,.,', 'bracket-parser.y', 48)
   def _reduce_22(val, _values)
+    TLetter.new(:LEX_SPECIAL_LETTER, val[0])
+  end
+.,.,
+
+module_eval(<<'.,.,', 'bracket-parser.y', 49)
+  def _reduce_23(val, _values)
     TLetter.new(:LEX_SPACE,          val[0])
   end
 .,.,
