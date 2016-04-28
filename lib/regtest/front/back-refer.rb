@@ -47,7 +47,12 @@ module Regtest::Front::BackRefer
         if(md = value.match(/^\\g[<'](\w+)[>']$/))
           @paren_obj = @options[:parens].get_paren(md[1])
           if(!@paren_obj && md[1].match(/^\d+$/))
-            @paren_obj = @options[:parens].get_paren(md[1].to_i)
+            paren_offset = md[1].to_i
+            if paren_offset == 0
+              @paren_obj = :WHOLE_REG_EXPRESSION
+            else
+              @paren_obj = @options[:parens].get_paren(paren_offset)
+            end
           end
         else
           raise "Error: Internal error, invalid named reference"
@@ -85,17 +90,25 @@ module Regtest::Front::BackRefer
     # JSONへの変換
     def json
       @paren_obj = get_paren(@type, @value)
-      if(!@paren_obj)
+      case @paren_obj
+      when Regtest::Front::Parenthesis::Paren
+        name = @paren_obj.name
+        refer_name = @paren_obj.refer_name
+      when :WHOLE_REG_EXPRESSION
+        name = ""
+        refer_name = "$$_0"
+      else
         raise "Error: parenthesis #{@value} not found"
       end
+      
       @@id += 1
       "{\"type\": \"#{@type}\", " +
        "\"value\": \"#{@value}\", " +
        "\"offset\": \"#{@offset}\", " +
        "\"length\": \"#{@length}\", " +
-       "\"name\": \"#{@paren_obj.name}\", " +
+       "\"name\": \"#{name}\", " +
       " \"id\": \"c#{@@id}\", " +
-       "\"refer_name\": \"#{@paren_obj.refer_name}\", " +
+       "\"refer_name\": \"#{refer_name}\", " +
        "\"relative_num\": \"#{@relative_num}\" " +
        "}"
     end

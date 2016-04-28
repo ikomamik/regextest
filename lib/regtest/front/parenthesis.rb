@@ -36,7 +36,7 @@ module Regtest::Front::Parenthesis
 
     # 条件の場合
     def get_condition(prefix)
-      puts "prefix: #{prefix}"
+      # puts "prefix: #{prefix}"
       if(md = prefix.match(/^\((\d+)\)$/))
         condition_name = @options[:parens].get_paren(md[1].to_i)
         if !condition_name

@@ -310,7 +310,11 @@ class Regtest::Back
         result = nil
       else
         @nest += 1
-        result = generate_matched_string({json: @parens_hash[target["refer_name"]][:target], regopt: reg_options})
+        if target["refer_name"] == "$$_0"     # recursively call whole expression
+          result = generate_matched_string({json: @json_obj, regopt: @reg_options})
+        else
+          result = generate_matched_string({json: @parens_hash[target["refer_name"]][:target], regopt: reg_options})
+        end
         @nest -= 1
       end
     when "LEX_CHAR"
