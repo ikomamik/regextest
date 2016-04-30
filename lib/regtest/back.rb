@@ -200,7 +200,10 @@ class Regtest::Back
         end
       else
         # 一つでも値を生成するエントリがあればそれを使う
-        offsets = (0 ... target["value"].size).to_a.shuffle
+        offsets = (0 ... target["value"].size).to_a
+        if !param[:atomic]
+          offsets.shuffle!    # shuffle if not atomic group (this proceduce is not sufficient...)
+        end
         result = nil
         offsets.each do | offset |
           result = generate_matched_string({json: target["value"][offset], regopt: reg_options})
@@ -211,7 +214,7 @@ class Regtest::Back
     when "LEX_PAREN"
       # カッコ内で有効なオプションの設定
       paren_prefix = target["prefix"]
-      # puts target["prefix"]
+      # pp target["prefix"]
       if(paren_prefix == "<=")
         lb_result = generate_matched_string({json: target["value"], regopt: reg_options})
         result = Regtest::Back::Element.new({cmd: :CMD_LOOK_BEHIND, result: lb_result})
@@ -224,6 +227,16 @@ class Regtest::Back
       elsif(paren_prefix == "!")
         la_result = generate_matched_string({json: target["value"], regopt: reg_options})
         result = Regtest::Back::Element.new({cmd: :CMD_NOT_LOOK_AHEAD, result: la_result})
+      elsif(paren_prefix == ">")   # atomic group
+        generate_string = generate_matched_string({json: target["value"], regopt: reg_options, atomic: true})
+        @parens_hash[target["refer_name"]][:generated] ||= []
+        @parens_hash[target["refer_name"]][:generated][@nest] = generate_string
+        result = generate_string
+      elsif(paren_prefix == "")   # simple parenthesis
+        generate_string = generate_matched_string({json: target["value"], regopt: reg_options})
+        @parens_hash[target["refer_name"]][:generated] ||= []
+        @parens_hash[target["refer_name"]][:generated][@nest] = generate_string
+        result = generate_string
       else
         # 条件を指定時
         select_num = nil
