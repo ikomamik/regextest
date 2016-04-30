@@ -2,6 +2,7 @@
 
 require 'regtest'
 require 'kconv'
+require 'timeout'
 require 'pp'
 
 class Regtest::Test
@@ -11,6 +12,7 @@ class Regtest::Test
       failed: [],
       others: [],
       not_scope: [],
+      timeout: [],
     }
     do_test(results, max_tests)
     print_results(results)
@@ -24,6 +26,7 @@ class Regtest::Test
     puts "failed:    #{results[:failed].size}"
     puts "others:    #{results[:others].size}"
     puts "not_scope: #{results[:not_scope].size}"
+    puts "timeout:   #{results[:timeout].size}"
   end
   
   def do_test(results, max_tests)
@@ -31,12 +34,18 @@ class Regtest::Test
       break if(max_tests && i >= max_tests)  # for debug
       begin
         puts line
-        rc = eval(line)
+        rc = nil
+        timeout(5){
+          rc = eval(line)
+        }
         if(rc[:result] == :ok)
           results[:success].push({ md: rc[:md], reg: rc[:reg]})
         else
           results[:failed].push({ result: rc })
         end
+      rescue Timeout::Error => ex
+        warn "Timeout::Error #{ex}. \nline:#{line}"
+        results[:timeout].push({result: :timeout, message: ex, reg: line})
       rescue RegexpError => ex
         warn "RegexpError #{ex}. \nline:#{line}"
         results[:not_scope].push({result: :regexp_error, message: ex, reg: line})
