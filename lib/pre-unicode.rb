@@ -27,7 +27,7 @@ class RegtestPreUnicode
         next
       end
       next if(!class_name || line.length == 0)
-      prop_name = line.gsub(/^\s+/, "")
+      prop_name = line.gsub(/^\s+/, "").downcase
       raise "Duplicated symbol #{prop_name}" if properties[prop_name]
       begin
         properties[prop_name] = { class: class_name, reg: /\p{#{prop_name}}+/ , ranges: []}

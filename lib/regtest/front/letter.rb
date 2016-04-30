@@ -116,10 +116,10 @@ module Regtest::Front::Letter
     def generate_unicode_char(val)
       # Unicode関連のモジュールは動的に読み込み(性能アップのため）
       require 'regtest/front/unicode'        # Unicodeのレンジ
-      TLetter.include Regtest::Front::ParseUnicode
+      TLetter.include Regtest::Front::Unicode
       
       if(md = val.match(/\{(\w+)\}/))
-        class_name = md[1]
+        class_name = md[1].downcase
         if !@@unicode_ranges[class_name]
           @@unicode_ranges[class_name] = Unicode.property(class_name) ||
             raise("Invalid Unicode class #{class_name} in #{val}")

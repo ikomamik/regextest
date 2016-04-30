@@ -31,11 +31,11 @@ module Regtest::Front::CharClass
         @length = value.length
       end
       
-      # 全ての文字集合を求める
+      # Calc whole set of letters (depends on language environment)
       @whole_set = get_whole_set
     end
     
-    # 選択肢の追加
+    # Add a letter to nominate letters
     def add(value)
       TstLog("Selectlable add: #{value}"); 
       @nominates.push value
@@ -43,7 +43,7 @@ module Regtest::Front::CharClass
       self
     end
     
-    # 選択肢の反転(ブラケットの時のみ有効)
+    # reverse nominate letters (valid only in a bracket)
     def reverse
       TstLog("Selectlable reverse"); 
 
@@ -57,12 +57,12 @@ module Regtest::Front::CharClass
       @nominates = reconstruct_nominates(whole)
     end
 
-    # 選択肢の再構成
+    # Reconstruct nominate letters
     def reconstruct_nominates(char_set)
-      # 各文字をコードポイントに変換
+      # Convert each letter to corresponding code point
       code_points = char_set.map{|letter| letter.unpack("U*")[0]}
       
-      # 隣り合ったコードポイントの文字はTRangeとして再構成する
+      # Consecutive code points are reconstructed into a TRange object
       new_nominates = []
       if code_points.size > 0
         range_start = range_end = code_points.shift
@@ -91,7 +91,7 @@ module Regtest::Front::CharClass
       self
     end
     
-    # 全ての文字集合
+    # Get whole code set
     def get_whole_set
       if( @reg_options.is_multiline? )
         work = [ TRange.new("\x20", "\x7e"),  TRange.new("\n")]
