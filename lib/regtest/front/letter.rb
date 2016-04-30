@@ -184,6 +184,11 @@ module Regtest::Front::Letter
                 [ TRange.new('a', 'f'), TRange.new('A', 'F'),
                   TRange.new('0', '9') ]
               )
+      when '[:word:]'
+        obj = CharClass.new(
+                [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
+                  TRange.new('0', '9'), TRange.new('_') ]
+              )
       else
         raise "Error: Invalid character class #{val}"
       end
