@@ -79,18 +79,16 @@ class Regtest
     return nil unless(@result)
     result_string = @result.pre_match + @result.match + @result.post_match
     if(md = @reg_exp.match(result_string))
-      if md.pre_match  == @result.pre_match && 
-         md.to_a[0]    == @result.match &&
-         md.post_match == @result.post_match
-         md
-      else
-       @reason = :invalid_match
-       puts "NG: Invalid matched string"
-        puts "  proc: #{md.pre_match.inspect}  <-->  #{@result.pre_match.inspect}"
-        puts "  body: #{md.to_a[0].inspect}  <-->  #{@result.match.inspect}"
-        puts "  succ: #{md.post_match.inspect}  <-->  #{@result.post_match.inspect}"
-        nil
+      if(md.pre_match  != @result.pre_match || 
+         md.to_a[0]    != @result.match ||
+         md.post_match != @result.post_match)
+        @reason = :invalid_match_string
+        TstLog "WARN: Invalid matched string"
+        TstLog "  proc: #{md.pre_match.inspect}  <-->  #{@result.pre_match.inspect}"
+        TstLog "  body: #{md.to_a[0].inspect}  <-->  #{@result.match.inspect}"
+        TstLog "  succ: #{md.post_match.inspect}  <-->  #{@result.post_match.inspect}"
       end
+      md
     else
       @reason = { rc: :not_matched, string: result_string}
       puts "NG: not matched. regex(#{@reg_string}) string(#{result_string.inspect})"
