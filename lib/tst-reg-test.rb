@@ -13,8 +13,10 @@ class Regtest::Test
       others: [],
       not_scope: [],
       timeout: [],
+      perl_syntax: [],
     }
-    do_test(results, max_tests)
+    time_out = 1
+    do_test(results, max_tests, time_out)
     print_results(results)
   end
   
@@ -27,15 +29,16 @@ class Regtest::Test
     puts "others:    #{results[:others].size}"
     puts "not_scope: #{results[:not_scope].size}"
     puts "timeout:   #{results[:timeout].size}"
+    puts "perl_syntax:   #{results[:perl_syntax].size}"
   end
   
-  def do_test(results, max_tests)
-    get_lines.each_with_index do | line, i |
+  def do_test(results, max_tests, timeout_seconds)
+    get_lines(results).each_with_index do | line, i |
       break if(max_tests && i >= max_tests)  # for debug
+      puts line
       begin
-        puts line
         rc = nil
-        timeout(5){
+        timeout(timeout_seconds){
           rc = eval(line)
         }
         if(rc[:result] == :ok)
@@ -68,14 +71,19 @@ class Regtest::Test
     end
   end
 
-  def get_lines
+  def get_lines(results)
     lines = []
     # py_source = IO.read("../contrib/Onigmo/testpy.py")
     File::open("../contrib/Onigmo/testpy.py") do |f|
       f.each do |line|
-        if(md = line.match(/^\s*(?:x|x2|n)\s*\(.+?$/u) rescue nil)
-          line.sub!(/,\s*\".+?$/, ")") rescue nil
-          lines.push line if line
+        if !line.match(/ONIG_SYNTAX_PERL/)
+          if(md = line.match(/^\s*(?:x|x2|n)\s*\(.+?$/u) rescue nil)
+            line.sub!(/,\s*\".+?$/, ")") rescue nil
+            lines.push line if line
+          end
+        else
+          warn "Perl syntax. \nline:#{line}"
+          results[:perl_syntax].push({ type: :perl_syntax, test: line, info: nil})
         end
       end
     end
