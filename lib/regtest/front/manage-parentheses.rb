@@ -38,12 +38,31 @@ module Regtest::Front::ManageParentheses
       end
     end
     
-    # カッコの参照
-    def get_paren(get_id)
-      if(Integer === get_id)
-        @paren_hash["$$_#{get_id}"]
+    # search target parenthesis
+    def get_paren(get_id, offset = nil)
+      if !offset
+        if(Integer === get_id)
+          @paren_hash["$$_#{get_id}"]
+        else
+          @paren_hash[get_id]
+        end
       else
-        @paren_hash[get_id]
+        # puts "offset = #{offset}, id = #{get_id}"
+        target_id = @paren_array.size - 1
+        @paren_array.each_with_index do | paren, i |
+          # puts paren.offset
+          if paren.offset > offset
+            target_id = i + 1  # paren is started from 1
+            break
+          end
+        end
+        relative_offset = get_id.to_i
+        if relative_offset < 0
+          target_id += get_id.to_i
+        else
+          target_id += get_id.to_i - 1
+        end
+        @paren_hash["$$_#{target_id}"]
       end
     end
   end

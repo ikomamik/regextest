@@ -34,18 +34,35 @@ module Regtest::Front::BackRefer
         else
           raise "Error: Internal error, invalid back reference"
         end
-      when :LEX_NAMED_REFER   # \k<foo>のパターン
-        if(md = value.match(/^\\k[<'](\w+)(?:([\+\-]\d+))?[>']$/))
-          @paren_obj = @options[:parens].get_paren(md[1])
-          if(md[2])
-            @relative_num = md[2].to_i
+      when :LEX_NAMED_REFER   # \k<foo>, \k<1>, \k<-1>のパターン
+        if(md = value.match(/^\\k[<']((\-\d+)|(\d+)|(\w+))(?:([\+\-]\d+))?[>']$/))
+          if md[2]       # \k<-1>
+            @paren_obj = @options[:parens].get_paren(md[1], @offset)
+          elsif md[3]    # \k<1> 
+            @paren_obj = @options[:parens].get_paren(md[1].to_i)
+          elsif md[4]    # \k<foo> 
+            @paren_obj = @options[:parens].get_paren(md[1])
+          else
+            raise "internal error: unexpected refer #{value}"
+          end
+          if md[5]
+            @relative_num = md[3].to_i
           end
         else
           raise "Error: Internal error, invalid named reference"
         end
       when :LEX_NAMED_GENERATE # \g<foo>のパターン
-        if(md = value.match(/^\\g[<'](\w+)[>']$/))
-          @paren_obj = @options[:parens].get_paren(md[1])
+        if(md = value.match(/^\\g[<'](([\-\+]\d+)|(\d+)|(\w+))[>']$/))
+          if md[2]       # \k<-1>
+            @paren_obj = @options[:parens].get_paren(md[1], @offset)
+          elsif md[3]    # \k<1> 
+            @paren_obj = @options[:parens].get_paren(md[1].to_i)
+          elsif md[4]    # \k<foo> 
+            @paren_obj = @options[:parens].get_paren(md[1])
+          else
+            raise "internal error: unexpected refer #{value}"
+          end
+          
           if(!@paren_obj && md[1].match(/^\d+$/))
             paren_offset = md[1].to_i
             if paren_offset == 0
