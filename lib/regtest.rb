@@ -14,6 +14,9 @@ require 'regtest/regexp'
 
 class Regtest
   include Regtest::Common
+
+  # constants
+  TstConstRetryMax =  (ENV['TST_MAX_RETRY'])?(ENV['TST_MAX_RETRY'].to_i):5
   
   # Constructer
   def initialize(param, options = {})
@@ -64,14 +67,18 @@ class Regtest
 
   # genetate string to be matched with specified regular expression
   def generate
-    @result = @back_end.generate
-    if @result
-      verify    # returns a match-object
-    else
-      puts "NG: Failed to generate"
-      @reason = :failed_to_generate
-      nil
+    TstConstRetryMax.times do 
+      @result = @back_end.generate
+      if @result
+        @result = verify    # returns a match-object
+      else
+        TstLog "NG: Failed to generate"
+        @reason = :failed_to_generate
+        @result = nil
+      end
+      break if @result
     end
+    @result
   end
   
   # Verifies the result
