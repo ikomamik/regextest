@@ -534,7 +534,7 @@ module_eval(<<'.,.,', 'parser.y', 63)
 
 module_eval(<<'.,.,', 'parser.y', 64)
   def _reduce_38(val, _values)
-    TLetter.new(:LEX_CHAR,           val[0][1..1])
+    TLetter.new(:LEX_SIMPLE_ESCAPE,  val[0])
   end
 .,.,
 

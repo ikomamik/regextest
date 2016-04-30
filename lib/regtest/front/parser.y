@@ -62,7 +62,7 @@ rule
          | LEX_MINUS              {TLetter.new(:LEX_CHAR,           val[0])}
          | LEX_AND_AND            {TLetter.new(:LEX_AND_AND,        val[0])}
          | LEX_SPACE              {TLetter.new(:LEX_SPACE,          val[0])}
-         | LEX_SIMPLE_ESCAPE      {TLetter.new(:LEX_CHAR,           val[0][1..1])}
+         | LEX_SIMPLE_ESCAPE      {TLetter.new(:LEX_SIMPLE_ESCAPE,  val[0])}
          | LEX_ANY_LETTER         {TLetter.new(:LEX_ANY_LETTER,     val[0])}
 
 end
