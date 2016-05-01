@@ -3,6 +3,7 @@
 require 'regtest/front/char-class'     # character class element
 require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'
+require 'regtest/front/unicode'        # Unicodeのレンジ
 
 # A letter
 module Regtest::Front::Letter
@@ -10,6 +11,7 @@ module Regtest::Front::Letter
     include Regtest::Common
     include Regtest::Front::CharClass
     include Regtest::Front::Range
+    include Regtest::Front::Unicode   # 
     @@id = 0   # a class variable for generating unique name of element
     @@unicode_ranges = {}
       
@@ -125,9 +127,9 @@ module Regtest::Front::Letter
     
     # Unicodeクラス指定時の値生成
     def generate_unicode_char(val)
-      # Unicode関連のモジュールは動的に読み込み(性能アップのため）
-      require 'regtest/front/unicode'        # Unicodeのレンジ
-      TLetter.include Regtest::Front::Unicode
+      # Unicode関連のモジュールは動的に読み込み(性能アップのため）. commented out since this code not executed at ruby 2.0.0
+      #require 'regtest/front/unicode'        # Unicodeのレンジ
+      #TLetter.include Regtest::Front::Unicode
       
       if(md = val.match(/\{(\w+)\}/))
         class_name = md[1].downcase
