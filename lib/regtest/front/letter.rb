@@ -91,6 +91,15 @@ module Regtest::Front::Letter
         obj = CharClass.new(
                 [ TRange.new("\x20", "\x2f"), TRange.new("\x3a", "\x7e") ]
               )
+      when "\\h"
+        obj = CharClass.new(
+                [ TRange.new('0', '9') , TRange.new('a', 'f'), TRange.new('A', 'F')]
+              )
+      when "\\H"
+        obj = CharClass.new(
+                [ TRange.new("\x20", "\x2f"), TRange.new("\x3a", "\x40"),
+                  TRange.new("\x47", "\x60"), TRange.new("\x67", "\x7e")]
+              )
       when "\\s"
         obj = CharClass.new(
                 [ TRange.new(' '), TRange.new("\x9"), TRange.new("\xa"), 
