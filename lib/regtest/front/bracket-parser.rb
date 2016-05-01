@@ -292,7 +292,7 @@ module_eval(<<'.,.,', 'bracket-parser.y', 35)
 
 module_eval(<<'.,.,', 'bracket-parser.y', 36)
   def _reduce_12(val, _values)
-    TLetter.new(:LEX_CHAR,           val[0][1..1])
+    TLetter.new(:LEX_SIMPLE_ESCAPE,  val[0])
   end
 .,.,
 
