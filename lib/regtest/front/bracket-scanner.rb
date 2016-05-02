@@ -10,7 +10,7 @@ class Regtest::Front::BracketScanner
   LexCodeLiteral = %r!\\x[0-9A-Fa-f]{1,2}|\\[0-7]{2,3}!
   LexTable = [
     [:LEX_POSIX_CHAR_CLASS,
-      %r!\[:\^?\w+:\]! ],      # 文字列先頭の場合(?<=.)は、文字クラスでは無い
+      %r!\[:\^?\w+:\]! ],      # First letter (?<=.) is not a character class
     [:LEX_BRACKET_START2,
       %r!\[\^! ],
     [:LEX_BRACKET_START,
@@ -25,7 +25,7 @@ class Regtest::Front::BracketScanner
      # %r!\\M-(?:\\w|#{LexCodeLiteral.source})! ],
      %r!\\M-(?:[a-z]|\\C-[a-z])! ],
     # [:LEX_ESCAPED_LETTER,
-    #   %r!\\[tvnrbfae #\{\}\[\]\(\)]! ],    # 文字クラスでは\bは有効
+    #   %r!\\[tvnrbfae #\{\}\[\]\(\)]! ],    # \b is valid within character class
     [:LEX_UNICODE,
       %r!\\u\h{4}|\\u\{\h{1,6}(?:\s+\h{1,6})*\}! ],
     [:LEX_SIMPLIFIED_CLASS,
@@ -41,7 +41,7 @@ class Regtest::Front::BracketScanner
     [:LEX_EXTENDED_COMMENT,
       %r!\#.*?(?:\n|$)! ],
     [:LEX_ESCAPED_LETTER,
-      %r!\\.! ],    # 文字クラスでは\bは有効
+      %r!\\.! ],    # \b is valid within character class
     [:LEX_SPACE,
       %r!\s!m ],
     [:LEX_SIMPLE_ESCAPE,      # redundant escape \@, \", etc.
@@ -49,7 +49,7 @@ class Regtest::Front::BracketScanner
     [:LEX_CHAR,
       %r!.! ],
 
-    # 以下は不要として削除
+    # Following lex word is not necessary
     #[:LEX_BACK_REFER,
     # %r!\\[1-9]\d*! ],
     #[:LEX_NAMED_REFER,
@@ -96,7 +96,7 @@ class Regtest::Front::BracketScanner
     results
   end
   
-  # テスト用のメソッド
+  # method for testing
   def self.test(test_string, reg_options = 0)
     puts "String: #{test_string.inspect}"
     results = Regtest::Front::BracketScanner.new().scan(test_string)
@@ -124,6 +124,4 @@ end
 ]', Regexp::EXTENDED)
     
   end
-
-
 

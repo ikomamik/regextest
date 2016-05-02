@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# ブラケットの中のレンジ
+# Consective codepoints
 module Regtest::Front::Range
   class TRange
     @@id = 0   # a class variable for generating unique name of element
@@ -21,7 +21,7 @@ module Regtest::Front::Range
     
     attr_reader :offset, :length
     
-    # 文字列の生成
+    # parse letter
     def parse_letter(letter)
       case letter
       when String
@@ -39,7 +39,7 @@ module Regtest::Front::Range
       [@range[offset]].pack("U*")
     end
     
-    # レンジの生成(ユニコードのコードポイントの配列を生成）
+    # generate range (generate array of Unicode codepoints)
     def generate_range(letter_begin, letter_end)
       char_ords = []
       (letter_begin.unpack("U*")[0]..letter_end.unpack("U*")[0]).to_a.each do |codepoint|
@@ -58,7 +58,7 @@ module Regtest::Front::Range
       # 何もしない
     end
     
-    # JSONへの変換(Unicodeのコードポイントにする）
+    # transform to json format (using codepoints of Unicode)
     def json
       @@id += 1
       work_begin = @begin.unpack("U*")[0]

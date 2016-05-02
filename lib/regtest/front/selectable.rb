@@ -26,7 +26,7 @@ module Regtest::Front::Selectable
       end
     end
     
-    # 選択肢の追加
+    # add selectable sequence
     def add(value)
       TstLog("Selectlable add: #{value}"); 
       @nominates.push value
@@ -34,7 +34,7 @@ module Regtest::Front::Selectable
       self
     end
     
-    # JSONへの変換
+    # transform to json format
     def json
       @@id += 1
       "{" +

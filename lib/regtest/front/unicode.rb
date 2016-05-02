@@ -1,13 +1,13 @@
 # encoding: utf-8
 # DO NOT Modify This File Since Automatically Generated
 
-# Unicodeのレンジ
+# Range of Unicode
 module Regtest::Front::Unicode
   class Unicode
     include Regtest::Front::CharClass
     include Regtest::Front::Range
     
-    # ハッシュの生成
+    # Generate hash of properties
     def self.property(class_name)
       case class_name
         when "alpha"

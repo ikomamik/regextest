@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'regtest/front/repeat'
 
-# 繰り返し数付きの要素(文字やカッコ）
+# An element (a letter or a parenthesis) with quantifier
 module Regtest::Front::Repeatable
   class Repeatable
     include Regtest::Front::Repeat
@@ -18,7 +18,7 @@ module Regtest::Front::Repeatable
     
     attr_reader :offset, :length
     
-    # 繰り返し指定の追加
+    # add quantifier
     def set_quant(quant_value)
       quant = quant_value[0]
       @length += quant_value[2]
@@ -31,7 +31,7 @@ module Regtest::Front::Repeatable
       self
     end
     
-    # JSONへの変換
+    # transform to json format
     def json
       if(@quant)
         @@id += 1

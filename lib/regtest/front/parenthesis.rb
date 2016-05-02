@@ -25,7 +25,7 @@ module Regtest::Front::Parenthesis
     
     attr_reader :prefix, :name, :refer_name, :offset, :length
 
-    # カッコの名前がある場合
+    # get name of parenthesis (if any)
     def get_name(prefix)
       if(md = prefix.match(/^[<'](\w+)[>']$/))
         md[1]
@@ -34,7 +34,7 @@ module Regtest::Front::Parenthesis
       end
     end
 
-    # 条件の場合
+    # get condition of parenthesis
     def get_condition(prefix)
       # puts "prefix: #{prefix}"
       if(md = prefix.match(/^\((\d+)\)$/))
@@ -64,7 +64,7 @@ module Regtest::Front::Parenthesis
       condition_name
     end
 
-    # 数字で後方参照する名前の設定
+    # set unique name for back reference
     def set_refer_name(name)
       @refer_name = name
     end
@@ -76,7 +76,7 @@ module Regtest::Front::Parenthesis
       string
     end
     
-    # 生成済みの文字列を得る
+    # get generated string
     def get_value(relative_num = 0)
       # print "gen: "; pp @generated_string
       if(@generated_string.size > 0)
@@ -94,7 +94,7 @@ module Regtest::Front::Parenthesis
       @element.reset
     end
     
-    # JSONへの変換
+    # transform to json format
     def json
       @condition = get_condition(@prefix)
       condition_name = @condition.refer_name if @condition

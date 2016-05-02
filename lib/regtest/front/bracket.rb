@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'regtest/front/repeat'
 
-# 文字単位の選択（ブラケット）
+# Select a character (bracket)
 module Regtest::Front::Bracket
   class Bracket
     @@id = 0   # a class variable for generating unique name of element
@@ -19,7 +19,7 @@ module Regtest::Front::Bracket
       @element = elem
       TstLog("Bracket: value: #{value}, type: #{@type}, elem: #{elem}")
       
-      # "[^"の場合は、反転させる
+      # Reverse in case "[^"
       if(!@type)
         @element.reverse
       end
@@ -42,7 +42,7 @@ module Regtest::Front::Bracket
       @element.reset
     end
     
-    # JSONへの変換
+    # transform to json format
     def json
       @@id += 1
       "{" +

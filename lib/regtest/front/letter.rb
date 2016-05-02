@@ -30,7 +30,7 @@ module Regtest::Front::Letter
     
     attr_reader :offset, :length
     
-    # 文字のタイプによって生成値または生成オブジェクトを設定
+    # generate character(s) corresponding type of the character
     def set_attr(type, val)
       case type
       when :LEX_CHAR, :LEX_SPACE, :LEX_AND_AND
@@ -57,7 +57,7 @@ module Regtest::Front::Letter
       end
     end
     
-    # 全ての文字生成
+    # generate whole set of letters (depends on option)
     def generate_any_char(val)
       if( @reg_options.is_multiline? )
         @obj = CharClass.new(
@@ -70,7 +70,7 @@ module Regtest::Front::Letter
       end
     end
     
-    # 簡易指定の値生成
+    # generate simplified character class
     def generate_simplified_class(val)
       obj = nil
       case val
@@ -125,9 +125,10 @@ module Regtest::Front::Letter
       obj
     end
     
-    # Unicodeクラス指定時の値生成
+    # generate Unicode class (ie. \p{...})
     def generate_unicode_char(val)
-      # Unicode関連のモジュールは動的に読み込み(性能アップのため）. commented out since this code not executed at ruby 2.0.0
+      # Dynamic loading of Unicode regarding modules (for better performance).
+      # commented out since this code not executed at ruby 2.0.0
       #require 'regtest/front/unicode'        # Unicodeのレンジ
       #TLetter.include Regtest::Front::Unicode
       
@@ -141,7 +142,7 @@ module Regtest::Front::Letter
       @@unicode_ranges[class_name]
     end
     
-    # POSIX文字クラス指定時の値生成
+    # generate POSIX character class (ie. [[:alpha:]], etc.)
     def generate_char_class(val)
       obj = nil
       case val
@@ -235,7 +236,7 @@ module Regtest::Front::Letter
       end
     end
     
-    # JSONへの変換
+    # transform to json format
     def json
       @@id += 1
       if String === @obj

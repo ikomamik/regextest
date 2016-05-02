@@ -19,7 +19,7 @@ module Regtest::Front::Anchor
     
     attr_reader :offset, :length
     
-    # JSONへの変換
+    # transform to json format
     def json
       @@id += 1
       "{" +

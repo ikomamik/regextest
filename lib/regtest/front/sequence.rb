@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'regtest/front/repeat'
 
-# 要素のシーケンス
+# Sequence of elements (letter or parenthesis)
 module Regtest::Front::Sequence
   class Sequence
     @@id = 0   # a class variable for generating unique name of element
@@ -16,7 +16,7 @@ module Regtest::Front::Sequence
     
     attr_reader :offset, :length
     
-    # 要素の追加
+    # add an element (a letter or a parenthesis) to sequence
     def add(elem)
       TstLog("Sequence add: #{elem}")
       @elements.push elem
@@ -42,7 +42,7 @@ module Regtest::Front::Sequence
       end
     end
     
-    # JSONへの変換
+    # transform to json format
     def json
       # if @elements.size > 1
         @@id += 1

@@ -47,13 +47,13 @@ module Regtest::Front::CharClass
     def reverse
       TstLog("Selectlable reverse"); 
 
-      # 全ての集合から文字を削除
+      # delete characters from whole set
       whole = @whole_set.dup
       @nominates.each do | nominate |
         whole -= nominate.enumerate
       end
       
-      # 隣り合ったコードポイントの文字はTRangeとして再構成する
+      # reconstructing valid character set using TRange objects
       @nominates = reconstruct_nominates(whole)
     end
 
@@ -79,14 +79,13 @@ module Regtest::Front::CharClass
       new_nominates
     end
     
-    # 選択肢のAND
+    # AND process of nominates
     def and(other_char_class)
       TstLog("Selectlable and: #{other_char_class}");
 
-      # 文字レベルで共通のものを求める
       char_set = enumerate & other_char_class.enumerate
       
-      # 隣り合ったコードポイントの文字はTRangeとして再構成する
+      # reconstructing valid character set using TRange objects
       @nominates = reconstruct_nominates(char_set)
       self
     end
@@ -124,7 +123,7 @@ module Regtest::Front::CharClass
       end
     end
     
-    # JSONへの変換
+    # transform to json format
     def json
       #if @nominates.size > 1
         @@id += 1

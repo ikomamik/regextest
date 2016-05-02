@@ -2,25 +2,25 @@
 
 require "pp"
 
-# Unicodeの文字クラスの一覧を生成するスクリプト
-# Unicode.orgのテーブルは使わず、Rubyの正規表現の結果を元に
-# 生成するアルゴリズム
+# A script for generating character class of Unicode
+# It does not use tables of Unicode.org, 
+# but use result of Ruby Regexp execution
 
 class RegtestPreUnicode
   def self.generate
-    # Rubyで有効なプロパティを
+    # Get valid properties of Ruby
     onig_properties = read_onig_properties("./contrib/Onigmo/UnicodeProps.txt")
     ranges = get_ranges_of_properties(onig_properties)
     puts_unicode_ranges('lib/regtest/front/unicode.rb', ranges)
   end
 
-  # 鬼雲のマニュアルからUnicode文字クラスの一覧を得る
+  # Get list of Unicode classes from Onigmo manual
   def self.read_onig_properties(file)
     content = IO.read(file)
     class_name = nil
     properties = {}
     content.split(/\r?\n/).each_with_index do | line, i |
-      # プロパティの種別
+      # Type or property
       if(line[0..0] == "*")
         class_name = line[2..-1].gsub(/\W+/, "_")
         class_name.chop! if(class_name[-1..-1] == "_")
@@ -32,32 +32,32 @@ class RegtestPreUnicode
       begin
         properties[prop_name] = { class: class_name, reg: /\p{#{prop_name}}+/ , ranges: []}
       rescue RegexpError
-        # バージョン差異等により失敗する場合がある。現状、無視。
+        # Somehow some property name fails. ignore as for now
         warn "Regexp error at /\\p{#{prop_name}}/"
       end
       
-      # デバッグ用
+      # for debugging
       # break if(i > 10)
     end
     properties
   end
 
-  # Unicodeのスクリプト、ブロックに対応したTRangeのRubyソースの出力
+  # output ruby source (using TRange) corresponding to scripts/blocks of Unicode
   def self.get_ranges_of_properties(properties)
     puts "\nGenerating Unicode table. It takes 1-2 minutes."
     ranges = {}
     
-    # 全ての文字を行列にしてからjoinで文字列に変換
-    # (文字列の連結にすると性能が出ないので)
+    # form whole letter to array, then join all letters
+    # (concatinating string cause performance problem)
     whole_letters_array = []
     0.step(0x10ffff).each do | codepoint |
-      # サロゲートの部分はスキップ
+      # skip surrogate part
       next if (codepoint >= 0xd800 && codepoint <= 0xdfff)
       whole_letters_array.push  [codepoint].pack("U*")
     end
     whole_letters = whole_letters_array.join("")
 
-    # 各クラスごとに作成した文字列をスキャン
+    # scan string generated for each class
     properties.each do | prop_name, value |
       whole_letters.scan(value[:reg]) do | matched |
         
@@ -69,7 +69,7 @@ class RegtestPreUnicode
     ranges
   end
 
-  # Unicodeのスクリプト、ブロックに対応したTRangeのRubyソースの出力
+  # puts source to unicode.rb
   def self.puts_unicode_ranges(unicode_file, ranges)
     ranges_source = ranges.keys.map { |prop_name|
       (" "*14) + "when \"#{prop_name}\"\n" +
@@ -82,13 +82,13 @@ class RegtestPreUnicode
       # encoding: utf-8
       # DO NOT Modify This File Since Automatically Generated
 
-      # Unicodeのレンジ
+      # Range of Unicode
       module Regtest::Front::Unicode
         class Unicode
           include Regtest::Front::CharClass
           include Regtest::Front::Range
           
-          # ハッシュの生成
+          # Generate hash of properties
           def self.property(class_name)
             case class_name
 #{ranges_source}

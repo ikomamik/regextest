@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-# カッコを管理するクラス
+# A class for managing parentheses
 module Regtest::Front::ManageParentheses
   class Parens
     def initialize()
@@ -8,11 +8,11 @@ module Regtest::Front::ManageParentheses
       @paren_array = []
     end
     
-    # カッコの登録
+    # register a parenthesis
     def add(paren)
-      # 後方参照がある場合は、とりあえず登録
-      if(paren.prefix.length == 0 ||    # prefixが無いときは捕獲
-         (paren.prefix[-1] != ':' &&    # (?: or (?i: or (?imx), etc.以外のとき
+      # register capturable parentheses
+      if(paren.prefix.length == 0 ||    # capture without prefix or
+         (paren.prefix[-1] != ':' &&    # other than (?: or (?i: or (?imx), etc.
           !paren.prefix.match(/^([imx]*(?:\-[imx]+)?)$/) &&
           !paren.prefix.match(/^[\=\!\>]|\<[\=\!]/)
          )
@@ -20,20 +20,20 @@ module Regtest::Front::ManageParentheses
         @paren_array.push paren
       end
       
-      # 名前付きの場合は、その名前も登録
+      # if name (ie. (?<foo>... ), register the name
       if(paren.name)
         @paren_hash[paren.name] = paren
       end
       paren
     end
     
-    # カッコのソート（カッコの番号はoffset順で解析順ではないので）
+    # sort of parentheses (since number of parenthesis not analyze order but offset order)
     def sort
       # pp @paren_array.map{|paren| paren.offset}
       @paren_array.sort{|x, y| x.offset <=> y.offset}.each_with_index do | paren, i |
         # puts "$$_#{i+1}  offset:#{paren.offset}"
         refer_name = "$$_#{i+1}"
-        @paren_hash[refer_name] = paren    # カッコは１から。
+        @paren_hash[refer_name] = paren    # parenthesis number from 1
         paren.set_refer_name(refer_name)
       end
     end

@@ -4,8 +4,8 @@ require "strscan"
 require "pp"
 
 class Regtest::Front::Scanner
-  # 正規表現文字の素語解析用のテーブル(ここで厳密に解析せず
-  # ちょっとしたミスは、構文解析側でエラー出力するようにする）
+  # A table for lexical analysis of elements
+  # (Not strict analisis here.)
   LexCodeLiteral = %r!\\x[0-9A-Fa-f]{1,2}|\\[0-7]{2,3}!
   LexTable = [
     [:LEX_BACK_REFER,
@@ -22,10 +22,10 @@ class Regtest::Front::Scanner
      # %r!\\M-(?:\\w|#{LexCodeLiteral.source})! ],
      %r!\\M-(?:[a-z]|\\C-[a-z])! ],
     [:LEX_ESCAPED_LETTER,
-     %r!\\[tvnrfae #\{\}\[\]\(\)]! ],      # \bは文字クラス外ではアンカー
+     %r!\\[tvnrfae #\{\}\[\]\(\)]! ],   # \b is an anchor out of bracket
     [:LEX_UNICODE,
      %r!\\u\h{4}|\\u\{\h{1,6}(?:\s+\h{1,6})*\}! ],
-    # [:LEX_POSIX_CHAR_CLASS,    # 文字クラス以外では無効
+    # [:LEX_POSIX_CHAR_CLASS,           # invalid out of bracket
     #   %r!\[:\w+:\]! ],
     [:LEX_SIMPLIFIED_CLASS,
      %r!\\[wWsSdDhH]! ],
@@ -124,7 +124,7 @@ class Regtest::Front::Scanner
     results
   end
   
-  # テスト用のメソッド
+  # method for testing
   def self.test(test_string, reg_options = nil)
     puts "String: #{test_string.inspect}"
     results = Regtest::Front::Scanner.new().scan(test_string)

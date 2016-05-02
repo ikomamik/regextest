@@ -1,9 +1,9 @@
 # encoding: utf-8
 
-# 繰り返し数を解析するクラス
+# Quantifier class
 module Regtest::Front::Repeat
   class Repeat
-    # 定数
+    # Constants for the class
     TstConstRepeatMax =  (ENV['TST_MAX_REPEAT'])?(ENV['TST_MAX_REPEAT'].to_i):32
     
     TstOptGreedy      =  1
@@ -19,7 +19,7 @@ module Regtest::Front::Repeat
     end
     attr_reader :max_value, :min_value
     
-    # 最小値、最大値、オプションを求める
+    # get minimum, maximum, and option
     def set_values(param)
       case param
       when '?', '??', '?+'
@@ -40,25 +40,25 @@ module Regtest::Front::Repeat
         @option |= TstOptGreedy     if(param.size == 1)
         @option |= TstOptReluctant  if(param[-1] == "?")
         @option |= TstOptPossessive if(param[-1] == "+")
-      when /^\{(\d+)\}([\?\+]?)$/         # {3} のパターン
+      when /^\{(\d+)\}([\?\+]?)$/         # {3}, etc.
         @min_value = $1.to_i
         @max_value = $1.to_i
         @option |= TstOptGreedy     if(!$2)
         @option |= TstOptReluctant  if($2 == "?")
         @option |= TstOptPossessive if($2 == "+")
-      when /^\{(\d+),(\d+)\}([\?\+]?)$/   # {2,3}のパターン
+      when /^\{(\d+),(\d+)\}([\?\+]?)$/   # {2,3}, etc.
         @min_value = $1.to_i
         @max_value = $2.to_i
         @option |= TstOptGreedy     if(!$2)
         @option |= TstOptReluctant  if($2 == "?")
         @option |= TstOptPossessive if($2 == "+")
-      when /^\{,(\d+)\}([\?\+]?)$/        # {,3}のパターン
+      when /^\{,(\d+)\}([\?\+]?)$/        # {,3}, etc.
         @min_value = 0
         @max_value = $1.to_i
         @option |= TstOptGreedy     if(!$2)
         @option |= TstOptReluctant  if($2 == "?")
         @option |= TstOptPossessive if($2 == "+")
-      when /^\{(\d+),\}([\?\+]?)$/        # {3,}のパターン
+      when /^\{(\d+),\}([\?\+]?)$/        # {3,}, etc.
         @min_value = $1.to_i
         @max_value = TstConstRepeatMax
         @max_value = @min_value + TstConstRepeatMax if(@max_value < @min_value)

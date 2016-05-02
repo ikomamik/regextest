@@ -13,7 +13,7 @@ module Regtest::Front::Empty
     
     attr_reader :offset, :length
     
-    # JSONへの変換(Unicodeのコードポイントにする）
+    # generate json format
     def json
       @@id += 1
         "{" +
