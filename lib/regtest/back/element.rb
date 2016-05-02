@@ -65,6 +65,7 @@ class Regtest::Back::Element
   def union(other_obj)
     raise "invalid command" if(other_obj.command != :CMD_SELECT)
     @nominates |= other_obj.nominates
+    # @nominates += other_obj.nominates # to be faster
   end
   
   # for simple pretty print
