@@ -25,7 +25,7 @@ class Regtest
     @reg_string = nil
     @reg_exp = nil
     set_regex(param)
-        
+
     # Prepare parsers (for whole regex and bracket)
     @parser = RegtestFrontParser.new
     
@@ -98,8 +98,7 @@ class Regtest
       md
     else
       @reason = { rc: :not_matched, string: result_string}
-      puts "NG: not matched. regex(#{@reg_string}) string(#{result_string.inspect})"
-      nil
+      raise "failed to generate. Not matched regex(#{@reg_string}) string(#{result_string.inspect})"
     end
     # @result = @back_end.generate
   end
