@@ -60,6 +60,13 @@ class Regtest
       @reg_exp = param
       @@parse_options[:reg_options].set(@reg_exp.options)   # inner regex options have priorty
       @reg_string = @reg_exp.source
+      
+      # following codes must be changed later
+      puts "FOO" + @reg_string
+      if @reg_string.match(/^\(\?\w*x/)
+        puts "foo"
+        @@parse_options[:reg_options].modify("x")
+      end
     else
       raise "Error: string or regular expression required"
     end
