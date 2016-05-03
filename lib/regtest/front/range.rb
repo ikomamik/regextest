@@ -34,7 +34,7 @@ module Regtest::Front::Range
     end
     
     # 文字列の生成
-    def generate
+    def generate2
       offset = rand(@range.size)
       [@range[offset]].pack("U*")
     end

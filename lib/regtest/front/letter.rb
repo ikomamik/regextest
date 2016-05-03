@@ -227,15 +227,6 @@ module Regtest::Front::Letter
       end
     end
     
-    # 結果のリセット
-    def reset
-      if String === @obj
-        # 何もしない
-      else
-        @obj.reset
-      end
-    end
-    
     # transform to json format
     def json
       @@id += 1

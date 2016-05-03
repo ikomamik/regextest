@@ -100,8 +100,8 @@ module Regtest::Front::CharClass
       work.inject([]){|result,elem| result |= elem.enumerate}
     end
     
-    # 文字列の生成
-    def generate
+    # generating a set of letters
+    def generate2
       offsets = (0 ... @nominates.size).to_a.shuffle
       result = nil
       offsets.each do | offset |
@@ -112,15 +112,8 @@ module Regtest::Front::CharClass
     end
     
     # 文字の列挙
-    def enumerate
+    def enumerate2
       @nominates.inject([]){|result, nominate| result += nominate.enumerate}
-    end
-    
-    # 結果のリセット
-    def reset
-      @nominates.each do | nominate |
-        nominate.reset
-      end
     end
     
     # transform to json format

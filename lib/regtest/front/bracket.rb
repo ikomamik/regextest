@@ -27,19 +27,9 @@ module Regtest::Front::Bracket
     
     attr_reader :offset, :length
     
-    # 文字列の生成
-    def generate
-      @element.generate(@type)
-    end
-    
     # 文字の列挙
     def enumerate
       @element.enumerate
-    end
-    
-    # 結果のリセット
-    def reset
-      @element.reset
     end
     
     # transform to json format

@@ -76,7 +76,7 @@ module Regtest::Front::BackRefer
     end
     
     # 参照のみの場合は新たに生成せずに前に生成した文字列を使う
-    def generate
+    def generate2
       if(!@paren_obj)
         @paren_obj = get_paren(@type, @value)
         if(!@paren_obj)
@@ -88,14 +88,6 @@ module Regtest::Front::BackRefer
         @paren_obj.generate
       else
         @paren_obj.get_value(@relative_num)
-      end
-    end
-    
-    # 結果のリセット
-    def reset
-      if(@type == :LEX_NAMED_GENERATE)
-        @paren_obj = nil
-        @relative_num = nil
       end
     end
     

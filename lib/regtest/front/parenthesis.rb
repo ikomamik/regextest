@@ -69,13 +69,6 @@ module Regtest::Front::Parenthesis
       @refer_name = name
     end
 
-    # 文字列の生成
-    def generate
-      string = @element.generate
-      @generated_string.push string
-      string
-    end
-    
     # get generated string
     def get_value(relative_num = 0)
       # print "gen: "; pp @generated_string
@@ -85,13 +78,6 @@ module Regtest::Front::Parenthesis
         warn "Error: refer uninitialized parenthesis"
         nil
       end
-    end
-    
-    # 結果のリセット
-    def reset
-      @generated_string = []
-      @nest = 0
-      @element.reset
     end
     
     # transform to json format
