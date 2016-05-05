@@ -111,8 +111,8 @@ module Regtest::Front::CharClass
       result
     end
     
-    # 文字の列挙
-    def enumerate2
+    # enumerate nomimated letters
+    def enumerate
       @nominates.inject([]){|result, nominate| result += nominate.enumerate}
     end
     
