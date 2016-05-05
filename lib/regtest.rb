@@ -62,9 +62,7 @@ class Regtest
       @reg_string = @reg_exp.source
       
       # following codes must be changed later
-      puts "FOO" + @reg_string
       if @reg_string.match(/^\(\?\w*x/)
-        puts "foo"
         @@parse_options[:reg_options].modify("x")
       end
     else
