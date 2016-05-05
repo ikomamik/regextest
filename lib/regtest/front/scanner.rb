@@ -92,9 +92,9 @@ class Regtest::Front::Scanner
     reg_options = (options)?options[:reg_options]:nil
 
     if( reg_options && reg_options.is_extended? )
-      @lex_table = LexTable
+      @lex_table = LexTable.dup
     else
-      @lex_table = LexTable.delete_if{|elem| elem[0] == :LEX_EXTENDED_COMMENT}
+      @lex_table = LexTable.dup.delete_if{|elem| elem[0] == :LEX_EXTENDED_COMMENT}
     end
     whole_lex = @lex_table.map{|lex| "(?<#{lex[0]}>" + lex[1].source + ")"}.join('|')
     # puts whole_lex
