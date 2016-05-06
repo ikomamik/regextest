@@ -307,10 +307,10 @@ class Regtest::Back
     when "LEX_RANGE"
       letter = []
       codepoints = (target["begin"]..target["end"]).to_a
-      codepoints.each do | codepoint |
-        letter += ignore_case2([codepoint].pack("U*"), reg_options)
-      end
-      # letter = codepoints.map{| codepoint | [codepoint].pack("U*")}   # to be faster
+      #codepoints.each do | codepoint |
+      #  letter += ignore_case2([codepoint].pack("U*"), reg_options)
+      #end
+      letter = codepoints.map{| codepoint | [codepoint].pack("U*")}   # to be faster
       result = Regtest::Back::Element.new({cmd: :CMD_SELECT, data: letter})
     when "LEX_BACK_REFER", "LEX_NAMED_REFER"
       if @parens_hash[target["refer_name"]][:generated]
