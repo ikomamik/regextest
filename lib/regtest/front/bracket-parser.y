@@ -10,10 +10,17 @@ rule
          | brc_sq1 LEX_AND_AND brc_sq2
            {val[0].and(val[2])}
            
+  # a first char of elements
+  brc_sq2: LEX_BRACKET_END brc_sq3   # ']' as a first entry is valid
+           {val[1].add(TLetter.new(:LEX_CHAR,val[0]))}
+         | LEX_BRACKET_END           # '[]]' or '[^]]' pattern 
+           {CharClass.new(TLetter.new(:LEX_CHAR,val[0]))}
+         | brc_sq3
+  
   # a sequence of elements
-  brc_sq2: brc_elm
+  brc_sq3: brc_elm
            {CharClass.new(val[0])}
-         | brc_sq2 brc_elm
+         | brc_sq3 brc_elm
            {val[0].add(val[1])}
            
   # a element (a letter, a character class, a range or another bracket)

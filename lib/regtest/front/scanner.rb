@@ -51,7 +51,19 @@ class Regtest::Front::Scanner
     [:LEX_PAREN_END,
      %r!\)! ],
     [:LEX_BRACKET,     # considering nested bracket
-     %r!(?<bs>\[(?:\[:\^?\w+:\]|\\\]|\\.|[^\]\[]|\g<bs>)+\])! ],
+     # %r!(?<bs>\[(?:\[:\^?\w+:\]|\\\]|\\.|[^\]\[]|\g<bs>)+\])! ],
+     %r!(?<bs>
+        \[\^?\]?       # first part [, [^, [], [^] are possible
+          (?:|                # body part
+             \[:\^?\w+:\]|
+             \\\]|
+             \\.|
+             # \&\&\]|   # &&] is valid... however not matched ']'. why?
+             [^\]\[]|
+             \g<bs>
+          )+
+        \])
+       !x ],
     [:LEX_OR,
      %r!\|! ],
     [:LEX_ANC_LINE_BEGIN,
@@ -121,6 +133,7 @@ class Regtest::Front::Scanner
       end
     end
     results.push [false, nil]
+    # pp results
     results
   end
   
