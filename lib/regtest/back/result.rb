@@ -305,19 +305,55 @@ class Regtest::Back::Result
           end
         end
       when :CMD_ANC_WORD_BOUND
-        offsets.uniq.each do | offset |
+        offsets.uniq.size.times do | i |
+          offset = offsets[i]
           # puts "before offset:#{offset} #{@results}"
           if offset > 0 && offset < @results.size
             if !bound_process(@results[offset-1], @results[offset])
               return false
             end
+          elsif @results.size == 0
+            @results.push (Regtest::Back::Element.any_char)
+            @results.push (Regtest::Back::Element.any_char)
+            bound_process(@results[0], @results[1])
+          elsif offset == @results.size
+            @results.push (Regtest::Back::Element.any_char)
+            if !bound_process(@results[-2], @results[-1])
+              return false
+            end
+          elsif offset == 0
+            if !unshift_params(1)
+              return false
+            end
+            @results.unshift (Regtest::Back::Element.any_char)
+            if !bound_process(@results[0], @results[1])
+              return false
+            end
           end
         end
       when :CMD_ANC_WORD_UNBOUND
-        offsets.uniq.each do | offset |
+        offsets.uniq.size.times do | i |
+          offset = offsets[i]
           # puts "before offset:#{offset} #{@results}"
           if offset > 0 && offset < @results.size
             if !unbound_process(@results[offset-1], @results[offset])
+              return false
+            end
+          elsif @results.size == 0
+            @results.push (Regtest::Back::Element.any_char)
+            @results.push (Regtest::Back::Element.any_char)
+            unbound_process(@results[0], @results[1])
+          elsif offset == @results.size
+            @results.push (Regtest::Back::Element.any_char)
+            if !unbound_process(@results[-2], @results[-1])
+              return false
+            end
+          elsif offset == 0
+            if !unshift_params(1)
+              return false
+            end
+            @results.unshift (Regtest::Back::Element.any_char)
+            if !unbound_process(@results[0], @results[1])
               return false
             end
           end
