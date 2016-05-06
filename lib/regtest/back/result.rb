@@ -54,7 +54,7 @@ class Regtest::Back::Result
 
   # Merge results of look aheads / behinds
   def merge
-    merge_look_ahead
+    merge_look_ahead && 
     merge_look_behind
   end
 
@@ -175,7 +175,9 @@ class Regtest::Back::Result
     unshift_length = sub_results.end_offset - offset
     if unshift_length > 0
       # @results = sub_results[0..(unshift_length-1)] + @results
-      unshift_params(unshift_length, sub_results)
+      if !unshift_params(unshift_length)
+        return false
+      end
     end
 
     # intersect elems
@@ -199,7 +201,9 @@ class Regtest::Back::Result
   def merge_not_look_behind_elems(offset, sub_results)
     unshift_length = sub_results.end_offset - offset
     if unshift_length > 0
-      unshift_params(unshift_length, sub_results)
+      if !unshift_params(unshift_length)
+        return false
+      end
     end
     
     try_order = sub_results.size.times.to_a.shuffle
@@ -249,14 +253,16 @@ class Regtest::Back::Result
   end
   
   # unshift parameters
-  def unshift_params(unshift_length, sub_results)
+  def unshift_params(unshift_length)
     @look_aheads.each{|elem| elem[:offset] += unshift_length}
     @look_behinds.each{|elem| elem[:offset] += unshift_length}
-    @positional_anchors.values do | value |
-      value.map!{|elem| elem[:offset] += unshift_length}
+    @positional_anchors.each do | cmd, offsets |
+      return false if(cmd == :CMD_ANC_STRING_BEGIN)
+      offsets.map!{| offset | offset += unshift_length}
     end
     @start_offset += unshift_length
     @end_offset += unshift_length
+    true
   end
   
   # narrow down nominates by anchors

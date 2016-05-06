@@ -94,7 +94,9 @@ class Regtest::Back
         raise "invalid command: #{command}"
       end
     end
-    results.merge
+    if !results.merge
+      return nil
+    end
     
     results
   end
