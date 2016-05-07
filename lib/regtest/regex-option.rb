@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-require "pp"
-
-# 正規表現のオプションを保持するクラス
+# A class that manages options of regular expression
 class Regtest::RegexOption
   attr_accessor :reg_options
   
@@ -10,18 +8,18 @@ class Regtest::RegexOption
     self.set(options)
   end
   
-  # コピー用のメソッド（不要か）
+  # a method for copy (maybe unnecessary)
   def initialize_copy(source_obj)
     @reg_options = source_obj.reg_options
   end
     
-  # オプションのセット
+  # set one or more options
   def set(options)
     @reg_options = 0
     modify(options)
   end
     
-  # オプションの変更
+  # modify one or more options
   def modify(options)
     case options
     when String
@@ -31,12 +29,12 @@ class Regtest::RegexOption
     end
   end
     
-  # オプション文字列による変更
+  # modify regoption by string (like 'x-im')
   def modify_string(opt_string)
     opts = opt_string.split("-")
     raise "Option string (#{opt_string}) is invalid." if(opts.size > 2)
     
-    # ビットの設定
+    # set option bits
     if(opts[0])
       opts[0].split(//).each do | opt |
         case opt
@@ -52,7 +50,7 @@ class Regtest::RegexOption
       end
     end
     
-    # ビットのリセット
+    # reset option bits
     if(opts[1])
       opts[1].split(//).each do | opt |
         case opt
@@ -70,13 +68,13 @@ class Regtest::RegexOption
     @reg_options
   end
 
-  # オプションの変更
+  # modify options by integer
   def modify_integer(options)
     @reg_options |= options
   end
       
 
-  # フラグの状態確認
+  # methods for checking each flag
   def is_ignore?
     (@reg_options & Regexp::IGNORECASE != 0)
   end
@@ -111,12 +109,10 @@ end
     puts "OK mod extended" if(!opts.is_extended?)
     puts "OK mod multiline" if(!opts.is_multiline?)
     
-    # 元のオブジェクトと独立であることを確認
+    # verify opt2 is independent of opt
     puts "OK mod igonore" if(opts2.is_ignore?)
     puts "OK mod extended" if(opts2.is_extended?)
     puts "OK mod multiline" if(opts2.is_multiline?)
     
   end
-
-
 

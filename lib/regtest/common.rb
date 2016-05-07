@@ -1,8 +1,8 @@
 # encoding: utf-8
 
-# パーサクラスの共通部
+# Common part of regtest
 module Regtest::Common
-  # 解析オプション
+  # Analyzing options
   @@parse_options = nil
   
 end
