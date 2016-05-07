@@ -48,7 +48,7 @@ module Regtest::Front::ManageParentheses
         end
       else
         # puts "offset = #{offset}, id = #{get_id}"
-        target_id = @paren_array.size - 1
+        target_id = @paren_array.size + 1
         @paren_array.each_with_index do | paren, i |
           # puts paren.offset
           if paren.offset > offset
