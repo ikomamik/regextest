@@ -119,7 +119,9 @@ end
 
 # Log
 def TstLog(msg)
-  warn msg
+  if(!defined? Rails)  # not output debug message when rails env (even if development mode)
+    warn msg
+  end
 end
 
 # Test suite
