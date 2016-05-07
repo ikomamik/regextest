@@ -70,11 +70,6 @@ module Regtest::Front::Repeat
       end
     end
     
-    # 繰り返し数を生成(現在、オプションは実装されていない）
-    def generate2
-      @min_value + rand(1 + @max_value - @min_value)
-    end
-
   end
 end
 

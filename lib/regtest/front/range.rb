@@ -33,12 +33,6 @@ module Regtest::Front::Range
       end
     end
     
-    # 文字列の生成
-    def generate2
-      offset = rand(@range.size)
-      [@range[offset]].pack("U*")
-    end
-    
     # generate range (generate array of Unicode codepoints)
     def generate_range(letter_begin, letter_end)
       char_ords = []

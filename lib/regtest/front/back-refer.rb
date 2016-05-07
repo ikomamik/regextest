@@ -75,22 +75,6 @@ module Regtest::Front::BackRefer
       @paren_obj
     end
     
-    # 参照のみの場合は新たに生成せずに前に生成した文字列を使う
-    def generate2
-      if(!@paren_obj)
-        @paren_obj = get_paren(@type, @value)
-        if(!@paren_obj)
-          raise "Error: parenthesis #{@value} not found"
-        end
-      end
-      
-      if(@type == :LEX_NAMED_GENERATE)
-        @paren_obj.generate
-      else
-        @paren_obj.get_value(@relative_num)
-      end
-    end
-    
     # transform to json format
     def json
       @paren_obj = get_paren(@type, @value)

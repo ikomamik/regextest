@@ -24,17 +24,6 @@ module Regtest::Front::Sequence
       self
     end
     
-    # 文字列の生成
-    def generate2
-      results = @elements.map{|elem| elem.generate}
-      if(results.index(nil))
-        puts "seq nil"
-        nil
-      else
-        results.join("")
-      end
-    end
-    
     # transform to json format
     def json
       # if @elements.size > 1

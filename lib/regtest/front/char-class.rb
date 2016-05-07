@@ -100,17 +100,6 @@ module Regtest::Front::CharClass
       work.inject([]){|result,elem| result |= elem.enumerate}
     end
     
-    # generating a set of letters
-    def generate2
-      offsets = (0 ... @nominates.size).to_a.shuffle
-      result = nil
-      offsets.each do | offset |
-        result = @nominates[offset].generate
-        break if(result)
-      end
-      result
-    end
-    
     # enumerate nomimated letters
     def enumerate
       @nominates.inject([]){|result, nominate| result += nominate.enumerate}
