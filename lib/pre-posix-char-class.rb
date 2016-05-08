@@ -40,8 +40,8 @@ def get_onigmo_unicode_propety_class(file, hash)
 end
 
 hash = {}
-get_onigmo_posix_char_class("./onigmo/RE.txt", hash)
-get_onigmo_unicode_propety_class("./onigmo/UnicodeProps.txt", hash)
+get_onigmo_posix_char_class("../contrib/onigmo/RE.txt", hash)
+# get_onigmo_unicode_propety_class("../contrib/onigmo/UnicodeProps.txt", hash)
 pp hash
 exit
 
