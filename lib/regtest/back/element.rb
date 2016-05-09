@@ -16,7 +16,7 @@ class Regtest::Back::Element
       result = @nominates[rand(@nominates.size)]
       @nominates = [result]   # fixed!
     else
-      raise "invalid command #{@command}"
+      raise "invalid command at random_fix: #{@command}"
     end
     result
   end
@@ -41,7 +41,7 @@ class Regtest::Back::Element
   
   # narrow down nominates
   def intersect(other_obj)
-    raise "invalid command" if(other_obj.command != :CMD_SELECT)
+    raise "invalid command at intersect" if(other_obj.command != :CMD_SELECT)
     work = @nominates & other_obj.nominates
     if work.size > 0
       @nominates = work
@@ -52,7 +52,7 @@ class Regtest::Back::Element
   
   # exclude
   def exclude(other_obj)
-    raise "invalid command" if(other_obj.command != :CMD_SELECT)
+    raise "invalid command at exclude" if(other_obj.command != :CMD_SELECT)
     work = @nominates - other_obj.nominates
     if work.size > 0
       @nominates = work
@@ -63,7 +63,7 @@ class Regtest::Back::Element
   
   # join nominates
   def union(other_obj)
-    raise "invalid command" if(other_obj.command != :CMD_SELECT)
+    raise "invalid command at union" if(other_obj.command != :CMD_SELECT)
     #@nominates |= other_obj.nominates
     @nominates += other_obj.nominates # to be faster
   end
@@ -83,7 +83,7 @@ class Regtest::Back::Element
          :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START
       @param.inspect
     else
-      raise "invalid command #{@command}"
+      raise "inner error, invalid command #{@command}"
     end
   end
   

@@ -76,7 +76,7 @@ class Regtest::Back::Result
           return nil
         end
       else
-        raise "invalid command: #{command}"
+        raise "invalid command at merge_look_ahead: #{command}"
       end
     end
     true
@@ -164,7 +164,7 @@ class Regtest::Back::Result
           return nil
         end
       else
-        raise "invalid command: #{command}"
+        raise "invalid command at merge_look_behind: #{command}"
       end
     end
     true

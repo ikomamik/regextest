@@ -92,7 +92,7 @@ class Regtest::Back
            :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START  
         results.add_anchor(command)
       else
-        raise "invalid command: #{command}"
+        raise "inner error, invalid command at checking anchors: #{command}"
       end
     end
     if !results.merge
