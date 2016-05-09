@@ -89,7 +89,8 @@ class Regtest::Back
           return nil
         end
       when :CMD_ANC_LINE_BEGIN, :CMD_ANC_LINE_END, :CMD_ANC_WORD_BOUND, :CMD_ANC_WORD_UNBOUND,
-           :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START  
+           :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START,
+           :CMD_ANC_LOOK_BEHIND2
         results.add_anchor(command)
       else
         raise "inner error, invalid command at checking anchors: #{command}"

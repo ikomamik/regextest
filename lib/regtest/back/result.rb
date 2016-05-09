@@ -358,6 +358,8 @@ class Regtest::Back::Result
             end
           end
         end
+      when :CMD_ANC_LOOK_BEHIND2
+        @start_offset = offsets.max
       else
         raise "command (#{cmd}) not implemented"
       end
