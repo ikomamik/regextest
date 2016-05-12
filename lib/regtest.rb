@@ -48,11 +48,12 @@ class Regtest
   def set_regex(param)
     case param
     when String
-      if param.match(/^\/.*\/$/)
+      if param.match(/^\/.*\/[imx]*$/)
         @reg_exp = eval(param)
         @reg_string = @reg_exp.source
       else
-        @reg_string = param
+        new_param = check_builtin(param)
+        @reg_string = new_param
         @reg_exp = /#{@reg_string}/
       end
       @@parse_options[:reg_source] = @reg_string
@@ -84,6 +85,26 @@ class Regtest
       break if @result
     end
     @result
+  end
+  
+  # add built-in functions if any
+  def check_builtin(param)
+    builtin_functions = {}
+    param.scan(/\\g[\<\'](_\w+_)[\>\']/) do | func_name |
+      builtin_functions[func_name[0]] = true
+    end
+    if builtin_functions.keys.size > 0
+      require 'regtest/front/builtin-functions'
+      functions = Regtest::Front::BuiltinFunctions.new
+      builtin_functions.keys.each do | func_name |
+        if func_string = functions.find_func(func_name)
+          param = param + func_string
+        else
+          raise "invalid built-in function name (#{func_name})"
+        end
+      end
+    end
+    param
   end
   
   # Verifies the result
@@ -150,7 +171,11 @@ if __FILE__ == $0
     end
     
     begin
-      reg = eval "/#{regex}/#{ARGV[1]}"
+      if ARGV[1]
+        reg = eval "/#{regex}/#{ARGV[1]}"
+      else
+        reg = regex
+      end
     rescue SyntaxError => ex
       warn "Ruby Regexp: Syntax error: " + ex.message
       reg = regex
