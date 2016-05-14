@@ -21,7 +21,7 @@ class Regtest
   # Constructer
   def initialize(param, options = {})
     @@parse_options = options
-    @@parse_options[:reg_options] = Regtest::RegexOption.new
+    @@parse_options[:reg_options] ||= Regtest::RegexOption.new
     @reg_string = nil
     @reg_exp = nil
     set_regex(param)
@@ -48,7 +48,7 @@ class Regtest
   def set_regex(param)
     case param
     when String
-      if param.match(/^\/.*\/[imx]*$/)
+      if md = param.match(/^\/(.*)\/([imx]*)$/)
         @reg_exp = eval(param)
         @reg_string = @reg_exp.source
       else
@@ -140,9 +140,9 @@ end
 
 # Log
 def TstLog(msg)
-  if(!defined? Rails)  # not output debug message when rails env (even if development mode)
+  # if(!defined? Rails)  # not output debug message when rails env (even if development mode)
     warn msg
-  end
+  # end
 end
 
 # Test suite
