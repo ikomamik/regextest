@@ -35,12 +35,14 @@ class Regtest::Front::Scanner
      %r![\?\*\+][\?\+]?|\{\d+(?:,\d*)?\}\??|\{,\d+\}\??! ],
     [:LEX_COMMENT,
      %r!\(\?\#(?:\\\)|[^\)])*\)! ],
-    # [:LEX_OPTION_PAREN,
-    #  %r!\(\?[imxdau]*(?:\-[imx]+)?\)! ],
+    [:LEX_OPTION_PAREN_1,
+     %r!\(\?(?=\w*x)[imxdau]+(?:\-[im]*)?\)! ],              # (?x-im)
+    [:LEX_OPTION_PAREN_2,
+     %r!\(\?[imxdau]*(?:\-(?=\w*x)[imx]+)?\)! ],             # (?im-x)
     [:LEX_PAREN_START_EX1,
-     %r!\(\?(?=\w*x)[imxdau]+(?:\-[im]*)?(?::|(?=\)))! ],   # (?:x-im ... )
+     %r!\(\?(?=\w*x)[imxdau]+(?:\-[im]*)?(?::|(?=\)))! ],    # (?x-im: ... )
     [:LEX_PAREN_START_EX2,
-     %r!\(\?[imxdau]*(?:\-(?=\w*x)[imx]+)?(?::|(?=\)))! ],   # (?:im-x ... )
+     %r!\(\?[imxdau]*(?:\-(?=\w*x)[imx]+)?(?::|(?=\)))! ],   # (?im-x: ... )
     [:LEX_PAREN_START,
      %r!\(\?<\w+>|
         \(\?'\w+'|

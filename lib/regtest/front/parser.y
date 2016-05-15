@@ -23,6 +23,10 @@ rule
            {Sequence.new(val[0])}
          | reg_seq reg_rep
            {val[0].add(val[1])}
+         | LEX_OPTION_PAREN_1  reg_seq_ex          # ((?x)a b c)
+           {Sequence.new(val[1])}
+         | reg_seq LEX_OPTION_PAREN_1  reg_seq_ex  # (a (?x)b c)
+           {val[0].add(val[2])}
            
   # repeatable elements
   reg_rep: reg_elm
@@ -89,6 +93,10 @@ rule
            {Sequence.new(val[0])}
          | reg_seq_ex reg_rep_ex
            {val[0].add(val[1])}
+         | LEX_OPTION_PAREN_2  reg_seq               # ((?-x)a b c)
+           {Sequence.new(val[1])}
+         | reg_seq_ex LEX_OPTION_PAREN_2  reg_seq    # (a (?-x)b c)
+           {val[0].add(val[2])}
            
   # repeatable elements
   reg_rep_ex: reg_elm_ex
