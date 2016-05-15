@@ -7,7 +7,6 @@ class Regtest; end
 require 'regtest/version'
 require 'regtest/common'
 require 'regtest/front'
-require 'regtest/front/parser'
 require 'regtest/regex-option'
 require 'regtest/back'
 require 'regtest/regexp'
@@ -26,14 +25,11 @@ class Regtest
     @reg_exp = nil
     set_regex(param)
 
-    # Prepare parsers (for whole regex and bracket)
-    @parser = RegtestFrontParser.new
+    # Parse string
+    @front_end = Regtest::Front.new(@reg_string, @@parse_options)
     
-    # Do parse
-    @obj = @parser.parse(@reg_string, @@parse_options)
-    
-    # To json
-    @json_obj = get_json_obj(@obj)
+    # To json (use json format for backend)
+    @json_obj = @front_end.get_json_obj
     
     # Prepare back-end process. (use generate method for generating string)
     @back_end = Regtest::Back.new(@json_obj)
@@ -129,13 +125,6 @@ class Regtest
     # @result = @back_end.generate
   end
   
-  # Output JSON format parse result of the regex
-  def get_json_obj(result = @obj)
-    require "json"
-    json_obj = JSON.load(result.json)
-    puts JSON.pretty_generate(json_obj)
-    json_obj
-  end
 end
 
 # Log

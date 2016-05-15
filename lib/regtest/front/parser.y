@@ -178,20 +178,17 @@ end
  
 ---- header
 # parser classes
-require 'regtest/front/scanner'        # scanner class (for splitting the string)
 require 'regtest/front/empty'          # parser class for empty part ("", (|) etc.)
 require 'regtest/front/letter'         # parser class for a letter
 require 'regtest/front/range'          # parser class for a range of letters
 require 'regtest/front/selectable'     # parser class for a selectable element
 require 'regtest/front/parenthesis'    # parser class for a parenthesis
-require 'regtest/front/manage-parentheses'   # management class of parentheses
 require 'regtest/front/repeatable'     # parser class for a repeatable elements
 require 'regtest/front/sequence'       # parser class for a sequence of elements
 require 'regtest/front/bracket'        # parser class for a character class (bracket)
 require 'regtest/front/anchor'         # parser class for a anchor
 require 'regtest/front/back-refer'     # parser class for a back reference
 require 'regtest/front/bracket-parser' # bracket parser
-require 'regtest/regex-option'         # option of the regular expression
 
 ---- inner
 # modules for sharing procedures with bracket parser
@@ -205,39 +202,26 @@ include Regtest::Front::Sequence
 include Regtest::Front::Bracket
 include Regtest::Front::Anchor
 include Regtest::Front::BackRefer
-include Regtest::Front::ManageParentheses
 
 # execute to parse
-def parse(str, options)
+def parse(lex_words, options)
   @options = options
   
-  # scanning the string
-  scanner = Regtest::Front::Scanner.new(options)
-  @q = scanner.scan(str)
+  # scanned lexical words
+  @q = lex_words
   
-  # initialize management class of parentheses
-  @options[:parens] = Parens.new()
-
   # bracket parser (class name is strange because of racc's restriction)
   @bracket_parser = RegtestFrontBracketParser.new
   
   # delete comments (since it is complecated to handle comments)
   @q = @q.delete_if{|token| token[0] == :LEX_COMMENT}
   
-  # if extended option specified, delete spaces from string
-  #if( @options[:reg_options].is_extended? )
-  #  @q = @q.delete_if{|token| (token[0] == :LEX_EXTENDED_COMMENT || token[0] == :LEX_SPACE)}
-  #end
-
   # execute to parse
   begin
     parse_result = do_parse
   rescue Racc::ParseError => ex
     raise ex.message
   end
-  
-  # sort parentheses (since number of parenthesis is offset-order other than parsing-order)
-  @options[:parens].sort
   
   parse_result
 end
