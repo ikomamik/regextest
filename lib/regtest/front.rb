@@ -9,8 +9,6 @@ require 'regtest/front/manage-parentheses'   # management class of parentheses
 
 # Front end processes
 class Regtest::Front
-  include Regtest::Front::ManageParentheses
-
   def initialize(reg_string, options)
     @options = options
   
@@ -19,7 +17,7 @@ class Regtest::Front
     lex_words = scanner.scan(reg_string)
     
     # initialize management class of parentheses
-    @options[:parens] = Parens.new()
+    @options[:parens] = Regtest::Front::ManageParentheses.new()
 
     # Prepare parsers (for whole regex and bracket)
     @parser = RegtestFrontParser.new
@@ -46,6 +44,3 @@ end
 # Test suite (execute when this file is specified in command line)
 if __FILE__ == $0 
 end
-
-
-
