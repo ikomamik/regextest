@@ -62,11 +62,7 @@ class Regtest::Front::BracketScanner
   def initialize(options = nil)
     reg_options = options[:reg_options]
 
-    if( reg_options.is_extended? )
-      @lex_table = LexTable
-    else
-      @lex_table = LexTable.delete_if{|elem| elem[0] == :LEX_EXTENDED_COMMENT}
-    end
+    @lex_table = LexTable
     whole_lex = @lex_table.map{|lex| "(?<#{lex[0]}>" + lex[1].source + ")"}.join('|')
     @reg = /^#{whole_lex}/mx
   end

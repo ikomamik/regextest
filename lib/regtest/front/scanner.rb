@@ -37,15 +37,19 @@ class Regtest::Front::Scanner
      %r!\(\?\#(?:\\\)|[^\)])*\)! ],
     # [:LEX_OPTION_PAREN,
     #  %r!\(\?[imxdau]*(?:\-[imx]+)?\)! ],
+    [:LEX_PAREN_START_EX1,
+     %r!\(\?(?=\w*x)[imxdau]+(?:\-[im]*)?(?::|(?=\)))! ],   # (?:x-im ... )
+    [:LEX_PAREN_START_EX2,
+     %r!\(\?[imxdau]*(?:\-(?=\w*x)[imx]+)?(?::|(?=\)))! ],   # (?:im-x ... )
     [:LEX_PAREN_START,
      %r!\(\?<\w+>|
         \(\?'\w+'|
         \(\?\(\d+\)|
         \(\?\(<\w+>\)|
         \(\?\('\w+'\)|
-        \(\?[imxdau]*(?:\-[imx]+)?(?::|(?=\)))|
+        \(\?[imdau]*(?:\-[im]*)?(?::|(?=\)))|    # expressions independent of "x"
         \(\?\<[\=\!]|
-        \(\?.|
+        \(\?.|    # for better error message
         \(
        !x ],
     [:LEX_PAREN_END,
@@ -86,16 +90,22 @@ class Regtest::Front::Scanner
      %r!\\G! ],
     [:LEX_SPECIAL_LETTER,
      %r!\\[RX]! ],
+    [:LEX_SHARP,
+     %r!\#! ],
     [:LEX_ANY_LETTER,
      %r!\.! ],
-    [:LEX_EXTENDED_COMMENT,
-     %r!\#.*?(?:\n|$)! ],
+    # [:LEX_EXTENDED_COMMENT,  # commented out since there is dynamic syntax change using (?x: ...)
+    #  %r!\#.*?(?:\n|$)! ],
+    [:LEX_NEW_LINE,
+     %r!\n!m ],
     [:LEX_SPACE,
      %r!\s!m ],
     [:LEX_ERROR,
      %r![\{\}\[\]]! ],
     [:LEX_SIMPLE_ESCAPE,      # redundant escape \@, \", etc.
      %r!\\.! ],
+    # [:LEX_REGOPT_LETTER,      # imxdau
+    #  %r![imxdau]! ],
     [:LEX_CHAR,
      %r!.! ],
   ]
@@ -103,11 +113,7 @@ class Regtest::Front::Scanner
   def initialize(options = nil)
     reg_options = (options)?options[:reg_options]:nil
 
-    if( reg_options && reg_options.is_extended? )
-      @lex_table = LexTable.dup
-    else
-      @lex_table = LexTable.dup.delete_if{|elem| elem[0] == :LEX_EXTENDED_COMMENT}
-    end
+    @lex_table = LexTable.dup
     whole_lex = @lex_table.map{|lex| "(?<#{lex[0]}>" + lex[1].source + ")"}.join('|')
     # puts whole_lex
     @reg = /^#{whole_lex}/mx
