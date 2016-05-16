@@ -14,13 +14,21 @@ module Regtest::Front::Sequence
       @elements = [elem]
     end
     
-    attr_reader :offset, :length
+    attr_reader :offset, :length, :elements
     
     # add an element (a letter or a parenthesis) to sequence
     def add(elem)
       TstLog("Sequence add: #{elem}")
       @elements.push elem
       @length += elem.length
+      self
+    end
+    
+    # concatinate other sequence object to sequence
+    def concatinate(other_obj)
+      TstLog("Sequence concatinate: #{other_obj}")
+      @elements += other_obj.elements
+      @length += other_obj.length
       self
     end
     

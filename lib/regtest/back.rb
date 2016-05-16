@@ -306,6 +306,8 @@ class Regtest::Back
       result = Regtest::Back::Element.new({cmd: :CMD_ANC_MATCH_START})
     when "LEX_ANC_LOOK_BEHIND2"
       result = Regtest::Back::Element.new({cmd: :CMD_ANC_LOOK_BEHIND2})
+    when "LEX_OPTION_PAREN"     # options are processed at front-end
+      result = []
     when "LEX_EMPTY"
       result = []
     else

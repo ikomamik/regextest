@@ -1,24 +1,37 @@
 #encoding: utf-8
+require 'regtest/front/empty'          # parser class for empty part ("", (|) etc.)
 
 # Class for parsing parenthesis
 module Regtest::Front::Parenthesis
   
   class Paren
     include Regtest::Common
+    include Regtest::Front::Empty
     @@id = 0   # a class variable for generating unique name of element
     
     # Constructor
-    def initialize(paren_start, element, paren_end)
+    def initialize(paren_start, element = nil, paren_end = nil)
       @options = @@parse_options
       @paren_type = paren_start[0]
       @offset = paren_start[1]
-      @length = (paren_end[1] - paren_start[1]) + paren_end[2]
-      @prefix = @paren_type.sub(/^\(\??/, "")    # delete head '(' and '?'
+      if paren_end
+        @length = (paren_end[1] - paren_start[1]) + paren_end[2]
+      else
+        @length = paren_start[2]
+      end
+      @prefix = @paren_type.sub(/^\(\??/, "").sub(/\)$/, "")    # delete head '(', '?', and tail ")"
       @name = get_name(@prefix)
       @condition = nil  # set at generating json
       @refer_name = nil
-      TstLog("Parenthesis: name:#{@name}, offset:#{@offset}, element:#{element}")
-      @element = element
+      if element
+        TstLog("Parenthesis: name:#{@name}, offset:#{@offset}, element:#{element}")
+        @element = element
+        @type_name = "LEX_PAREN"
+      else
+        TstLog("Parenthesis: name:#{@name}, offset:#{@offset}, element: \"\"")
+        @element = TEmpty.new
+        @type_name = "LEX_OPTION_PAREN"    # (?x-i) etc.
+      end
       @generated_string = []
       @nest = 0
     end
@@ -82,10 +95,10 @@ module Regtest::Front::Parenthesis
     
     # transform to json format
     def json
+      @@id += 1
       @condition = get_condition(@prefix)
       condition_name = @condition.refer_name if @condition
-      @@id += 1
-      "{\"type\": \"LEX_PAREN\"," +
+      "{\"type\": \"#{@type_name}\"," +
       " \"name\": \"#{@name}\"," +
       " \"offset\": \"#{@offset}\"," +
       " \"length\": \"#{@length}\"," +
