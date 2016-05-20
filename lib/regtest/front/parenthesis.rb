@@ -93,6 +93,31 @@ module Regtest::Front::Parenthesis
       end
     end
     
+    # set options
+    def set_options(options)
+      reg_options = options[:reg_options]
+      TstLog("Parenthesis set_options before: #{reg_options.inspect}, prefix: #{@prefix}");
+      if md = @prefix.match(/^([imxdau]*(?:\-[imx]*)?)(:)?$/)
+        if md[2]
+          # deep copy if (?imx: ) pattern
+          cur_options = reg_options.dup
+        else
+          # replace option if (?imx) pattern
+          cur_options = reg_options
+        end
+        cur_options.modify(md[1])
+        TstLog("Parenthesis set_options after: #{cur_options.inspect}, new_regopt: #{md[1]}");
+      else
+        cur_options = reg_options
+      end
+      
+      new_options = options.dup
+      new_options[:reg_options] = cur_options
+
+      @element.set_options(new_options)
+      self
+    end
+    
     # transform to json format
     def json
       @@id += 1

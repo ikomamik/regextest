@@ -105,6 +105,29 @@ module Regtest::Front::CharClass
       @nominates.inject([]){|result, nominate| result += nominate.enumerate}
     end
     
+    # set options
+    def set_options(options)
+      TstLog("CharClass set_options: #{options[:reg_options].inspect}");
+      alternatives = []
+      @nominates.each do |nominate|
+        case nominates
+        when Range
+          nominate.set_options(options, alternatives)
+        when String
+          nominate.set_options(options)
+        end
+      end
+      if alternatives.size > 0
+        code_points = enumerate
+        alternatives.each do | alternative |
+          # ignore alternative is more than two letters
+          code_points.push(alternative[0]) if(alternative.size == 1)
+        end
+        @nominates = reconstruct_nominates(code_points)
+      end
+      self
+    end
+    
     # transform to json format
     def json
       #if @nominates.size > 1

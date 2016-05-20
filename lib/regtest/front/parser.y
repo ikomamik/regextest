@@ -16,7 +16,7 @@ rule
          | reg_sel LEX_OR
            {val[0].add(TEmpty.new)}
          | LEX_OR reg_sel
-           {sel = Selectable.new(TEmpty.new); sel.add(val[1]); sel}
+           {Selectable.new(TEmpty.new).add(val[1])}
 
   # sequence of elements
   reg_seq: reg_rep
@@ -31,6 +31,10 @@ rule
            {Sequence.new(Paren.new(val[0])).concatinate(val[1])}
          | reg_seq LEX_OPTION_PAREN_2  reg_seq     # (a (?-x)b c). stay basic mode
            {val[0].add(Paren.new(val[1])).concatinate(val[2])}
+         | LEX_OPTION_PAREN_1                      # ((?x)). transit extended mode
+           {Sequence.new(Paren.new(val[0]))}
+         | LEX_OPTION_PAREN_2                      # ((?-x)). transit extended mode
+           {Sequence.new(Paren.new(val[0]))}
            
   # repeatable elements
   reg_rep: reg_elm
@@ -90,7 +94,7 @@ rule
          | reg_sel_ex LEX_OR
            {val[0].add(TEmpty.new)}
          | LEX_OR reg_sel_ex
-           {sel = Selectable.new(TEmpty.new); sel.add(val[1]); sel}
+           {Selectable.new(TEmpty.new).add(val[1])}
 
   # sequence of elements
   reg_seq_ex: reg_rep_ex
@@ -105,6 +109,10 @@ rule
            {Sequence.new(Paren.new(val[0])).concatinate(val[1])}
          | reg_seq_ex LEX_OPTION_PAREN_2  reg_seq    # (a (?-x)b c). transit to basic mode
            {val[0].add(Paren.new(val[1])).concatinate(val[2])}
+         | LEX_OPTION_PAREN_1                      # ((?x)). transit extended mode
+           {Sequence.new(Paren.new(val[0]))}
+         | LEX_OPTION_PAREN_2                      # ((?-x)). transit extended mode
+           {Sequence.new(Paren.new(val[0]))}
            
   # repeatable elements
   reg_rep_ex: reg_elm_ex

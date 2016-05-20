@@ -13,6 +13,13 @@ module Regtest::Front::Empty
     
     attr_reader :offset, :length
     
+    # set options
+    def set_options(options)
+      TstLog("Empty set_options: #{options[:reg_options].inspect}");
+      # do nothing
+      self
+    end
+    
     # generate json format
     def json
       @@id += 1

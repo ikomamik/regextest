@@ -75,6 +75,13 @@ module Regtest::Front::BackRefer
       @paren_obj
     end
     
+    # set options
+    def set_options(options)
+      TstLog("BackRefer set_options: #{options[:reg_options].inspect}");
+      # nothing to do
+      self
+    end
+    
     # transform to json format
     def json
       @paren_obj = get_paren(@type, @value)

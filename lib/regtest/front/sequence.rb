@@ -32,6 +32,21 @@ module Regtest::Front::Sequence
       self
     end
     
+    # set options
+    def set_options(options)
+      TstLog("Sequence set_options: #{options[:reg_options].inspect}")
+
+      # dup for preventing from rewrite in the sequence
+      new_options = options.dup
+      new_options[:reg_options] = options[:reg_options].dup
+      
+      # call elements of the sequence
+      @elements.each do | element |
+        element.set_options(new_options)
+      end
+      self
+    end
+    
     # transform to json format
     def json
       # if @elements.size > 1

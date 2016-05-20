@@ -13,17 +13,20 @@ class Regtest::Front
     @options = options
   
     # scanning the string
-    scanner = Regtest::Front::Scanner.new(options)
+    scanner = Regtest::Front::Scanner.new
     lex_words = scanner.scan(reg_string)
     
     # initialize management class of parentheses
     @options[:parens] = Regtest::Front::ManageParentheses.new()
 
-    # Prepare parsers (for whole regex and bracket)
+    # Prepare parsers (for whole regex parser and bracket parser)
     @parser = RegtestFrontParser.new
     
     # Do parse
     @obj = @parser.parse(lex_words, @options)
+    
+    # process options
+    @obj.set_options(options)
     
     # sort parentheses, since number of parenthesis is by offset-order (not by parsing-order)
     @options[:parens].sort

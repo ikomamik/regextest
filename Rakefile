@@ -9,23 +9,33 @@ task :default => :make
 
 # Generating parser
 file 'lib/regtest/front/parser.rb' => 'lib/regtest/front/parser.y' do
-  puts 'making tst-reg-parser.rb'
+  puts 'making regtest/front/parser.rb'
   sh 'racc lib/regtest/front/parser.y -o lib/regtest/front/parser.rb'
 end
 
 # Generating bracket parser
 file 'lib/regtest/front/bracket-parser.rb' => 'lib/regtest/front/bracket-parser.y' do
-  puts 'making lib/regtest/front/bracket-parser.rb'
+  puts 'making regtest/front/bracket-parser.rb'
   sh 'racc lib/regtest/front/bracket-parser.y -o lib/regtest/front/bracket-parser.rb'
 end
 
 # Generating Unicode parser
 file 'lib/regtest/front/unicode.rb' => 'lib/pre-unicode.rb' do
-  puts "making tst-reg-parse-unicode.rb"
+  puts "making regtest/front/unicode.rb"
   sh 'ruby  lib/pre-unicode.rb'
 end
 
-task :make => ['lib/regtest/front/parser.rb', 'lib/regtest/front/bracket-parser.rb', 'lib/regtest/front/unicode.rb'] do 
+# Generating case-folding mapping
+file 'lib/regtest/front/case-folding.rb' => 'lib/pre-case-folding.rb' do
+  puts "making regtest/front/case-folding.rb"
+  sh 'ruby  lib/pre-case-folding.rb'
+end
+
+task :make =>
+        ['lib/regtest/front/parser.rb',
+         'lib/regtest/front/bracket-parser.rb',
+         'lib/regtest/front/unicode.rb',
+         'lib/regtest/front/case-folding.rb'] do 
   puts "Rake it!"
 end
 

@@ -33,6 +33,16 @@ module Regtest::Front::Selectable
       @length = value.offset - @offset + value.length
       self
     end
+
+    # set options
+    def set_options(options)
+      TstLog("Selectlable set_options: #{options[:reg_options].inspect}"); 
+      reg_options = (options)?options[:reg_options]:nil
+      @nominates.each do | nominate |
+        nominate.set_options(options)
+      end
+      self
+    end
     
     # transform to json format
     def json

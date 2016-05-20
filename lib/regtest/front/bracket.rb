@@ -32,6 +32,13 @@ module Regtest::Front::Bracket
       @element.enumerate
     end
     
+    # set options
+    def set_options(options)
+      TstLog("Bracket set_options: #{options[:reg_options].inspect}");
+      @element.set_options(options)
+      self
+    end
+    
     # transform to json format
     def json
       @@id += 1

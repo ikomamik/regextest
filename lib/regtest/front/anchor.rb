@@ -19,6 +19,11 @@ module Regtest::Front::Anchor
     
     attr_reader :offset, :length
     
+    # set options
+    def set_options(options)
+      TstLog("Anchor set_options: #{options[:reg_options].inspect}");
+    end
+    
     # transform to json format
     def json
       @@id += 1

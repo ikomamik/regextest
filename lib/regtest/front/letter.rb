@@ -218,13 +218,21 @@ module Regtest::Front::Letter
       end
     end
     
-    # 文字の列挙
-    def enumerate
-      if String === @obj
-        [ @obj ]
+    # set options
+    def set_options(options)
+      TstLog("Letter set_options: #{options[:reg_options].inspect}")
+      case @obj
+      when String
+        if options[:reg_options].is_ignore?
+          if alters = Regtest::Front::CaseFolding.ignore_case([@obj])
+            @obj = CharClass.new( [ TRange.new(@obj) ] )
+            alters.each{|alter| @obj.add alter}
+          end
+        end
       else
-        @obj.enumerate
+        @obj.set_options(options)
       end
+      self
     end
     
     # transform to json format

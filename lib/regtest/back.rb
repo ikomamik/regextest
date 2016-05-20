@@ -285,9 +285,13 @@ class Regtest::Back
         @nest -= 1
       end
     when "LEX_CHAR"
-      # result = ignore_case(target["value"], reg_options)
-      letter = ignore_case2(target["value"], reg_options)
-      result = Regtest::Back::Element.new({cmd: :CMD_SELECT, data: letter})
+      case target["value"]
+      when String
+        result = Regtest::Back::Element.new({cmd: :CMD_SELECT, data: [target["value"]]})
+      else
+        # letter = ignore_case2(target["value"], reg_options)
+        result = generate_matched_string({json: target["value"], regopt: reg_options})
+      end
     when "LEX_ANC_LINE_BEGIN"
       result = Regtest::Back::Element.new({cmd: :CMD_ANC_LINE_BEGIN})
     when "LEX_ANC_LINE_END"

@@ -31,6 +31,13 @@ module Regtest::Front::Repeatable
       self
     end
     
+    # set options
+    def set_options(options)
+      TstLog("Repeatable set_options: #{options[:reg_options].inspect}"); 
+      @value.set_options(options)
+      self
+    end
+    
     # transform to json format
     def json
       if(@quant)
