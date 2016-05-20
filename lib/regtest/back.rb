@@ -255,6 +255,12 @@ class Regtest::Back
           result = nil
           break
         end
+        
+        # quit to repeat if the first element is begin anchor
+        if !(String === elem[0]) && !(String === elem[-1])
+          break if elem[0].command == :CMD_ANC_LINE_BEGIN && !elem[-1].new_line?
+          break if elem[0].command == :CMD_ANC_STRING_BEGIN
+        end
       end
     when "LEX_RANGE"
       letter = []
