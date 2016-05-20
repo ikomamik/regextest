@@ -3,7 +3,7 @@
 require 'regtest/front/char-class'     # character class element
 require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'
-require 'regtest/front/unicode'        # Unicodeのレンジ
+require 'regtest/front/unicode'        # range of Unicode
 
 # A letter
 module Regtest::Front::Letter
@@ -33,8 +33,11 @@ module Regtest::Front::Letter
     # generate character(s) corresponding type of the character
     def set_attr(type, val)
       case type
-      when :LEX_CHAR, :LEX_SPACE, :LEX_AND_AND
-        @obj = val
+      when :LEX_CHAR, :LEX_SPACE
+        @obj = CharClass.new([ TRange.new(val)])
+      when :LEX_AND_AND
+        raise "Internal error: enexpected LEX_AND_AND"
+        @obj = CharClass.new([TRange.new(val)])
       when :LEX_SIMPLE_ESCAPE
         @obj = val[1..1]
       when :LEX_CONTROL_LETTER, :LEX_META_LETTER
@@ -210,11 +213,20 @@ module Regtest::Front::Letter
     end
     
     # 文字列の生成
-    def generate
+    #def generate
+    #  if String === @obj
+    #    @obj
+    #  else
+    #    @obj.generate
+    #  end
+    #end
+    
+    # enumerate codepoints
+    def enumerate
       if String === @obj
-        @obj
+        [ @obj.unpack("U*")[0] ]
       else
-        @obj.generate
+        @obj.enumerate
       end
     end
     

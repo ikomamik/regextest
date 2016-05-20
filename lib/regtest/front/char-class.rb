@@ -58,10 +58,7 @@ module Regtest::Front::CharClass
     end
 
     # Reconstruct nominate letters
-    def reconstruct_nominates(char_set)
-      # Convert each letter to corresponding code point
-      code_points = char_set.map{|letter| letter.unpack("U*")[0]}
-      
+    def reconstruct_nominates(code_points)
       # Consecutive code points are reconstructed into a TRange object
       new_nominates = []
       if code_points.size > 0
@@ -70,23 +67,23 @@ module Regtest::Front::CharClass
           if(codepoint == range_end + 1)
             range_end = codepoint
           else
-            new_nominates.push TRange.new([range_start].pack("U*"), [range_end].pack("U*"))
+            new_nominates.push TRange.new(range_start, range_end)
             range_start = range_end = codepoint
           end
         end
-        new_nominates.push TRange.new([range_start].pack("U*"), [range_end].pack("U*"))
+        new_nominates.push TRange.new(range_start, range_end)
       end
       new_nominates
     end
     
     # AND process of nominates
     def and(other_char_class)
-      TstLog("Selectlable and: #{other_char_class}");
+      TstLog("CharClass and: #{other_char_class}");
 
-      char_set = enumerate & other_char_class.enumerate
+      code_points = enumerate & other_char_class.enumerate
       
       # reconstructing valid character set using TRange objects
-      @nominates = reconstruct_nominates(char_set)
+      @nominates = reconstruct_nominates(code_points)
       self
     end
     

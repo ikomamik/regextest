@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+require 'regtest/front/case-folding'   # case folding hash
+
 # Consective codepoints
 module Regtest::Front::Range
   class TRange
@@ -14,7 +16,6 @@ module Regtest::Front::Range
         @end = @begin
       end
       TstLog("TRange: #{@begin}-#{@end}")
-      @range = generate_range(@begin, @end)
       @offset = -1  # not used in this class
       @length = -1  # not used in this class
     end
@@ -25,11 +26,15 @@ module Regtest::Front::Range
     def parse_letter(letter)
       case letter
       when String
-        letter
+        letter.unpack("U*")[0]
       when Integer
-        [letter].pack("U*")
+        letter
       else
-        letter.generate
+        enum = letter.enumerate
+        if enum.size > 1
+          raise "Internal error: TRange parameters must be a letter"
+        end
+        enum[0]
       end
     end
     
@@ -41,10 +46,7 @@ module Regtest::Front::Range
     # transform to json format (using codepoints of Unicode)
     def json
       @@id += 1
-      work_begin = @begin.unpack("U*")[0]
-      work_end   = @end.unpack("U*")[0]
-
-      "{\"type\": \"LEX_RANGE\", \"id\": \"G#{@@id}\", \"begin\": #{work_begin}, \"end\": #{work_end}}"
+      "{\"type\": \"LEX_RANGE\", \"id\": \"G#{@@id}\", \"begin\": #{@begin}, \"end\": #{@end}}"
     end
   end
 end
