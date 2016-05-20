@@ -8,7 +8,7 @@ module Regtest::Front::Bracket
 
     # Constructor
     def initialize(value, elem)
-      @value = value[0]
+      @value  = value[0]
       @offset = value[1]
       @length = value[2]
       if(@value.match(/^\[\^/))
@@ -27,7 +27,7 @@ module Regtest::Front::Bracket
     
     attr_reader :offset, :length
     
-    # 文字の列挙
+    # enumerate codepoints
     def enumerate
       @element.enumerate
     end

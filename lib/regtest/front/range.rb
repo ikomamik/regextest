@@ -8,7 +8,7 @@ module Regtest::Front::Range
     # Constructor
     def initialize(letter_begin, letter_end = nil)
       @begin = parse_letter(letter_begin)
-      if(letter_end)
+      if letter_end 
         @end = parse_letter(letter_end)
       else
         @end = @begin
@@ -33,23 +33,9 @@ module Regtest::Front::Range
       end
     end
     
-    # generate range (generate array of Unicode codepoints)
-    def generate_range(letter_begin, letter_end)
-      char_ords = []
-      (letter_begin.unpack("U*")[0]..letter_end.unpack("U*")[0]).to_a.each do |codepoint|
-        char_ords.push codepoint
-      end
-      char_ords
-    end
-    
-    # 文字の列挙
+    # enumerate
     def enumerate
-      @range.map{|codepoint| [codepoint].pack("U*")}
-    end
-    
-    # リセット
-    def reset
-      # 何もしない
+      (@begin..@end).to_a
     end
     
     # transform to json format (using codepoints of Unicode)

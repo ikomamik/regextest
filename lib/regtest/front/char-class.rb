@@ -14,7 +14,7 @@ module Regtest::Front::CharClass
 
     # Constructor
     def initialize(value)
-      TstLog("Selectlable: #{value}")
+      TstLog("CharClass: #{value}")
       @reg_options = @@parse_options[:reg_options]
       case value
       when Array
@@ -37,7 +37,7 @@ module Regtest::Front::CharClass
     
     # Add a letter to nominate letters
     def add(value)
-      TstLog("Selectlable add: #{value}"); 
+      TstLog("CharClass add: #{value}"); 
       @nominates.push value
       @length = value.offset - @offset + value.length
       self
@@ -45,7 +45,7 @@ module Regtest::Front::CharClass
     
     # reverse nominate letters (valid only in a bracket)
     def reverse
-      TstLog("Selectlable reverse"); 
+      TstLog("CharClass reverse"); 
 
       # delete characters from whole set
       whole = @whole_set.dup

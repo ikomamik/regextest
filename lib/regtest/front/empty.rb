@@ -7,6 +7,7 @@ module Regtest::Front::Empty
 
     # Constructor
     def initialize
+      TstLog("Empty: ")
       @offset = -1
       @length = 0
     end

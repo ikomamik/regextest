@@ -112,9 +112,7 @@ class Regtest::Front::Scanner
      %r!.! ],
   ]
   
-  def initialize(options = nil)
-    reg_options = (options)?options[:reg_options]:nil
-
+  def initialize
     @lex_table = LexTable.dup
     whole_lex = @lex_table.map{|lex| "(?<#{lex[0]}>" + lex[1].source + ")"}.join('|')
     # puts whole_lex
@@ -141,7 +139,7 @@ class Regtest::Front::Scanner
       end
     end
     results.push [false, nil]
-    # pp results
+    pp results
     results
   end
   
