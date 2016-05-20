@@ -19,7 +19,13 @@ module Regtest::Front::Parenthesis
       else
         @length = paren_start[2]
       end
-      @prefix = @paren_type.sub(/^\(\??/, "").sub(/\)$/, "")    # delete head '(', '?', and tail ")"
+      
+      # delete head '(', '?', and tail ")"
+      @prefix = @paren_type.sub(/^\(\??/, "")
+      if @prefix.index("(") != 0
+        @prefix.sub!(/\)$/, "")
+      end
+      
       @name = get_name(@prefix)
       @condition = nil  # set at generating json
       @refer_name = nil
