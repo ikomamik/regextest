@@ -34,19 +34,20 @@ module Regtest::Front::Letter
     def set_attr(type, val)
       case type
       when :LEX_CHAR, :LEX_SPACE
+        @data_type = :LEX_CHAR
         @obj = CharClass.new([ TRange.new(val)])
-      when :LEX_AND_AND
-        raise "Internal error: enexpected LEX_AND_AND"
-        @obj = CharClass.new([TRange.new(val)])
       when :LEX_SIMPLE_ESCAPE
-        @obj = val[1..1]
+        @data_type = :LEX_CHAR
+        @obj = CharClass.new([ TRange.new(val[1..1])])
       when :LEX_CONTROL_LETTER, :LEX_META_LETTER
-        @obj = eval('"'+ val + '"')   # convert using ruby's eval
+        @data_type = :LEX_CHAR
+        @obj = CharClass.new([ TRange.new(eval('"'+ val + '"'))])   # convert using ruby's eval
+      when :LEX_CODE_LITERAL, :LEX_ESCAPED_LETTER, :LEX_UNICODE
+        @data_type = :LEX_CHAR
+        @obj = CharClass.new([ TRange.new(eval('"'+val+'"'))])
       when :LEX_BRACKET
         require 'regtest/front/bracket'
         @obj = Regtest::Front::Bracket.new(val)
-      when :LEX_CODE_LITERAL, :LEX_ESCAPED_LETTER, :LEX_UNICODE
-        @obj = eval('"'+val+'"')
       when :LEX_SIMPLIFIED_CLASS
         @obj = generate_simplified_class(val)
       when :LEX_POSIX_CHAR_CLASS
@@ -55,6 +56,9 @@ module Regtest::Front::Letter
         @obj = generate_unicode_char(val)
       when :LEX_ANY_LETTER
         @obj = generate_any_char(val)
+      when :LEX_AND_AND
+        raise "Internal error: enexpected LEX_AND_AND"
+        @obj = CharClass.new([TRange.new(val)])
       else
         raise "Error: internal error, type:#{type} not implemented"
       end
@@ -212,55 +216,25 @@ module Regtest::Front::Letter
       obj
     end
     
-    # 文字列の生成
-    #def generate
-    #  if String === @obj
-    #    @obj
-    #  else
-    #    @obj.generate
-    #  end
-    #end
-    
     # enumerate codepoints
     def enumerate
-      if String === @obj
-        [ @obj.unpack("U*")[0] ]
-      else
-        @obj.enumerate
-      end
+      @obj.enumerate
     end
     
     # set options
     def set_options(options)
       TstLog("Letter set_options: #{options[:reg_options].inspect}")
-      case @obj
-      when String
-        if options[:reg_options].is_ignore?
-          if alters = Regtest::Front::CaseFolding.ignore_case([@obj])
-            @obj = CharClass.new( [ TRange.new(@obj) ] )
-            alters.each{|alter| @obj.add alter}
-          end
-        end
-      else
-        @obj.set_options(options)
-      end
+      @obj.set_options(options)
       self
     end
     
     # transform to json format
     def json
       @@id += 1
-      if String === @obj
-        "{" +
-           "\"type\": \"LEX_CHAR\", \"id\": \"L#{@@id}\", \"value\": #{@obj.inspect}, " +
-           "\"offset\": #{@offset}, \"length\": #{@length}" +
-        "}"
-      else
-        "{" +
-          "\"type\": \"#{@data_type}\", \"id\": \"L#{@@id}\", \"value\": #{@obj.json}, " +
-           "\"offset\": #{@offset}, \"length\": #{@length}" +
-        "}"
-      end
+      "{" +
+        "\"type\": \"#{@data_type}\", \"id\": \"L#{@@id}\", \"value\": #{@obj.json}, " +
+         "\"offset\": #{@offset}, \"length\": #{@length}" +
+      "}"
     end
   end
 end

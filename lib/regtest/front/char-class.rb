@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'regtest/front/range'          # Range of character
+require 'regtest/front/case-folding'   # case folding class
 require 'regtest/regex-option'         # Options of regex
 
 # character class elements
@@ -104,23 +105,24 @@ module Regtest::Front::CharClass
     
     # set options
     def set_options(options)
-      TstLog("CharClass set_options: #{options[:reg_options].inspect}");
-      alternatives = []
-      @nominates.each do |nominate|
-        case nominates
-        when Range
-          nominate.set_options(options, alternatives)
-        when String
-          nominate.set_options(options)
+      TstLog("CharClass set_options: #{options[:reg_options].inspect}")
+      if options[:reg_options].is_ignore?
+        alternatives = []
+        @nominates.each do |nominate|
+          nominate.enumerate.each do | letter |
+            if alter = Regtest::Front::CaseFolding.ignore_case([letter])
+              alternatives.push alter[0]
+            end
+          end
         end
-      end
-      if alternatives.size > 0
-        code_points = enumerate
-        alternatives.each do | alternative |
-          # ignore alternative is more than two letters
-          code_points.push(alternative[0]) if(alternative.size == 1)
+        if alternatives.size > 0
+          code_points = enumerate
+          alternatives.each do | alternative |
+            # ignore alternative is more than two letters
+            code_points.push(alternative[0]) if(alternative.size == 1)
+          end
+          @nominates = reconstruct_nominates(code_points)
         end
-        @nominates = reconstruct_nominates(code_points)
       end
       self
     end
