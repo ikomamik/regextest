@@ -93,7 +93,7 @@ module Regtest::Front::BackRefer
         name = ""
         refer_name = "$$_0"
       else
-        raise "Error: parenthesis #{@value} not found"
+        raise "Error: parenthesis not found: type: #{@type}, value: #{@value}"
       end
       
       @@id += 1
