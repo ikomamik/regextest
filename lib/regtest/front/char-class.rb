@@ -32,8 +32,10 @@ module Regtest::Front::CharClass
         @length = value.length
       end
       
-      # Calc whole set of letters (depends on language environment)
-      @whole_set = get_whole_set
+      @is_reverse = false
+      @whole_set = nil
+      @other_char_classes = []
+      
     end
     
     # Add a letter to nominate letters
@@ -47,6 +49,11 @@ module Regtest::Front::CharClass
     # reverse nominate letters (valid only in a bracket)
     def reverse
       TstLog("CharClass reverse"); 
+      @is_reverse = true
+    end
+    
+    def set_reverse
+      TstLog("CharClass set_reverse"); 
 
       # delete characters from whole set
       whole = @whole_set.dup
@@ -77,15 +84,24 @@ module Regtest::Front::CharClass
       new_nominates
     end
     
-    # AND process of nominates
+    # set other char-set (AND(&&) notation)
     def and(other_char_class)
       TstLog("CharClass and: #{other_char_class}");
 
-      code_points = enumerate & other_char_class.enumerate
+      @other_char_classes.push other_char_class
+      self
+    end
+
+    # AND process of nominates
+    def and_process(options)
+      code_points = enumerate
+      @other_char_classes.each do | other_char_class |
+        other_char_class.set_options(options)
+        code_points &= other_char_class.enumerate
+      end
       
       # reconstructing valid character set using TRange objects
       @nominates = reconstruct_nominates(code_points)
-      self
     end
     
     # Get whole code set
@@ -100,12 +116,12 @@ module Regtest::Front::CharClass
     
     # enumerate nomimated letters
     def enumerate
+      TstLog("CharClass enumerate")
       @nominates.inject([]){|result, nominate| result += nominate.enumerate}
     end
     
-    # set options
-    def set_options(options)
-      TstLog("CharClass set_options: #{options[:reg_options].inspect}")
+    # ignore process
+    def ignore_process(options)
       if options[:reg_options].is_ignore?
         alternatives = []
         @nominates.each do |nominate|
@@ -124,6 +140,31 @@ module Regtest::Front::CharClass
           @nominates = reconstruct_nominates(code_points)
         end
       end
+    end
+    
+    # fixes charset using options
+    def set_options(options)
+      TstLog("CharClass set_options: #{options[:reg_options].inspect}")
+      
+      # call set_options of other bracket
+      @nominates.each do |nominate|
+        if nominate.respond_to?(:set_options)
+          nominate.set_options(options)
+        end
+      end
+      
+      and_process(options)
+
+      ignore_process(options)
+      
+      # Calc whole set of letters (depends on language environment)
+      @whole_set = get_whole_set
+      
+      # reverse char set
+      if @is_reverse
+        set_reverse
+      end
+
       self
     end
     
