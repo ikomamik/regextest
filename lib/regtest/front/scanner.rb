@@ -8,6 +8,8 @@ class Regtest::Front::Scanner
   # (Not strict analisis here.)
   LexCodeLiteral = %r!\\x[0-9A-Fa-f]{1,2}|\\[0-7]{2,3}!
   LexTable = [
+    [:LEX_OCTET,
+     %r!\\(?:0?|1|2|3)[0-7]{2}! ],
     [:LEX_BACK_REFER,
      %r!\\[1-9]\d*! ],
     [:LEX_CODE_LITERAL,
@@ -17,7 +19,7 @@ class Regtest::Front::Scanner
     [:LEX_NAMED_GENERATE,
      %r!\\g[<'][\+\-]?\w+[>']! ],
     [:LEX_CONTROL_LETTER,
-     %r!\\c[a-z]|\\C-[a-z]! ],
+     %r!\\c[a-z]|\\C-[a-z]|\\c\\\\|\\C-\\\\! ],
     [:LEX_META_LETTER,
      # %r!\\M-(?:\\w|#{LexCodeLiteral.source})! ],
      %r!\\M-(?:[a-z]|\\C-[a-z])! ],

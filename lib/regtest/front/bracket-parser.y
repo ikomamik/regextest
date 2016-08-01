@@ -41,6 +41,7 @@ rule
 
   # a letter (can be expressed as x-y)
   brc_lt1: LEX_CHAR               {TLetter.new(:LEX_CHAR,           val[0])}
+         | LEX_OCTET              {TLetter.new(:LEX_OCTET,          val[0])}
          | LEX_SIMPLE_ESCAPE      {TLetter.new(:LEX_SIMPLE_ESCAPE,  val[0])}
          | LEX_MINUS              {TLetter.new(:LEX_CHAR,           val[0])}   # minus as a first letter
          | LEX_CODE_LITERAL       {TLetter.new(:LEX_CODE_LITERAL,   val[0])}

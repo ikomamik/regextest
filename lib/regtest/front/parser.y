@@ -54,6 +54,7 @@ rule
 
   # letter
   reg_let: LEX_CHAR               {TLetter.new(:LEX_CHAR,           val[0])}
+         | LEX_OCTET              {TLetter.new(:LEX_OCTET,          val[0])}
          | LEX_BACK_REFER         {BackRefer.new(:LEX_BACK_REFER,   val[0])}
          | LEX_CODE_LITERAL       {TLetter.new(:LEX_CODE_LITERAL,   val[0])}
          | LEX_NAMED_REFER        {BackRefer.new(:LEX_NAMED_REFER,  val[0])}
@@ -132,6 +133,7 @@ rule
 
   # letter
   reg_let_ex: LEX_CHAR            {TLetter.new(:LEX_CHAR,           val[0])}
+         | LEX_OCTET              {TLetter.new(:LEX_OCTET,          val[0])}
          | LEX_BACK_REFER         {BackRefer.new(:LEX_BACK_REFER,   val[0])}
          | LEX_CODE_LITERAL       {TLetter.new(:LEX_CODE_LITERAL,   val[0])}
          | LEX_NAMED_REFER        {BackRefer.new(:LEX_NAMED_REFER,  val[0])}
@@ -164,6 +166,7 @@ rule
   # comment of extended mode
   reg_comment_ex: LEX_NEW_LINE    # end of the comment
          | LEX_CHAR               reg_comment_ex
+         | LEX_OCTET              reg_comment_ex
          | LEX_BACK_REFER         reg_comment_ex
          | LEX_CODE_LITERAL       reg_comment_ex
          | LEX_NAMED_REFER        reg_comment_ex

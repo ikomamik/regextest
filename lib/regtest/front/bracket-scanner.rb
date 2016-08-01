@@ -9,6 +9,8 @@ class Regtest::Front::BracketScanner
   # ちょっとしたミスは、構文解析側でエラー出力するようにする）
   LexCodeLiteral = %r!\\x[0-9A-Fa-f]{1,2}|\\[0-7]{2,3}!
   LexTable = [
+    [:LEX_OCTET,
+     %r!\\(?:0?|1|2|3)[0-7]{2}! ],
     [:LEX_POSIX_CHAR_CLASS,
       %r!\[:\^?\w+:\]! ],      # First letter (?<=.) is not a character class
     [:LEX_BRACKET_START2,
@@ -20,7 +22,7 @@ class Regtest::Front::BracketScanner
     [:LEX_CODE_LITERAL,
       LexCodeLiteral ],
     [:LEX_CONTROL_LETTER,
-      %r!\\c[a-z]|\\C-[a-z]! ],
+      %r!\\c[a-z]|\\C-[a-z]|\\c\\\\|\\C-\\\\! ],
     [:LEX_META_LETTER,
      # %r!\\M-(?:\\w|#{LexCodeLiteral.source})! ],
      %r!\\M-(?:[a-z]|\\C-[a-z])! ],

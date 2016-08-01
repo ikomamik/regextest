@@ -39,12 +39,9 @@ module Regtest::Front::Letter
       when :LEX_SIMPLE_ESCAPE
         @data_type = :LEX_CHAR
         @obj = CharClass.new([ TRange.new(val[1..1])])
-      when :LEX_CONTROL_LETTER, :LEX_META_LETTER
+      when :LEX_CODE_LITERAL, :LEX_ESCAPED_LETTER, :LEX_UNICODE, :LEX_CONTROL_LETTER, :LEX_META_LETTER, :LEX_OCTET
         @data_type = :LEX_CHAR
         @obj = CharClass.new([ TRange.new(eval('"'+ val + '"'))])   # convert using ruby's eval
-      when :LEX_CODE_LITERAL, :LEX_ESCAPED_LETTER, :LEX_UNICODE
-        @data_type = :LEX_CHAR
-        @obj = CharClass.new([ TRange.new(eval('"'+val+'"'))])
       when :LEX_BRACKET
         require 'regtest/front/bracket'
         @obj = Regtest::Front::Bracket.new(val)
