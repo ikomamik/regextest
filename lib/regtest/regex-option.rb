@@ -2,15 +2,22 @@
 
 # A class that manages options of regular expression
 class Regtest::RegexOption
-  attr_accessor :reg_options
+  # Constants for the class
+  TstRegOptDefault  =  1
+  TstRegOptAscii    =  2
+  TstRegOptUnicode  =  3
+
+  attr_accessor :reg_options, :char_set
   
   def initialize(options = nil)
     self.set(options)
+    @char_set = TstRegOptDefault
   end
   
   # a method for copy (maybe unnecessary)
   def initialize_copy(source_obj)
     @reg_options = source_obj.reg_options
+    @char_set = source_obj.char_set
   end
     
   # set one or more options
@@ -44,6 +51,12 @@ class Regtest::RegexOption
           @reg_options |= Regexp::EXTENDED
         when 'm'
           @reg_options |= Regexp::MULTILINE
+        when 'd'
+          @char_set = TstRegOptDefault
+        when 'u'
+          @char_set = TstRegOptUnicode
+        when 'a'
+          @char_set = TstRegOptAscii
         else
           raise "Invalid char (#{opt}) found in regexp option"
         end
@@ -87,6 +100,17 @@ class Regtest::RegexOption
     (@reg_options & Regexp::MULTILINE != 0)
   end
   
+  def is_default_char_set?
+    (@char_set == TstRegOptDefault)
+  end
+  
+  def is_ascii?
+    (@char_set == TstRegOptAscii)
+  end
+  
+  def is_unicode?
+    (@char_set == TstRegOptUnicode)
+  end
 end
 
 

@@ -10,12 +10,18 @@ module Regtest::Front::CharClass
     include Regtest::Common
     include Regtest::Front::Range
     @@id = 0   # a class variable for generating unique name of element
+    @@ascii_whole_set   = nil
+    @@unicode_whole_set = nil
     
     attr_reader :nominates, :offset, :length
 
     # Constructor
     def initialize(value)
       TstLog("CharClass: #{value}")
+      @@ascii_whole_set ||= get_ascii_whole_set
+      @@unicode_whole_set ||= get_unicode_whole_set
+      
+      
       @reg_options = @@parse_options[:reg_options]
       case value
       when Array
@@ -52,8 +58,11 @@ module Regtest::Front::CharClass
       @is_reverse = true
     end
     
-    def set_reverse
+    def set_reverse(options)
       TstLog("CharClass set_reverse"); 
+      
+      # Calc whole set of letters (depends on language environment)
+      @whole_set = get_whole_set(options)
 
       # delete characters from whole set
       whole = @whole_set.dup
@@ -63,6 +72,7 @@ module Regtest::Front::CharClass
       
       # reconstructing valid character set using TRange objects
       @nominates = reconstruct_nominates(whole)
+      self
     end
 
     # Reconstruct nominate letters
@@ -105,13 +115,36 @@ module Regtest::Front::CharClass
     end
     
     # Get whole code set
-    def get_whole_set
-      if( @reg_options.is_multiline? )
-        work = [ TRange.new("\x20", "\x7e"),  TRange.new("\n")]
+    def get_whole_set(options)
+      reg_options = options[:reg_options]
+      if reg_options.is_unicode?
+        whole_set = @@unicode_whole_set
       else
-        work = [ TRange.new("\x20", "\x7e") ]
+        whole_set = @@ascii_whole_set
       end
-      work.inject([]){|result,elem| result |= elem.enumerate}
+      
+      if reg_options.is_multiline?
+        whole_set |= ["\n"]
+      end
+      whole_set
+    end
+    
+    # Get whole code set of ascii
+    def get_ascii_whole_set
+      require 'regtest/front/unicode'
+      # same as  [ TRange.new("\x20", "\x7e") ]
+      ascii_set = Regtest::Front::Unicode.enumerate("ascii")
+      print_set = Regtest::Front::Unicode.enumerate("print")
+      ascii_set & print_set
+    end
+    
+    # Get whole code set of unicode
+    def get_unicode_whole_set
+      require 'regtest/front/unicode'
+      ascii_set = Regtest::Front::Unicode.enumerate("ascii")
+      katakana_set = Regtest::Front::Unicode.enumerate("katakana")
+      hiragana_set = Regtest::Front::Unicode.enumerate("hiragana")
+      ascii_set + katakana_set + hiragana_set
     end
     
     # enumerate nomimated letters
@@ -153,16 +186,13 @@ module Regtest::Front::CharClass
         end
       end
       
-      and_process(options)
+      and_process(options) if @other_char_classes.size > 0
 
       ignore_process(options)
       
-      # Calc whole set of letters (depends on language environment)
-      @whole_set = get_whole_set
-      
       # reverse char set
       if @is_reverse
-        set_reverse
+        set_reverse(options)
       end
 
       self

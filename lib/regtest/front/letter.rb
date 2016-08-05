@@ -3,7 +3,6 @@
 require 'regtest/front/char-class'     # character class element
 require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'
-require 'regtest/front/unicode'        # range of Unicode
 
 # A letter
 module Regtest::Front::Letter
@@ -11,24 +10,21 @@ module Regtest::Front::Letter
     include Regtest::Common
     include Regtest::Front::CharClass
     include Regtest::Front::Range
-    include Regtest::Front::Unicode   # 
     @@id = 0   # a class variable for generating unique name of element
     @@unicode_ranges = {}
       
     # Constructor
     def initialize(type, val)
       TstLog("TLetter: type:#{type}, value:#{val}")
-      @reg_options = @@parse_options[:reg_options]
+      @options = nil
       @data_type = type
       @value = val[0] || ""
       @offset = val[1] || -1
       @length = val[2] || 0
       @obj = nil
-      @options = @@parse_options
-      set_attr(type, @value)
     end
     
-    attr_reader :offset, :length
+    attr_reader :offset, :length, :value
     
     # generate character(s) corresponding type of the character
     def set_attr(type, val)
@@ -63,7 +59,7 @@ module Regtest::Front::Letter
     
     # generate whole set of letters (depends on option)
     def generate_any_char(val)
-      if( @reg_options.is_multiline? )
+      if( @options[:reg_options].is_multiline? )
         @obj = CharClass.new(
                  [ TRange.new("\x20", "\x7e"),  TRange.new("\n")]
                )
@@ -90,9 +86,15 @@ module Regtest::Front::Letter
                   TRange.new("\x7b", "\x7e") ]
               )
       when "\\d"
-        obj = CharClass.new(
-                [ TRange.new('0', '9') ]
-              )
+        if @options[:reg_options].is_unicode?
+          obj = CharClass.new(
+                   [ TRange.new('0', '9'),  TRange.new('０', '９')]
+                 )
+        else
+          obj = CharClass.new(
+                   [ TRange.new('0', '9') ]
+                 )
+        end
       when "\\D"
         obj = CharClass.new(
                 [ TRange.new("\x20", "\x2f"), TRange.new("\x3a", "\x7e") ]
@@ -129,21 +131,29 @@ module Regtest::Front::Letter
       obj
     end
     
-    # generate Unicode class (ie. \p{...})
+    # generate Unicode class (ie. \p{...} | \P{...})
     def generate_unicode_char(val)
       # Dynamic loading of Unicode regarding modules (for better performance).
       # commented out since this code not executed at ruby 2.0.0
-      #require 'regtest/front/unicode'        # Unicodeのレンジ
-      #TLetter.include Regtest::Front::Unicode
+      require 'regtest/front/unicode'        # range of Unicode
       
-      if(md = val.match(/\{(\w+)\}/))
-        class_name = md[1].downcase
+      if(md = val.match(/(p|P)\{(\w+)\}/))
+        class_name = md[2].downcase
         if !@@unicode_ranges[class_name]
-          @@unicode_ranges[class_name] = Unicode.property(class_name) ||
+          work = Regtest::Front::Unicode.property(class_name) ||
             raise("Invalid Unicode class #{class_name} in #{val}")
+          # construct char class
+          work = work.map{|elem| TRange.new(elem[0], elem[1])}
+          @@unicode_ranges[class_name] = CharClass.new(work)
         end
+      else
+        raise "Internal error, inconsistent Unicode class #{val}"
       end
-      @@unicode_ranges[class_name]
+      if md[1] == "p"
+        @@unicode_ranges[class_name]
+      else      # "P"
+        @@unicode_ranges[class_name].set_reverse(@options)
+      end
     end
     
     # generate POSIX character class (ie. [[:alpha:]], etc.)
@@ -221,6 +231,8 @@ module Regtest::Front::Letter
     # set options
     def set_options(options)
       TstLog("Letter set_options: #{options[:reg_options].inspect}")
+      @options = options
+      set_attr(@data_type, @value)
       @obj.set_options(options)
       self
     end

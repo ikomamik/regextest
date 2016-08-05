@@ -9,13 +9,14 @@ module Regtest::Front::Range
 
     # Constructor
     def initialize(letter_begin, letter_end = nil)
+      TstLog("TRange: #{letter_begin}-#{letter_end}")
       @begin = parse_letter(letter_begin)
       if letter_end 
         @end = parse_letter(letter_end)
       else
         @end = @begin
       end
-      TstLog("TRange: #{@begin}-#{@end}")
+
       @offset = -1  # not used in this class
       @length = -1  # not used in this class
     end
@@ -29,12 +30,10 @@ module Regtest::Front::Range
         letter.unpack("U*")[0]
       when Integer
         letter
+      when Regtest::Front::Letter::TLetter
+        eval('"' + letter.value + '"').unpack("U*")[0]
       else
-        enum = letter.enumerate
-        if enum.size > 1
-          raise "Internal error: TRange parameters must be a letter"
-        end
-        enum[0]
+        raise "Internal error. invalid letter class #{letter}"
       end
     end
     
