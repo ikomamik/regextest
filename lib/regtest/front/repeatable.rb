@@ -13,7 +13,7 @@ module Regtest::Front::Repeatable
       @value = value
       @offset = value.offset
       @length = value.length
-      @quant = nil
+      @quant = []
     end
     
     attr_reader :offset, :length
@@ -23,11 +23,7 @@ module Regtest::Front::Repeatable
       quant = quant_value[0]
       @length += quant_value[2]
       TstLog("Repeatable quant: #{quant_value}")
-      if !@quant
-        @quant = Repeat.new(quant)
-      else
-        raise "Error: syntax error, duplicate quantifier #{quant}"
-      end
+      @quant.push Repeat.new(quant)
       self
     end
     
@@ -40,18 +36,28 @@ module Regtest::Front::Repeatable
     
     # transform to json format
     def json
-      if(@quant)
+      json_string = ""
+      @quant.each do | current |
         @@id += 1
-        "{\"type\": \"LEX_REPEAT\", " +
-        " \"id\": \"m#{@@id}\", " +
-        " \"value\": #{@value.json}, " +
-        " \"offset\": #{@offset}, " +
-        " \"length\": #{@length}, " +
-        " \"min_repeat\": #{@quant.min_value}, " +
-        " \"max_repeat\": #{@quant.max_value}}"
-      else
-        @value.json
+        json_string += 
+          "{\"type\": \"LEX_REPEAT\", " +
+          " \"id\": \"m#{@@id}\", " +
+          " \"value\": "
       end
+      
+      json_string += @value.json
+      
+      if @quant.size > 0
+        work = @quant.map do | current |
+          " \"offset\": #{@offset}, " +
+          " \"length\": #{@length}, " +
+          " \"min_repeat\": #{current.min_value}, " +
+          " \"max_repeat\": #{current.max_value}}"
+        end
+        json_string += ", " + work.join(", ")
+      end
+      
+      json_string
     end
   end
 end
