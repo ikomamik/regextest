@@ -21,7 +21,14 @@ class Regtest::Test
   end
   
   def print_results(results)
-    pp results[:failed]
+    puts ""
+    results[:failed].each do | failed_hash |
+      puts "======="
+      puts "  type: #{failed_hash[:type] || failed_hash[:result][:result]}"
+      puts "  test: #{failed_hash[:test] || failed_hash[:result][:reg]}"
+      puts "  info: #{failed_hash[:info] || failed_hash[:result][:reason]}"
+      # pp failed_hash
+    end
 
     puts "======"
     puts "success:   #{results[:success].size}"
@@ -54,7 +61,7 @@ class Regtest::Test
         results[:not_scope].push({result: :regexp_error, message: ex, reg: line})
       rescue ArgumentError => ex
         warn "ArgumentError #{ex}. \nline: line"
-        results[:failed].push({result: :argument_error, message: ex, reg: line})
+        results[:failed].push({type: :argument_error, info: ex, test: line})
       rescue RuntimeError => ex
         warn "RuntimeError #{ex}. \nline:#{line}"
         results[:failed].push({ type: RuntimeError, test: line, info: ex})
