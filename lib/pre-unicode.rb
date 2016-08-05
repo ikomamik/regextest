@@ -73,8 +73,8 @@ class RegtestPreUnicode
   def self.puts_unicode_ranges(unicode_file, ranges)
     ranges_source = ranges.keys.map { |prop_name|
       (" "*14) + "when \"#{prop_name}\"\n" +
-      (" "*16) + "CharClass.new([" +
-      ( ranges[prop_name].map{|range| "TRange.new(#{range.begin}, #{range.end})"}.join(", ") ) +
+      (" "*16) + "([" +
+      ( ranges[prop_name].map{|range| "[#{range.begin}, #{range.end}]"}.join(", ") ) +
       "])"
     }.join("\n")
     
@@ -83,19 +83,19 @@ class RegtestPreUnicode
       # DO NOT Modify This File Since Automatically Generated
 
       # Range of Unicode
-      module Regtest::Front::Unicode
-        class Unicode
-          include Regtest::Front::CharClass
-          include Regtest::Front::Range
-          
-          # Generate hash of properties
-          def self.property(class_name)
-            case class_name
+      class Regtest::Front::Unicode
+        # Generate hash of properties
+        def self.property(class_name)
+          case class_name
 #{ranges_source}
-            else
-              raise "Internal error. Class name (#\{class_name\}) not found"
-            end
+          else
+            raise "Internal error. Class name (#\{class_name\}) not found"
           end
+        end
+        
+        # enumerate char-set
+        def self.enumerate(class_name)
+          self.property(class_name).inject([]){|result,elem| result += (elem[0]..elem[1]).to_a}
         end
       end
 
@@ -112,5 +112,3 @@ class RegtestPreUnicode
 end
 
 RegtestPreUnicode.generate
-
-# pp ranges
