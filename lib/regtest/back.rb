@@ -257,7 +257,8 @@ class Regtest::Back
         end
         
         # quit to repeat if the first element is begin anchor
-        if elem.size > 0 && !(String === elem[0]) && !(String === elem[-1])
+        elem.flatten! if Array === elem
+        if elem.size > 0 && elem[0].respond_to?(:command) && elem[-1].respond_to?(:command)
           break if elem[0].command == :CMD_ANC_LINE_BEGIN && !elem[-1].new_line?
           break if elem[0].command == :CMD_ANC_STRING_BEGIN
         end
