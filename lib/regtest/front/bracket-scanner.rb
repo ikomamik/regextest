@@ -40,8 +40,6 @@ class Regtest::Front::BracketScanner
       %r!\&\&! ],
     [:LEX_SPECIAL_LETTER,
       %r!\\[RX]! ],
-    [:LEX_EXTENDED_COMMENT,
-      %r!\#.*?(?:\n|$)! ],
     [:LEX_ESCAPED_LETTER,
       %r!\\.! ],    # \b is valid within character class
     [:LEX_SPACE,
