@@ -2,7 +2,6 @@
 
 class Regtest::Back; end
 require 'regtest/common'
-require 'regtest/regex-option'
 require 'regtest/back/element'
 require 'regtest/back/result'
 
@@ -11,7 +10,6 @@ class Regtest::Back
   
   # Constructor
   def initialize(json_obj)
-    @reg_options = @@parse_options[:reg_options]
     @reg_source = @@parse_options[:reg_source]
     @json_obj = json_obj
     
@@ -53,7 +51,7 @@ class Regtest::Back
     # seek parentheses because there are references defined ahead
     seek_parens(@json_obj)
     
-    pre_result = generate_matched_string({json: @json_obj, regopt: @reg_options})
+    pre_result = generate_matched_string({json: @json_obj})
     if pre_result
       if(result = check_look_ahead_behind(pre_result))
         if !result.narrow_down
@@ -121,14 +119,12 @@ class Regtest::Back
   def generate_matched_string(param)
     target = param[:json]
     # puts "MATCH type:#{target["type"]} #{rand(10)}"
-    reg_options = param[:regopt]
     result = nil  # 結果の文字列
     case target["type"]
     when "LEX_SEQ"
-      cur_options = reg_options.dup   # for preventing from rewrite in the sequence
       results = []
       target["value"].each do |elem|
-        generated_string = generate_matched_string({json: elem, regopt: cur_options})
+        generated_string = generate_matched_string({json: elem})
         if(Array === generated_string)
           generated_string.flatten!(1)
           results += generated_string
@@ -147,7 +143,7 @@ class Regtest::Back
       if param[:forced_select]
         # index is specified by condition 
         if target["value"][param[:forced_select]]
-          result = generate_matched_string({json: target["value"][param[:forced_select]], regopt: reg_options})
+          result = generate_matched_string({json: target["value"][param[:forced_select]]})
         else
           # regexp such as /^(?:b|(a))(?(1)1)$/ match "b"!
           result = []
@@ -160,7 +156,7 @@ class Regtest::Back
         end
         result = nil
         offsets.each do | offset |
-          result = generate_matched_string({json: target["value"][offset], regopt: reg_options})
+          result = generate_matched_string({json: target["value"][offset]})
           break if(result)
         end
       end
@@ -170,24 +166,24 @@ class Regtest::Back
       paren_prefix = target["prefix"]
       # pp target["prefix"]
       if(paren_prefix == "<=")
-        lb_result = generate_matched_string({json: target["value"], regopt: reg_options})
+        lb_result = generate_matched_string({json: target["value"]})
         result = Regtest::Back::Element.new({cmd: :CMD_LOOK_BEHIND, result: lb_result})
       elsif(paren_prefix == "=")
-        la_result = generate_matched_string({json: target["value"], regopt: reg_options})
+        la_result = generate_matched_string({json: target["value"]})
         result = Regtest::Back::Element.new({cmd: :CMD_LOOK_AHEAD, result: la_result})
       elsif(paren_prefix == "<!")
-        lb_result = generate_matched_string({json: target["value"], regopt: reg_options})
+        lb_result = generate_matched_string({json: target["value"]})
         result = Regtest::Back::Element.new({cmd: :CMD_NOT_LOOK_BEHIND, result: lb_result})
       elsif(paren_prefix == "!")
-        la_result = generate_matched_string({json: target["value"], regopt: reg_options})
+        la_result = generate_matched_string({json: target["value"]})
         result = Regtest::Back::Element.new({cmd: :CMD_NOT_LOOK_AHEAD, result: la_result})
       elsif(paren_prefix == ">")   # atomic group
-        generate_string = generate_matched_string({json: target["value"], regopt: reg_options, atomic: true})
+        generate_string = generate_matched_string({json: target["value"], atomic: true})
         @parens_hash[target["refer_name"]][:generated] ||= []
         @parens_hash[target["refer_name"]][:generated][@nest] = generate_string
         result = generate_string
       elsif(paren_prefix == "")   # simple parenthesis
-        generate_string = generate_matched_string({json: target["value"], regopt: reg_options})
+        generate_string = generate_matched_string({json: target["value"]})
         @parens_hash[target["refer_name"]][:generated] ||= []
         @parens_hash[target["refer_name"]][:generated][@nest] = generate_string
         result = generate_string
@@ -205,20 +201,7 @@ class Regtest::Back
         if(select_num == 1 && target["value"]["type"] != "LEX_SELECT")
           result = nil
         else
-          if(md = paren_prefix.match(/^([imx]*(?:\-[imx]+)?)(:)?$/))
-            if(md[2])
-              # deep copy if (?imx: ) pattern
-              cur_options = reg_options.dup
-            else
-              # replace option if (?imx) pattern
-              cur_options = reg_options
-            end
-            cur_options.modify(md[1])
-          else
-            cur_options = reg_options
-          end
-          
-          generate_string = generate_matched_string({json: target["value"], regopt: cur_options, forced_select: select_num})
+          generate_string = generate_matched_string({json: target["value"], forced_select: select_num})
           
           @parens_hash[target["refer_name"]][:generated] ||= []
           @parens_hash[target["refer_name"]][:generated][@nest] = generate_string
@@ -228,7 +211,7 @@ class Regtest::Back
     when "LEX_CHAR_CLASS"
       results = Regtest::Back::Element.new({cmd: :CMD_SELECT, data: []})
       target["value"].each do | elem |
-        sub_results = generate_matched_string({json: elem, regopt: reg_options})
+        sub_results = generate_matched_string({json: elem})
         results.union sub_results
       end
       if results.size > 0
@@ -237,7 +220,7 @@ class Regtest::Back
         result = nil
       end
     when "LEX_BRACKET", "LEX_SIMPLIFIED_CLASS", "LEX_ANY_LETTER", "LEX_POSIX_CHAR_CLASS", "LEX_UNICODE_CLASS"
-      result = generate_matched_string({json: target["value"], regopt: reg_options})
+      result = generate_matched_string({json: target["value"]})
     when "LEX_REPEAT"
       if(@quit_mode)
         repeat = target["min_repeat"]
@@ -249,7 +232,7 @@ class Regtest::Back
       result = []
       # puts "repeat=#{repeat} quit=#{@quit_mode} nest=#{@nest}"
       repeat.times do
-        if( elem = generate_matched_string({json: target["value"], regopt: reg_options}))
+        if( elem = generate_matched_string({json: target["value"]}))
           result.push elem
         else
           result = nil
@@ -266,9 +249,6 @@ class Regtest::Back
     when "LEX_RANGE"
       letter = []
       codepoints = (target["begin"]..target["end"]).to_a
-      #codepoints.each do | codepoint |
-      #  letter += ignore_case2([codepoint].pack("U*"), reg_options)
-      #end
       letter = codepoints.map{| codepoint | [codepoint].pack("U*")}   # to be faster
       result = Regtest::Back::Element.new({cmd: :CMD_SELECT, data: letter})
     when "LEX_BACK_REFER", "LEX_NAMED_REFER"
@@ -285,9 +265,9 @@ class Regtest::Back
       else
         @nest += 1
         if target["refer_name"] == "$$_0"     # recursively call whole expression
-          result = generate_matched_string({json: @json_obj, regopt: @reg_options})
+          result = generate_matched_string({json: @json_obj})
         else
-          result = generate_matched_string({json: @parens_hash[target["refer_name"]][:target], regopt: reg_options})
+          result = generate_matched_string({json: @parens_hash[target["refer_name"]][:target]})
         end
         @nest -= 1
       end
@@ -296,8 +276,7 @@ class Regtest::Back
       when String
         result = Regtest::Back::Element.new({cmd: :CMD_SELECT, data: [target["value"]]})
       else
-        # letter = ignore_case2(target["value"], reg_options)
-        result = generate_matched_string({json: target["value"], regopt: reg_options})
+        result = generate_matched_string({json: target["value"]})
       end
     when "LEX_ANC_LINE_BEGIN"
       result = Regtest::Back::Element.new({cmd: :CMD_ANC_LINE_BEGIN})
@@ -325,15 +304,6 @@ class Regtest::Back
       raise "#{target["type"]} not implemented (from generate_matched_string routine)"
     end
     result
-  end
-  
-  # if i option, uppercase/lowercase is rotate (this process should move to front part)
-  def ignore_case2(a_char, reg_options)
-    if( reg_options.is_ignore? && a_char.upcase != a_char.downcase)
-      [a_char.upcase, a_char.downcase]
-    else
-      [a_char]
-    end
   end
   
 end
