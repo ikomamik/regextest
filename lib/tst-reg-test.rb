@@ -6,7 +6,7 @@ require 'timeout'
 require 'pp'
 
 class Regtest::Test
-  def initialize(max_tests = nil)
+  def initialize(min_test, max_test)
     results = {
       success: [],
       failed: [],
@@ -16,7 +16,7 @@ class Regtest::Test
       perl_syntax: [],
     }
     time_out = 1
-    do_test(results, max_tests, time_out)
+    do_test(results, min_test, max_test, time_out)
     print_results(results)
   end
   
@@ -27,6 +27,7 @@ class Regtest::Test
       puts "  type: #{failed_hash[:type] || failed_hash[:result][:result]}"
       puts "  test: #{failed_hash[:test] || failed_hash[:result][:reg]}"
       puts "  info: #{failed_hash[:info] || failed_hash[:result][:reason]}"
+      puts "  indx: #{failed_hash[:index]}"
       # pp failed_hash
     end
 
@@ -39,9 +40,9 @@ class Regtest::Test
     puts "perl_syntax:   #{results[:perl_syntax].size}"
   end
   
-  def do_test(results, max_tests, timeout_seconds)
+  def do_test(results, min_test, max_test, timeout_seconds)
     get_lines(results).each_with_index do | line, i |
-      break if(max_tests && i >= max_tests)  # for debug
+      next if(i < min_test || i > max_test)
       puts line
       begin
         rc = nil
@@ -49,31 +50,31 @@ class Regtest::Test
           rc = eval(line)
         }
         if(rc[:result] == :ok)
-          results[:success].push({ md: rc[:md], reg: rc[:reg]})
+          results[:success].push({ md: rc[:md], reg: rc[:reg], index: i})
         else
-          results[:failed].push({ result: rc })
+          results[:failed].push({ result: rc, index: i })
         end
       rescue Timeout::Error => ex
         warn "Timeout::Error #{ex}. \nline:#{line}"
-        results[:timeout].push({result: :timeout, message: ex, reg: line})
+        results[:timeout].push({result: :timeout, message: ex, reg: line, index: i})
       rescue RegexpError => ex
         warn "RegexpError #{ex}. \nline:#{line}"
-        results[:not_scope].push({result: :regexp_error, message: ex, reg: line})
+        results[:not_scope].push({result: :regexp_error, message: ex, reg: line, index: i})
       rescue ArgumentError => ex
         warn "ArgumentError #{ex}. \nline: line"
-        results[:failed].push({type: :argument_error, info: ex, test: line})
+        results[:failed].push({type: :argument_error, info: ex, test: line, index: i})
       rescue RuntimeError => ex
         warn "RuntimeError #{ex}. \nline:#{line}"
-        results[:failed].push({ type: RuntimeError, test: line, info: ex})
+        results[:failed].push({ type: RuntimeError, test: line, info: ex, index: i})
       rescue SyntaxError => ex
         warn "SyntaxError #{ex}. \nline:#{line}"
-        results[:failed].push({ type: SyntaxError, test: line, info: ex})
+        results[:failed].push({ type: SyntaxError, test: line, info: ex, index: i})
       rescue NameError => ex
         warn "NameError #{ex}. \nline:#{line}"
-        results[:failed].push({ type: NameError, test: line, info: ex})
+        results[:failed].push({ type: NameError, test: line, info: ex, index: i})
       rescue Encoding::CompatibilityError => ex
         warn "Encoding::CompatibilityError #{ex}. \nline:#{line}"
-        results[:failed].push({ type: Encoding::CompatibilityError, test: line, info: ex})
+        results[:failed].push({ type: Encoding::CompatibilityError, test: line, info: ex, index: i})
       end
     end
   end
@@ -132,6 +133,7 @@ end
 
 # Test suite (execute when this file is specified in command line)
 if __FILE__ == $0
-  max_test = ARGV[0] && ARGV[0].to_i
-  Regtest::Test.new(max_test)
+  min_test = ARGV[1]?(ARGV[0].to_i):0
+  max_test = ARGV[1]?(ARGV[1].to_i):(ARGV[0]?(ARGV[0].to_i):99999999)
+  Regtest::Test.new(min_test, max_test)
 end
