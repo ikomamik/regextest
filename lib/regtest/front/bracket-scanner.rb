@@ -5,8 +5,8 @@ require "pp"
 
 class Regtest::Front::BracketScanner
 
-  # 正規表現文字の素語解析用のテーブル(ここで厳密に解析せず
-  # ちょっとしたミスは、構文解析側でエラー出力するようにする）
+  # A table for lexical analysis of elements
+  # (Not strict analisis here.)
   LexCodeLiteral = %r!\\x[0-9A-Fa-f]{1,2}|\\[0-7]{2,3}!
   LexTable = [
     [:LEX_OCTET,
