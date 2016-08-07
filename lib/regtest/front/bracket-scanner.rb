@@ -10,7 +10,7 @@ class Regtest::Front::BracketScanner
   LexCodeLiteral = %r!\\x[0-9A-Fa-f]{1,2}|\\[0-7]{2,3}!
   LexTable = [
     [:LEX_OCTET,
-     %r!\\(?:0?|1|2|3)[0-7]{2}! ],
+     %r!\\[0123][0-7]{2}|\\[123][0-7]! ],
     [:LEX_POSIX_CHAR_CLASS,
       %r!\[:\^?\w+:\]! ],      # First letter (?<=.) is not a character class
     [:LEX_BRACKET_START2,
