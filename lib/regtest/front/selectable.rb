@@ -8,7 +8,7 @@ module Regtest::Front::Selectable
     include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
     
-    attr_reader :candidate, :offset, :length
+    attr_reader :candidates, :offset, :length
 
     # Constructor
     def initialize(value)
@@ -16,11 +16,11 @@ module Regtest::Front::Selectable
       @reg_options = @@parse_options[:reg_options]
       case value
       when Array
-        @candidate = value
+        @candidates = value
         @offset = value[0].offset
         @length = value[-1].offset + value[-1].length - value[0].offset
       else
-        @candidate = [value]
+        @candidates = [value]
         @offset = value.offset
         @length = value.length
       end
@@ -29,7 +29,7 @@ module Regtest::Front::Selectable
     # add selectable sequence
     def add(value)
       TstLog("Selectlable add: #{value}"); 
-      @candidate.push value
+      @candidates.push value
       @length = value.offset - @offset + value.length
       self
     end
@@ -38,7 +38,7 @@ module Regtest::Front::Selectable
     def set_options(options)
       TstLog("Selectlable set_options: #{options[:reg_options].inspect}"); 
       reg_options = (options)?options[:reg_options]:nil
-      @candidate.each do | candidate |
+      @candidates.each do | candidate |
         candidate.set_options(options)
       end
       self
@@ -50,7 +50,7 @@ module Regtest::Front::Selectable
       "{" +
         "\"type\": \"LEX_SELECT\", \"id\": \"S#{@@id}\", " +
         "\"offset\": #{@offset}, \"length\": #{@length}, " +
-        "\"value\": [" + @candidate.map{|elem| elem.json}.join(",") +
+        "\"value\": [" + @candidates.map{|elem| elem.json}.join(",") +
       "]}"
     end
   end
