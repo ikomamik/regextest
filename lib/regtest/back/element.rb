@@ -5,46 +5,46 @@ class Regtest::Back::Element
   def initialize(param)
     @command = param[:cmd]
     @param = param
-    @nominates = param[:data] if @command == :CMD_SELECT
+    @candidates = param[:data] if @command == :CMD_SELECT
   end
   
-  attr_reader :param, :command, :nominates
+  attr_reader :param, :command, :candidates
   
   # random fix
   def random_fix
     if @command == :CMD_SELECT
-      result = @nominates[rand(@nominates.size)]
-      @nominates = [result]   # fixed!
+      result = @candidates[rand(@candidates.size)]
+      @candidates = [result]   # fixed!
     else
       raise "invalid command at random_fix: #{@command}"
     end
     result
   end
   
-  # size of nominates
+  # size of candidates
   def size
-    if(@nominates)
-      @nominates.size
+    if(@candidates)
+      @candidates.size
     else
       raise "internal error"
     end
   end
   
-  # [] of nominates
+  # [] of candidates
   def [](num)
-    if(@nominates)
-      @nominates[num]
+    if(@candidates)
+      @candidates[num]
     else
       raise "internal error"
     end
   end
   
-  # narrow down nominates
+  # narrow down candidates
   def intersect(other_obj)
     raise "invalid command at intersect" if(other_obj.command != :CMD_SELECT)
-    work = @nominates & other_obj.nominates
+    work = @candidates & other_obj.candidates
     if work.size > 0
-      @nominates = work
+      @candidates = work
     else
       nil
     end
@@ -53,27 +53,27 @@ class Regtest::Back::Element
   # exclude
   def exclude(other_obj)
     raise "invalid command at exclude" if(other_obj.command != :CMD_SELECT)
-    work = @nominates - other_obj.nominates
+    work = @candidates - other_obj.candidates
     if work.size > 0
-      @nominates = work
+      @candidates = work
     else
       nil
     end
   end
   
-  # join nominates
+  # join candidates
   def union(other_obj)
     raise "invalid command at union" if(other_obj.command != :CMD_SELECT)
-    #@nominates |= other_obj.nominates
-    @nominates += other_obj.nominates # to be faster
+    #@candidates |= other_obj.candidates
+    @candidates += other_obj.candidates # to be faster
   end
   
   # for simple pretty print
   def inspect
     case @command
     when :CMD_SELECT
-      if(@nominates)
-        @nominates.inspect
+      if(@candidates)
+        @candidates.inspect
       else
         @param[:data].inspect
       end
@@ -90,37 +90,37 @@ class Regtest::Back::Element
   
   # Includes new line or not
   def new_line?
-    @nominates.index("\n")
+    @candidates.index("\n")
   end
   
   # Sets new line
   def set_new_line
-    @nominates = ["\n"]
+    @candidates = ["\n"]
   end
   
   # Is word-elements only?
   def word_elements?
-    @nominates.join("").match(/^\p{Word}+$/)
+    @candidates.join("").match(/^\p{Word}+$/)
   end
   
   # is non-word-elements only?
   def non_word_elements?
-    @nominates.join("").match(/^\p{^Word}+$/)
+    @candidates.join("").match(/^\p{^Word}+$/)
   end
 
   # set word-elements
   def set_word_elements
-    @nominates.select!{|elem| elem.match(/^\w$/)}
+    @candidates.select!{|elem| elem.match(/^\w$/)}
   end
   
   # set non_word-elements
   def set_non_word_elements
-    @nominates.select!{|elem| elem.match(/^\W$/)}
+    @candidates.select!{|elem| elem.match(/^\W$/)}
   end
   
   # checks empty
   def empty?
-    @nominates.size == 0
+    @candidates.size == 0
   end
   
   # factory method to generate any char element
@@ -131,7 +131,7 @@ class Regtest::Back::Element
   
   # factory method to generate any char element
   def reverse
-    @nominates = ((" ".."\x7e").to_a) - @nominates
+    @candidates = ((" ".."\x7e").to_a) - @candidates
     self
   end
   

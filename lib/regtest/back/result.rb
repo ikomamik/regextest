@@ -265,7 +265,7 @@ class Regtest::Back::Result
     true
   end
   
-  # narrow down nominates by anchors
+  # narrow down candidate by anchors
   def narrow_down
     @positional_anchors.each do | cmd, offsets |
       case cmd
