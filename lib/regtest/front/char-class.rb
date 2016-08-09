@@ -13,7 +13,7 @@ module Regtest::Front::CharClass
     @@ascii_whole_set   = nil
     @@unicode_whole_set = nil
     
-    attr_reader :nominates, :offset, :length
+    attr_reader :candidates, :offset, :length
 
     # Constructor
     def initialize(value)
@@ -25,15 +25,15 @@ module Regtest::Front::CharClass
       @reg_options = @@parse_options[:reg_options]
       case value
       when Array
-        @nominates = value
+        @candidates = value
         @offset = -1 # value[0].offset
         @length = -1 # value[-1].offset + value[-1].length - value[0].offset
       when TRange
-        @nominates = [value]
+        @candidates = [value]
         @offset = -1
         @length = -1
       else
-        @nominates = [value]
+        @candidates = [value]
         @offset = value.offset
         @length = value.length
       end
@@ -44,15 +44,15 @@ module Regtest::Front::CharClass
       
     end
     
-    # Add a letter to nominate letters
+    # Add a letter to candidate letters
     def add(value)
       TstLog("CharClass add: #{value}"); 
-      @nominates.push value
+      @candidates.push value
       @length = value.offset - @offset + value.length
       self
     end
     
-    # reverse nominate letters (valid only in a bracket)
+    # reverse candidate letters (valid only in a bracket)
     def reverse
       TstLog("CharClass reverse"); 
       @is_reverse = true
@@ -66,32 +66,32 @@ module Regtest::Front::CharClass
 
       # delete characters from whole set
       whole = @whole_set.dup
-      @nominates.each do | nominate |
-        whole -= nominate.enumerate
+      @candidates.each do | candidate |
+        whole -= candidate.enumerate
       end
       
       # reconstructing valid character set using TRange objects
-      @nominates = reconstruct_nominates(whole)
+      @candidates = reconstruct_candidates(whole)
       self
     end
 
-    # Reconstruct nominate letters
-    def reconstruct_nominates(code_points)
+    # Reconstruct candidate letters
+    def reconstruct_candidates(code_points)
       # Consecutive code points are reconstructed into a TRange object
-      new_nominates = []
+      new_candidates = []
       if code_points.size > 0
         range_start = range_end = code_points.shift
         while(codepoint = code_points.shift)
           if(codepoint == range_end + 1)
             range_end = codepoint
           else
-            new_nominates.push TRange.new(range_start, range_end)
+            new_candidates.push TRange.new(range_start, range_end)
             range_start = range_end = codepoint
           end
         end
-        new_nominates.push TRange.new(range_start, range_end)
+        new_candidates.push TRange.new(range_start, range_end)
       end
-      new_nominates
+      new_candidates
     end
     
     # set other char-set (AND(&&) notation)
@@ -102,7 +102,7 @@ module Regtest::Front::CharClass
       self
     end
 
-    # AND process of nominates
+    # AND process of candidates
     def and_process(options)
       code_points = enumerate
       @other_char_classes.each do | other_char_class |
@@ -111,7 +111,7 @@ module Regtest::Front::CharClass
       end
       
       # reconstructing valid character set using TRange objects
-      @nominates = reconstruct_nominates(code_points)
+      @candidates = reconstruct_candidates(code_points)
     end
     
     # Get whole code set
@@ -150,15 +150,15 @@ module Regtest::Front::CharClass
     # enumerate nomimated letters
     def enumerate
       TstLog("CharClass enumerate")
-      @nominates.inject([]){|result, nominate| result += nominate.enumerate}
+      @candidates.inject([]){|result, candidate| result += candidate.enumerate}
     end
     
     # ignore process
     def ignore_process(options)
       if options[:reg_options].is_ignore?
         alternatives = []
-        @nominates.each do |nominate|
-          nominate.enumerate.each do | letter |
+        @candidates.each do |candidate|
+          candidate.enumerate.each do | letter |
             if alter = Regtest::Front::CaseFolding.ignore_case([letter])
               alternatives.push alter[0]
             end
@@ -170,7 +170,7 @@ module Regtest::Front::CharClass
             # ignore alternative is more than two letters
             code_points.push(alternative[0]) if(alternative.size == 1)
           end
-          @nominates = reconstruct_nominates(code_points)
+          @candidates = reconstruct_candidates(code_points)
         end
       end
     end
@@ -180,9 +180,9 @@ module Regtest::Front::CharClass
       TstLog("CharClass set_options: #{options[:reg_options].inspect}")
       
       # call set_options of other bracket
-      @nominates.each do |nominate|
-        if nominate.respond_to?(:set_options)
-          nominate.set_options(options)
+      @candidates.each do |candidate|
+        if candidate.respond_to?(:set_options)
+          candidate.set_options(options)
         end
       end
       
@@ -200,15 +200,15 @@ module Regtest::Front::CharClass
     
     # transform to json format
     def json
-      #if @nominates.size > 1
+      #if @candidates.size > 1
         @@id += 1
         "{" +
           "\"type\": \"LEX_CHAR_CLASS\", \"id\": \"CC#{@@id}\", " +
           "\"offset\": #{@offset}, \"length\": #{@length}, " +
-          "\"value\": [" + @nominates.map{|elem| elem.json}.join(",") +
+          "\"value\": [" + @candidates.map{|elem| elem.json}.join(",") +
         "]}"
       #else
-      #  @nominates[0].json
+      #  @candidates[0].json
       #end
     end
   end

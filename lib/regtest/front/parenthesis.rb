@@ -74,7 +74,7 @@ module Regtest::Front::Parenthesis
       # check number of elements
       if(condition_name)
         if(Regtest::Front::Selectable::Selectable === @element)
-          if(@element.nominates.size > 2)
+          if(@element.candidates.size > 2)
             raise "invalid condition. 1 or 2 selectable elements"
           end
         end
