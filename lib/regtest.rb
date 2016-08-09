@@ -20,6 +20,11 @@ class Regtest
     @@parse_options[:reg_options] ||= Regtest::RegexOption.new
     @reg_string = nil
     @reg_exp = nil
+    
+    # Set seed for randomizing
+    @seed = set_seed_for_randomizing(@@parse_options[:seed])
+
+    # Covert to source string if necessary
     set_regex(param)
 
     # Parse string
@@ -35,7 +40,18 @@ class Regtest
     @reason = nil
   end
   
-  attr_reader :reason
+  attr_reader :reason, :seed
+  
+  # Set seed for randomizing
+  def set_seed_for_randomizing(seed)
+    if seed
+      raise "Invalid seed (#{seed}: #{seed.class}) specified" if !(Integer === seed)
+      srand seed
+      seed
+    else
+      srand   # return preset seed
+    end
+  end
   
   # Covert to source string if necessary
   def set_regex(param)
