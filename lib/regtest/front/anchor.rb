@@ -1,10 +1,11 @@
 # encoding: utf-8
-
+require 'regtest/common'
 require 'regtest/regex-option'
 
 # Anchor class
 module Regtest::Front::Anchor
   class Anchor
+    include Regtest::Common
     include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
       

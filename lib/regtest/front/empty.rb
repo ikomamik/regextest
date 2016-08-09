@@ -1,8 +1,10 @@
 # encoding: utf-8
+require 'regtest/common'
 
 # Empty part
 module Regtest::Front::Empty
   class TEmpty
+    include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
 
     # Constructor

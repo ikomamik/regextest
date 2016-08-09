@@ -1,4 +1,5 @@
 #encoding: utf-8
+require 'regtest/common'
 require 'regtest/front/empty'          # parser class for empty part ("", (|) etc.)
 
 # Class for parsing parenthesis

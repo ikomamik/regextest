@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+require 'regtest/common'
 require 'regtest/front/range'          # Range of character
 require 'regtest/front/case-folding'   # case folding class
 require 'regtest/regex-option'         # Options of regex

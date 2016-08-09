@@ -14,10 +14,7 @@ require 'regtest/regexp'
 class Regtest
   include Regtest::Common
 
-  # constants
-  TstConstRetryMax =  (ENV['TST_MAX_RETRY'])?(ENV['TST_MAX_RETRY'].to_i):5
-  
-  # Constructer
+  # Constructor
   def initialize(param, options = {})
     @@parse_options = options
     @@parse_options[:reg_options] ||= Regtest::RegexOption.new
@@ -127,14 +124,6 @@ class Regtest
   
 end
 
-# Log
-def TstLog(msg)
-  # if(!defined? Rails)  # not output debug message when rails env (even if development mode)
-    warn msg
-  # end
-end
-
-# Test suite
 if __FILE__ == $0
   def md_print(md)
     "#{md.pre_match.inspect[1..-2]}\e[36m#{md.to_a[0].inspect[1..-2]}\e[0m#{md.post_match.inspect[1..-2]}"

@@ -1,9 +1,11 @@
 # encoding: utf-8
+require 'regtest/common'
 require 'regtest/front/repeat'
 
 # An element (a letter or a parenthesis) with quantifier
 module Regtest::Front::Repeatable
   class Repeatable
+    include Regtest::Common
     include Regtest::Front::Repeat
     @@id = 0   # a class variable for generating unique name of element
 

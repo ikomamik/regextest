@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+require 'regtest/common'
 require 'regtest/regex-option'         # Options of regex
 
 # selectable elements

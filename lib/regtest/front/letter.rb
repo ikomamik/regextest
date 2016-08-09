@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+require 'regtest/common'
 require 'regtest/front/char-class'     # character class element
 require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'

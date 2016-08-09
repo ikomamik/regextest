@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'regtest/common'
 
 # Parse back refer element (\1, \k<foo> etc.)
 module Regtest::Front::BackRefer

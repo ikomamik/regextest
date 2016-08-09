@@ -1,9 +1,11 @@
 # encoding: utf-8
+require 'regtest/common'
 require 'regtest/front/repeat'
 
 # Select a character (bracket)
 module Regtest::Front::Bracket
   class Bracket
+    include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
 
     # Constructor

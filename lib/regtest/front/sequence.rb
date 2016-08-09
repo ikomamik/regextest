@@ -1,9 +1,11 @@
 # encoding: utf-8
+require 'regtest/common'
 require 'regtest/front/repeat'
 
 # Sequence of elements (letter or parenthesis)
 module Regtest::Front::Sequence
   class Sequence
+    include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
 
     # Constructor

@@ -1,10 +1,11 @@
 # encoding: utf-8
-
+require 'regtest/common'
 require 'regtest/front/case-folding'   # case folding hash
 
 # Consective codepoints
 module Regtest::Front::Range
   class TRange
+    include Regtest::Common
     @@id = 0   # a class variable for generating unique name of element
 
     # Constructor
