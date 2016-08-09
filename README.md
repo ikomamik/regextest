@@ -1,5 +1,5 @@
 # Regtest
-Regtest generates sample string that matches with regular expression. It can be used as a debugging tool for regular expression. 
+Regtest generates sample string that matches with regular expression. Unlike similar tools, it recognizes anchors, charactor classes and other advanced notation of ruby regex. Target users are programmers or students for debugging/learning regular expression.
 
 ## Installation
 
@@ -21,16 +21,21 @@ Or install it yourself as:
 
 ```ruby
   require "regtest"
-  /\d{5}/.sample                 #=> "62853"
-  /\w{5}/.samples(3)             #=> ["50183", "10646", "35114", "93966", "20186"]
-  /(?<=pre)body(?=post)/.sample  #=> "prebodypost"
-  /(?<=pre)body(?=post)/.match_data              #=> #<MatchData "body">
-  /\A(?<a>|.|(?:(?<b>.)\g<a>\k<b+0>))\z/.sample  #=> "a]r\\CC\\r]a"
+  /\d{5}/.sample                   #=> "62853"
+  /\w{5}/.samples(3)               #=> ["50183", "10646", "35114", "93966", "20186"]
+  /(?<=pre)body(?=post)/.sample    #=> "prebodypost"
+  /(?=[a-z])\w{5}(?<=_\d)/.samples(4)      #=> ["nCc_0", "nxP_6", "cMl_3", "riQ_9"]
+  
+  /(?<=pre)body(?=post)/.match_data        #=> #<MatchData "body">
+  
+  palindrome = /\A(?<a>|.|(?:(?<b>.)\g<a>\k<b+0>))\z/
+  palindrome.sample                #=> "a]r\\CC\\r]a"
+  palindrome.match_data            #=> #<MatchData "z2#2z" a:"z2#2z" b:"2">
 ```
 
 ## Development
 
-A shell run/regtest to execute/test regtest library.
+Visit git repository ( https://bitbucket.org/ikomamik/regtest/src ) for developing
 
 ## Contributing
 
