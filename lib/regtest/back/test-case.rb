@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+# NOT USED AT PRESENT
+
+
 # ZDDライブラリ
 require "nysol/zdd"
 

@@ -38,7 +38,7 @@ class Regtest::Front
   def get_json_obj(result = @obj)
     require "json"
     json_obj = JSON.load(result.json)
-    puts JSON.pretty_generate(json_obj)
+    # puts JSON.pretty_generate(json_obj)
     json_obj
   end
 

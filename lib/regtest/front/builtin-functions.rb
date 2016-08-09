@@ -8,7 +8,6 @@ class Regtest::Front::BuiltinFunctions
     
   # find a built-in function
   def find_func(function_name)
-    pp @functions
     @functions[function_name]
   end
   

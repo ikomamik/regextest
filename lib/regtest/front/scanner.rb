@@ -141,7 +141,6 @@ class Regtest::Front::Scanner
       end
     end
     results.push [false, nil]
-    pp results
     results
   end
   

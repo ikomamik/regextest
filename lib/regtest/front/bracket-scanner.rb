@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 require "strscan"
-require "pp"
 
 class Regtest::Front::BracketScanner
 
@@ -96,7 +95,6 @@ class Regtest::Front::BracketScanner
   def self.test(test_string, reg_options = 0)
     puts "String: #{test_string.inspect}"
     results = Regtest::Front::BracketScanner.new().scan(test_string)
-    pp results
   end
 end
 

@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["IKOMA, Mikio"]
   spec.email         = ["mikio.ikoma@gmail.com"]
 
-  spec.summary       = %q{A Ruby library for generating sample data of regular expression}
+  spec.summary       = %q{A ruby library for generating sample data of regular expression}
   spec.description   = %q{This library generates data matched with specified regular expression.}
   spec.homepage      = "https://bitbucket.org/ikomamik/regtest"
   spec.license       = "MIT"

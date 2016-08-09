@@ -1,4 +1,7 @@
 # encoding: utf-8
+
+# NOT USED AT PRESENT
+
 require "pp"
 require "thread"
 

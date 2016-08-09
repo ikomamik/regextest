@@ -70,11 +70,6 @@ class Regtest
       @reg_exp = param
       @@parse_options[:reg_options].set(@reg_exp.options)   # inner regex options have priorty
       @reg_string = @reg_exp.source
-      
-      # following codes must be changed later
-      if @reg_string.match(/^\(\?\w*x/)
-        @@parse_options[:reg_options].modify("x")
-      end
     else
       raise "Error: string or regular expression required"
     end
@@ -140,7 +135,11 @@ class Regtest
   
 end
 
+# Test program
 if __FILE__ == $0
+  # ruby regtest.rb 'regular-expression'    =>  regular-expression
+  # ruby regtest.rb '[ab]'                  =>  a
+
   def md_print(md)
     "#{md.pre_match.inspect[1..-2]}\e[36m#{md.to_a[0].inspect[1..-2]}\e[0m#{md.post_match.inspect[1..-2]}"
   end
@@ -178,7 +177,7 @@ if __FILE__ == $0
     prog = Regtest.new(reg)
     10.times do
       if(md = prog.generate)
-        puts "*>\t" + md_print(md)     # md.string.inspect
+        puts "  " + md_print(md)     # md.string.inspect
       else
         puts "Failed to generate regex(#{reg})"
       end
