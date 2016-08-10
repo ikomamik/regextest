@@ -19,10 +19,9 @@ class Regtest::Front::Scanner
     [:LEX_NAMED_GENERATE,
      %r!\\g[<'][\+\-]?\w+[>']! ],
     [:LEX_CONTROL_LETTER,
-     %r!\\c[a-z]|\\C-[a-z]|\\c\\\\|\\C-\\\\! ],
+     %r!\\c[a-zA-Z]|\\C-[a-zA-Z]|\\c\\\\|\\C-\\\\! ],
     [:LEX_META_LETTER,
-     # %r!\\M-(?:\\w|#{LexCodeLiteral.source})! ],
-     %r!\\M-(?:[a-z]|\\C-[a-z])! ],
+     %r!\\M-(?:[a-zA-Z]|\\C-[a-zA-Z])! ],
     [:LEX_ESCAPED_LETTER,
      %r!\\[tvnrfae #\{\}\[\]\(\)]! ],   # \b is an anchor out of bracket
     [:LEX_UNICODE,
