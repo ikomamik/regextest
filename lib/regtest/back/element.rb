@@ -26,7 +26,7 @@ class Regtest::Back::Element
     if(@candidates)
       @candidates.size
     else
-      raise "internal error"
+      raise "internal error: candidates not found at size-method"
     end
   end
   
@@ -35,7 +35,7 @@ class Regtest::Back::Element
     if(@candidates)
       @candidates[num]
     else
-      raise "internal error"
+      raise "internal error: candidates not found at at-method"
     end
   end
   
