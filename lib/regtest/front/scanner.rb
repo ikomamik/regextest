@@ -105,7 +105,7 @@ class Regtest::Front::Scanner
     [:LEX_SPACE,
      %r!\s!m ],
     [:LEX_ERROR,
-     %r![\{\}\[\]]! ],
+     %r![\[\]]! ],
     [:LEX_SIMPLE_ESCAPE,      # redundant escape \@, \", etc.
      %r!\\.! ],
     # [:LEX_REGOPT_LETTER,      # imxdau
