@@ -103,8 +103,8 @@ class Regtest::Front::Scanner
      %r!\n!m ],
     [:LEX_SPACE,
      %r!\s!m ],
-    [:LEX_ERROR,
-     %r![\[\]]! ],
+    # [:LEX_ERROR,  # commented out since /]/ or /foo # [/x is valid notation
+    #  %r![\[\]]! ],
     [:LEX_SIMPLE_ESCAPE,      # redundant escape \@, \", etc.
      %r!\\.! ],
     # [:LEX_REGOPT_LETTER,      # imxdau
