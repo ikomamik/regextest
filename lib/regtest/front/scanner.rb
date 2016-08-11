@@ -1,9 +1,12 @@
 # encoding: utf-8
 
 require "strscan"
+require 'regtest/common'
 require "pp"
 
 class Regtest::Front::Scanner
+  include Regtest::Common
+
   # A table for lexical analysis of elements
   # (Not strict analisis here.)
   LexCodeLiteral = %r!\\x[0-9A-Fa-f]{1,2}|\\[0-7]{2,3}!
@@ -140,6 +143,7 @@ class Regtest::Front::Scanner
       end
     end
     results.push [false, nil]
+    TstLog("Scanned elements:\n#{results}")
     results
   end
   
