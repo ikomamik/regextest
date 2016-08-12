@@ -4,8 +4,6 @@
 module Regtest::Front::Repeat
   class Repeat
     # Constants for the class
-    TstConstRepeatMax =  (ENV['TST_MAX_REPEAT'])?(ENV['TST_MAX_REPEAT'].to_i):32
-    
     TstOptGreedy      =  1
     TstOptReluctant   =  2
     TstOptPossessive  =  4
