@@ -8,6 +8,7 @@ class Regtest::Back::Result
     @look_aheads = []
     @look_behinds = []
     @positional_anchors = {}
+    @reluctant_repeat = {}
     @start_offset = 0
     @end_offset = 0
     @pre_match = nil
@@ -50,6 +51,23 @@ class Regtest::Back::Result
   def add_anchor(cmd)
     @positional_anchors[cmd] ||= []
     @positional_anchors[cmd].push @end_offset
+  end
+
+  # Adds relrctant repeat information
+  def add_reluctant_repeat(elem)
+    repeat_id = elem.param[:id]
+    case elem.command
+    when :CMD_ANC_RELUCTANT_BEGIN
+      @reluctant_repeat[repeat_id] = [@end_offset]
+    when :CMD_ANC_RELUCTANT_END
+      if @reluctant_repeat[repeat_id]
+        @reluctant_repeat[repeat_id].push @end_offset
+      else
+        raise "internal error, invalid reluctant_repeat_end command"
+      end
+    else
+      raise "internal error, invalid reluctant_repeat command"
+    end
   end
 
   # Merge results of look aheads / behinds
@@ -103,7 +121,11 @@ class Regtest::Back::Result
 
   # Merge each elements of not-look-aheads
   def merge_not_look_ahead_elems(offset, sub_results)
-    term_offset = offset + sub_results.end_offset
+    if Regtest::Back::Element === sub_results
+      term_offset = offset + sub_results.end_offset
+    else
+      term_offset = offset + sub_results.size
+    end
     try_order = sub_results.size.times.to_a.shuffle
     
     found = false
@@ -143,6 +165,8 @@ class Regtest::Back::Result
         break
       end
     end
+    # pp @results
+    # puts "found = #{found}"
     found
   end
 
@@ -267,6 +291,26 @@ class Regtest::Back::Result
   
   # narrow down candidate by anchors
   def narrow_down
+    narrow_down_by_anchors
+    narrow_down_by_reluctant_repeat
+  end
+  
+  # narrow down candidate by reluctant repeat
+  def narrow_down_by_reluctant_repeat
+    @reluctant_repeat.each do | repeat_id, offsets |
+      repeat_part  = @results[offsets[0]...offsets[1]]
+      succeed_part = @results[offsets[1]..-1]
+      # puts "id=#{repeat_id}, start=#{repeat_part}, end=#{succeed_part}"
+      
+      # reluctant repeat is equivalent to not_look_ahead!
+      (offsets[0]...offsets[1]).to_a.each do | offset |
+        merge_not_look_ahead_elems(offset, succeed_part)
+      end
+    end
+  end
+  
+  # narrow down candidate by anchors
+  def narrow_down_by_anchors
     @positional_anchors.each do | cmd, offsets |
       case cmd
       when :CMD_ANC_STRING_BEGIN, :CMD_ANC_MATCH_START

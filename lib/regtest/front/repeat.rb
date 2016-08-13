@@ -3,6 +3,8 @@
 # Quantifier class
 module Regtest::Front::Repeat
   class Repeat
+    include Regtest::Common
+  
     # Constants for the class
     TstOptGreedy      =  1
     TstOptReluctant   =  2
@@ -15,7 +17,7 @@ module Regtest::Front::Repeat
       @option = 0
       set_values(param) if(param)
     end
-    attr_reader :max_value, :min_value
+    attr_reader :max_value, :min_value, :option
     
     # get minimum, maximum, and option
     def set_values(param)
@@ -66,6 +68,16 @@ module Regtest::Front::Repeat
       else
         raise "Error: repeat notation #{param} invalid"
       end
+    end
+    
+    # a+?, etc.
+    def is_reluctant?
+      ((@option & TstOptReluctant) != 0)
+    end
+    
+    # a++. etc.
+    def is_possessive?
+      ((@option & TstOptPossessive) != 0)
     end
     
   end

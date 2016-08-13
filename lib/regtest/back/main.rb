@@ -231,6 +231,9 @@ class Regtest::Back::Main
       repeat = target["min_repeat"]
     end
     result = []
+    if target["reluctant"] == "yes"
+      result.push Regtest::Back::Element.new({cmd: :CMD_ANC_RELUCTANT_BEGIN, id: target["id"]})
+    end
     # puts "repeat=#{repeat} quit=#{@quit_mode} nest=#{@nest}"
     repeat.times do
       if( elem = generate_candidates({json: target["value"]}))
@@ -246,6 +249,9 @@ class Regtest::Back::Main
         break if elem[0].command == :CMD_ANC_LINE_BEGIN && !elem[-1].new_line?
         break if elem[0].command == :CMD_ANC_STRING_BEGIN
       end
+    end
+    if target["reluctant"] == "yes"
+      result.push Regtest::Back::Element.new({cmd: :CMD_ANC_RELUCTANT_END, id: target["id"]})
     end
     result
   end
@@ -326,6 +332,8 @@ class Regtest::Back::Main
            :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START,
            :CMD_ANC_LOOK_BEHIND2
         results.add_anchor(command)
+      when :CMD_ANC_RELUCTANT_BEGIN, :CMD_ANC_RELUCTANT_END
+        results.add_reluctant_repeat(elem)
       else
         raise "inner error, invalid command at checking anchors: #{command}"
       end
@@ -333,7 +341,7 @@ class Regtest::Back::Main
     if !results.merge
       return nil
     end
-    
+    # pp results
     results
   end
 end

@@ -54,7 +54,10 @@ module Regtest::Front::Repeatable
           " \"offset\": #{@offset}, " +
           " \"length\": #{@length}, " +
           " \"min_repeat\": #{current.min_value}, " +
-          " \"max_repeat\": #{current.max_value}}"
+          " \"max_repeat\": #{current.max_value}, " +
+          " \"reluctant\": #{(current.is_reluctant?)?'"yes"':'"no"'}, " +
+          " \"possessive\": #{(current.is_possessive?)?'"yes"':'"no"'} " +
+          "}"
         end
         json_string += ", " + work.join(", ")
       end
