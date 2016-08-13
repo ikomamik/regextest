@@ -9,6 +9,7 @@ require 'regtest/front/manage-parentheses'   # management class of parentheses
 
 # Front end processes
 class Regtest::Front
+  include Regtest::Common
   def initialize(reg_string, options)
     @options = options
   
@@ -38,7 +39,7 @@ class Regtest::Front
   def get_json_obj(result = @obj)
     require "json"
     json_obj = JSON.load(result.json)
-    # puts JSON.pretty_generate(json_obj)
+    TstLog("JSON param:\n" + JSON.pretty_generate(json_obj))
     json_obj
   end
 
