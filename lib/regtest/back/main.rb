@@ -7,6 +7,7 @@ require 'regtest/back/element'
 require 'regtest/back/result'
 
 class Regtest::Back::Main
+  include Regtest::Common
   def initialize(json_obj, max_nest)
     @json_obj = json_obj
     @max_nest = max_nest
@@ -23,6 +24,7 @@ class Regtest::Back::Main
     # generate pre-result of matched string (pre-result contains candidates of letters)
     pre_result = generate_candidates({json: @json_obj})
     return nil unless pre_result
+    TstLog("pre_result:\n" + pre_result.inspect)
     
     # narrow down the candidates
     result = narrow_down_candidates(pre_result)
@@ -341,7 +343,6 @@ class Regtest::Back::Main
     if !results.merge
       return nil
     end
-    # pp results
     results
   end
 end
