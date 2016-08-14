@@ -77,7 +77,7 @@ class Regtest::Back::Element
       else
         @param[:data].inspect
       end
-    when :CMD_LOOK_BEHIND, :CMD_LOOK_AHEAD
+    when :CMD_LOOK_BEHIND, :CMD_LOOK_AHEAD, :CMD_NOT_LOOK_BEHIND, :CMD_NOT_LOOK_AHEAD
       @param.inspect
     when :CMD_ANC_LINE_BEGIN, :CMD_ANC_LINE_END, :CMD_ANC_WORD_BOUND, :CMD_ANC_WORD_UNBOUND,
          :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START,
