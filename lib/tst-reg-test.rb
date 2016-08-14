@@ -22,22 +22,30 @@ class Regtest::Test
   
   def print_results(results)
     puts ""
+    exceptions = get_exceptions
+    ignore = 0
     results[:failed].each do | failed_hash |
-      puts "======="
-      puts "  type: #{failed_hash[:type] || failed_hash[:result][:result]}"
-      puts "  test: #{failed_hash[:test] || failed_hash[:result][:reg]}"
-      puts "  info: #{failed_hash[:info] || failed_hash[:result][:reason]}"
-      puts "  indx: #{failed_hash[:index]}"
-      # pp failed_hash
+      regex = failed_hash[:test] || failed_hash[:result][:reg]
+      if !exceptions[regex]
+        puts "======="
+        puts "  type: #{failed_hash[:type] || failed_hash[:result][:result]}"
+        puts "  test: #{regex}"
+        puts "  info: #{failed_hash[:info] || failed_hash[:result][:reason]}"
+        puts "  indx: #{failed_hash[:index]}"
+        pp failed_hash
+      else
+        ignore += 1
+      end
     end
 
     puts "======"
     puts "success:   #{results[:success].size}"
-    puts "failed:    #{results[:failed].size}"
+    puts "failed:    #{results[:failed].size - ignore}"
+    puts "ignore:    #{ignore}"
     puts "others:    #{results[:others].size}"
-    puts "not_scope: #{results[:not_scope].size}"
     puts "timeout:   #{results[:timeout].size}"
-    puts "perl_syntax:   #{results[:perl_syntax].size}"
+    puts "regexp error: #{results[:not_scope].size}"
+    puts "perl_syntax:  #{results[:perl_syntax].size}"
   end
   
   def do_test(results, min_test, max_test, timeout_seconds)
@@ -72,6 +80,9 @@ class Regtest::Test
       rescue NameError => ex
         warn "NameError #{ex}. \nline:#{line}"
         results[:failed].push({ type: NameError, test: line, info: ex, index: i})
+      rescue TypeError => ex
+        warn "TypeError #{ex}. \nline:#{line}"
+        results[:failed].push({ type: TypeError, test: line, info: ex, index: i})
       rescue Encoding::CompatibilityError => ex
         warn "Encoding::CompatibilityError #{ex}. \nline:#{line}"
         results[:failed].push({ type: Encoding::CompatibilityError, test: line, info: ex, index: i})
@@ -101,12 +112,12 @@ class Regtest::Test
   def check_normal_test(reg)
     result = nil
     a_test = /#{reg}/
-    puts a_test.source
+    # puts a_test.source
     obj = Regtest.new(a_test)
     10.times do | i |
       md = obj.generate
       if(md)
-        print "OK md:#{md},"
+        # print "OK md:#{md},"
         result = {result: :ok, md: md, reg: a_test}
       else
         warn "Failed. reg='#{a_test}', reason=#{obj.reason}"
@@ -129,6 +140,17 @@ class Regtest::Test
     check_normal_test(reg)
   end
 
+end
+
+def get_exceptions
+  {
+    /az\G/  => true,
+    /az\A/  => true,
+    /a\Az/  => true,
+    /とて\G/  => true,
+    /まみ\A/  => true,
+    /ま\Aみ/  => true,
+  }
 end
 
 # Test suite (execute when this file is specified in command line)
