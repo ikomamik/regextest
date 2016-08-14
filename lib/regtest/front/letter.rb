@@ -3,6 +3,7 @@ require 'regtest/common'
 require 'regtest/front/char-class'     # character class element
 require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'
+require 'regtest/front/unicode'
 
 # A letter
 module Regtest::Front::Letter
@@ -135,7 +136,7 @@ module Regtest::Front::Letter
     def generate_unicode_char(val)
       # Dynamic loading of Unicode regarding modules (for better performance).
       # commented out since this code not executed at ruby 2.0.0
-      require 'regtest/front/unicode'        # range of Unicode
+      require 'regtest/front/unicode'
       
       if(md = val.match(/(p|P)\{(\w+)\}/))
         class_name = md[2].downcase
