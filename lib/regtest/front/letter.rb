@@ -4,6 +4,7 @@ require 'regtest/front/char-class'     # character class element
 require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'
 require 'regtest/front/unicode'
+require 'regtest/front/bracket'
 
 # A letter
 module Regtest::Front::Letter
@@ -40,7 +41,6 @@ module Regtest::Front::Letter
         @data_type = :LEX_CHAR
         @obj = CharClass.new([ TRange.new(eval('"'+ val + '"'))])   # convert using ruby's eval
       when :LEX_BRACKET
-        require 'regtest/front/bracket'
         @obj = Regtest::Front::Bracket.new(val)
       when :LEX_SIMPLIFIED_CLASS
         @obj = generate_simplified_class(val)
@@ -143,7 +143,7 @@ module Regtest::Front::Letter
     def generate_unicode_char(val)
       # Dynamic loading of Unicode regarding modules (for better performance).
       # commented out since this code not executed at ruby 2.0.0
-      require 'regtest/front/unicode'
+      # require 'regtest/front/unicode'
       
       if(md = val.match(/(p|P)\{(\^?)(\w+)\}/))
         class_name = md[3].downcase

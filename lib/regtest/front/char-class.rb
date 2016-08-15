@@ -150,7 +150,7 @@ module Regtest::Front::CharClass
     
     # Get whole code set of ascii
     def get_ascii_whole_set
-      require 'regtest/front/unicode'
+      # require 'regtest/front/unicode'
       # same as  [ TRange.new("\x20", "\x7e") ]
       ascii_set = Regtest::Front::Unicode.enumerate("ascii")
       print_set = Regtest::Front::Unicode.enumerate("print")
@@ -159,7 +159,7 @@ module Regtest::Front::CharClass
     
     # Get whole code set of unicode
     def get_unicode_whole_set
-      require 'regtest/front/unicode'
+      # require 'regtest/front/unicode'
       char_set = []
       TstConstUnicodeCharSet.split("|").each do | elem |
         char_set |= Regtest::Front::Unicode.enumerate(elem)
