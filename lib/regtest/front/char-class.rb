@@ -33,6 +33,17 @@ module Regtest::Front::CharClass
         @candidates = [value]
         @offset = -1
         @length = -1
+      when String   # value is a class names joined by "|"
+        class_names = value
+        @candidates = []
+        class_names.split("|").each do | class_name |
+          work = Regtest::Front::Unicode.property(class_name) ||
+            raise("Invalid Unicode class #{class_name}")
+          # construct char class
+          @candidates += work.map{|elem| TRange.new(elem[0], elem[1])}
+        end
+        @offset = -1
+        @length = -1
       else
         @candidates = [value]
         @offset = value.offset
@@ -50,6 +61,13 @@ module Regtest::Front::CharClass
       TstLog("CharClass add: #{value}"); 
       @candidates.push value
       @length = value.offset - @offset + value.length
+      self
+    end
+    
+    # Add TRange objects
+    def add_ranges(ranges)
+      TstLog("CharClass add_trange: #{ranges}"); 
+      @candidates += ranges
       self
     end
     
@@ -142,10 +160,11 @@ module Regtest::Front::CharClass
     # Get whole code set of unicode
     def get_unicode_whole_set
       require 'regtest/front/unicode'
-      ascii_set = Regtest::Front::Unicode.enumerate("ascii")
-      katakana_set = Regtest::Front::Unicode.enumerate("katakana")
-      hiragana_set = Regtest::Front::Unicode.enumerate("hiragana")
-      ascii_set + katakana_set + hiragana_set
+      char_set = []
+      TstConstUnicodeCharSet.split("|").each do | elem |
+        char_set |= Regtest::Front::Unicode.enumerate(elem)
+      end
+      char_set
     end
     
     # enumerate nomimated letters

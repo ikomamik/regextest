@@ -76,10 +76,14 @@ module Regtest::Front::Letter
       obj = nil
       case val
       when "\\w"
-        obj = CharClass.new(
-                [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
-                  TRange.new('0', '9'), TRange.new('_') ]
-              )
+        if @options[:reg_options].is_unicode?
+          obj = CharClass.new("Letter|Mark|Number|Connector_Punctuation")
+        else
+          obj = CharClass.new(
+                  [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
+                    TRange.new('0', '9'), TRange.new('_') ]
+                )
+        end
       when "\\W"
         obj = CharClass.new(
                 [ TRange.new("\x20", "\x2f"), TRange.new("\x3a", "\x40"),
@@ -88,9 +92,8 @@ module Regtest::Front::Letter
               )
       when "\\d"
         if @options[:reg_options].is_unicode?
-          obj = CharClass.new(
-                   [ TRange.new('0', '9'),  TRange.new('０', '９')]
-                 )
+          #obj = CharClass.new([ TRange.new('0', '9'),  TRange.new('０', '９')])
+          obj = CharClass.new("Decimal_Number")
         else
           obj = CharClass.new(
                    [ TRange.new('0', '9') ]
@@ -110,10 +113,14 @@ module Regtest::Front::Letter
                   TRange.new("\x47", "\x60"), TRange.new("\x67", "\x7e")]
               )
       when "\\s"
-        obj = CharClass.new(
-                [ TRange.new(' '), TRange.new("\x9"), TRange.new("\xa"), 
-                  TRange.new("\xc"), TRange.new("\xd") ]
-              )
+        ascii_ranges = [ TRange.new(' '), TRange.new("\x9"), TRange.new("\xa"), 
+                         TRange.new("\xc"), TRange.new("\xd") ]
+        if @options[:reg_options].is_unicode?
+          obj = CharClass.new("Line_Separator|Paragraph_Separator|Space_Separator")
+          obj.add_ranges(ascii_ranges)
+        else
+          obj = CharClass.new(ascii_ranges)
+        end
       when "\\S"
         obj = CharClass.new(
                 [ TRange.new("\x21", "\x7e") ]
@@ -138,88 +145,106 @@ module Regtest::Front::Letter
       # commented out since this code not executed at ruby 2.0.0
       require 'regtest/front/unicode'
       
-      if(md = val.match(/(p|P)\{(\w+)\}/))
-        class_name = md[2].downcase
+      if(md = val.match(/(p|P)\{(\^?)(\w+)\}/))
+        class_name = md[3].downcase
+        reverse = (md[2] && md[2]=="^")?true:false
+        
+        # if not found at cache
         if !@@unicode_ranges[class_name]
-          work = Regtest::Front::Unicode.property(class_name) ||
-            raise("Invalid Unicode class #{class_name} in #{val}")
+          #work = Regtest::Front::Unicode.property(class_name) ||
+          #  raise("Invalid Unicode class #{class_name} in #{val}")
           # construct char class
-          work = work.map{|elem| TRange.new(elem[0], elem[1])}
-          @@unicode_ranges[class_name] = CharClass.new(work)
+          #work = work.map{|elem| TRange.new(elem[0], elem[1])}
+          @@unicode_ranges[class_name] = CharClass.new(class_name)
         end
       else
         raise "Internal error, inconsistent Unicode class #{val}"
       end
-      if md[1] == "p"
+      
+      # ￥P{^...} is equivalent to \p{...}
+      if((md[1] == "p" && !reverse) || (md[1] == "P" && reverse))
         @@unicode_ranges[class_name]
-      else      # "P"
+      else      # \P{}  or \p{^}
         @@unicode_ranges[class_name].set_reverse(@options)
       end
     end
     
+    def classname_to_ranges(arrays)
+    end
+    
     # generate POSIX character class (ie. [[:alpha:]], etc.)
     def generate_char_class(val)
-      obj = nil
-      case val
-      when '[:alnum:]'
-        obj = CharClass.new(
-                [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
-                  TRange.new('0', '9') ]
-              )
-      when '[:cntrl:]'
-        obj = CharClass.new(
-                [ TRange.new("\x00", "\x1f"), TRange.new("\x7f") ]
-              )
-      when '[:lower:]'
-        obj = CharClass.new(
-                [ TRange.new('a', 'z') ]
-              )
-      when '[:space:]'
-        obj = CharClass.new(
-                [ TRange.new(' '), TRange.new("\n"), TRange.new("\r"), 
-                  TRange.new("\t"), TRange.new("\f"), TRange.new("\v") ]
-              )
-      when '[:alpha:]'
-        obj = CharClass.new(
-                [ TRange.new('a', 'z'), TRange.new('A', 'Z') ]
-              )
-      when '[:digit:]'
-        obj = CharClass.new(
-                [ TRange.new('0', '9') ]
-              )
-      when '[:print:]'
-        obj = CharClass.new(
-                [ TRange.new("\x20", "\x7e") ]
-              )
-      when '[:upper:]'
-        obj = CharClass.new(
-                [ TRange.new('A', 'Z') ]
-              )
-      when '[:blank:]'
-        obj = CharClass.new(
-                [ TRange.new(' '), TRange.new("\t")  ]
-              )
-      when '[:graph:]'
-        obj = CharClass.new(
-                [ TRange.new("\x21", "\x7e") ]
-              )
-      when '[:punct:]'
-        obj = CharClass.new(
-                [ TRange.new("\x21", "\x2f"), TRange.new("\x3a", "\x40"),
-                  TRange.new("\x5b", "\x60"), TRange.new("\x7b", "\x7e") ]
-              )
-      when '[:xdigit:]'
-        obj = CharClass.new(
-                [ TRange.new('a', 'f'), TRange.new('A', 'F'),
-                  TRange.new('0', '9') ]
-              )
-      when '[:word:]'
-        obj = CharClass.new(
-                [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
-                  TRange.new('0', '9'), TRange.new('_') ]
-              )
+      if(md = val.match(/^\[\:(\w+)\:\]$/))
+        class_name = md[1]
       else
-        raise "Error: Invalid character class #{val}"
+        raise "internal error, invalid POSIX class name(#{val})"
+      end
+      
+      obj = nil
+      if @options[:reg_options].is_unicode?
+        obj = CharClass.new(class_name)
+      else
+        case val
+        when '[:alnum:]'
+          obj = CharClass.new(
+                  [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
+                    TRange.new('0', '9') ]
+                )
+        when '[:alpha:]'
+          obj = CharClass.new(
+                  [ TRange.new('a', 'z'), TRange.new('A', 'Z') ]
+                )
+        when '[:cntrl:]'
+          obj = CharClass.new(
+                  [ TRange.new("\x00", "\x1f"), TRange.new("\x7f") ]
+                )
+        when '[:lower:]'
+          obj = CharClass.new(
+                  [ TRange.new('a', 'z') ]
+                )
+        when '[:print:]'
+          obj = CharClass.new(
+                  [ TRange.new("\x20", "\x7e") ]
+                )
+        when '[:space:]'
+          obj = CharClass.new(
+                  [ TRange.new(' '), TRange.new("\n"), TRange.new("\r"), 
+                    TRange.new("\t"), TRange.new("\f"), TRange.new("\v") ]
+                )
+        when '[:digit:]'
+          obj = CharClass.new(
+                  [ TRange.new('0', '9') ]
+                )
+        when '[:upper:]'
+          obj = CharClass.new(
+                  [ TRange.new('A', 'Z') ]
+                )
+        when '[:blank:]'
+          obj = CharClass.new(
+                  [ TRange.new(' '), TRange.new("\t")  ]
+                )
+        when '[:graph:]'
+          obj = CharClass.new(
+                  [ TRange.new("\x21", "\x7e") ]
+                )
+        when '[:punct:]'
+          obj = CharClass.new(
+                  [ TRange.new("\x21", "\x2f"), TRange.new("\x3a", "\x40"),
+                    TRange.new("\x5b", "\x60"), TRange.new("\x7b", "\x7e") ]
+                )
+        when '[:xdigit:]'
+          obj = CharClass.new(
+                  [ TRange.new('a', 'f'), TRange.new('A', 'F'),
+                    TRange.new('0', '9') ]
+                )
+        when '[:word:]'
+          obj = CharClass.new(
+                  [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
+                    TRange.new('0', '9'), TRange.new('_') ]
+                )
+        else
+          raise "Error: Invalid character class #{val}"
+        end
       end
       obj
     end

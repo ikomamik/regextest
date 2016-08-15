@@ -34,7 +34,7 @@ class Regtest::Front::Scanner
     [:LEX_SIMPLIFIED_CLASS,
      %r!\\[wWsSdDhH]! ],
     [:LEX_UNICODE_CLASS,
-     %r!(?:\\p\{\^?|\\P\{)\w+\}! ],
+     %r!\\[pP]\{\^?\w+\}! ],
     [:LEX_QUANTIFIER,
      %r![\?\*\+][\?\+]?|\{\d+(?:,\d*)?\}\??|\{,\d+\}\??! ],
     [:LEX_COMMENT,

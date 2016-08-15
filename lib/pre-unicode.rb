@@ -86,7 +86,7 @@ class RegtestPreUnicode
       class Regtest::Front::Unicode
         # Generate hash of properties
         def self.property(class_name)
-          case class_name
+          case class_name.downcase
 #{ranges_source}
           else
             raise "Internal error. Class name (#\{class_name\}) not found"
