@@ -229,8 +229,10 @@ module Regtest::Front::Letter
                 )
         when '[:punct:]'
           obj = CharClass.new(
-                  [ TRange.new("\x21", "\x2f"), TRange.new("\x3a", "\x40"),
-                    TRange.new("\x5b", "\x60"), TRange.new("\x7b", "\x7e") ]
+                  [ TRange.new("\x21", "\x23"), TRange.new("\x25", "\x2a"), 
+                    TRange.new("\x2c", "\x2f"), TRange.new("\x3a", "\x3b"),
+                    TRange.new("\x3f", "\x40"), TRange.new("\x5b", "\x5d"),
+                    TRange.new("\x5f"), TRange.new("\x7b"), TRange.new("\x7d") ]
                 )
         when '[:xdigit:]'
           obj = CharClass.new(
