@@ -6,9 +6,10 @@ module Regtest::Common
   @@parse_options = nil
   
   # environment variables
-  TstConstRetryMax  = (ENV['REGTEST_MAX_RETRY'])?(ENV['REGTEST_MAX_RETRY'].to_i):5
-  TstConstRepeatMax = (ENV['REGTEST_MAX_REPEAT'])?(ENV['REGTEST_MAX_REPEAT'].to_i):32
-  TstConstDebug     = (ENV['REGTEST_DEBUG'])?true:false
+  TstConstRetryMax     = (ENV['REGTEST_MAX_RETRY'])?(ENV['REGTEST_MAX_RETRY'].to_i):5
+  TstConstRepeatMax    = (ENV['REGTEST_MAX_REPEAT'])?(ENV['REGTEST_MAX_REPEAT'].to_i):32
+  TstConstRecursionMax = (ENV['REGTEST_MAX_RECURSION'])?(ENV['REGTEST_MAX_RECURSION'].to_i):32
+  TstConstDebug        = (ENV['REGTEST_DEBUG'])?true:false
   
   # whole character set if unicode mode. specify as 'ascii|kana', 'ascii|han|kana', etc.
   TstConstUnicodeCharSet  = (ENV['REGTEST_UNICODE_CHAR_SET'] || "ascii|katakana|hiragana").downcase

@@ -20,7 +20,7 @@ class Regtest::Back
     # @test_info = Regtest::Back::TestCase.new(@json_obj, @name_hash)
     
     # default max recursion is 8.
-    @max_nest = (ENV['TST_MAX_RECURSION'])?(ENV['TST_MAX_RECURSION'].to_i):8
+    @max_nest = TstConstRecursionMax
   end
   
   # A public method that generates string to match the regexp
