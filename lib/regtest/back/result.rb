@@ -303,7 +303,7 @@ class Regtest::Back::Result
       # puts "id=#{repeat_id}, start=#{repeat_part}, end=#{succeed_part}"
       
       # reluctant repeat is equivalent to not_look_ahead!
-      (offsets[0]...offsets[1]).to_a.each do | offset |
+      (offsets[0]..(offsets[1] - succeed_part.size)).to_a.each do | offset |
         merge_not_look_ahead_elems(offset, succeed_part)
       end
     end
