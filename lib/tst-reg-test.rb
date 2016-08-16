@@ -95,6 +95,7 @@ class Regtest::Test
     # py_source = IO.read("../contrib/Onigmo/testpy.py")
     File::open("../contrib/Onigmo/testpy.py") do |f|
       f.each do |line|
+        line.force_encoding("utf-8")
         if !line.match(/ONIG_SYNTAX_PERL/)
           if(md = line.match(/^\s*(?:x|x2|n)\s*\(.+?$/u) rescue nil)
             line.sub!(/,\s*\".+?$/, ")") rescue nil

@@ -38,8 +38,9 @@ class Regtest::Front
   # Output JSON format parse result of the regex
   def get_json_obj(result = @obj)
     require "json"
-    json_obj = JSON.load(result.json)
-    TstLog("JSON param:\n" + JSON.pretty_generate(json_obj))
+    option = { max_nesting: 999}  # work around for ruby 1.9.*
+    json_obj = JSON.parse(result.json, option)
+    TstLog("JSON param:\n" + JSON.pretty_generate(json_obj, option))
     json_obj
   end
 

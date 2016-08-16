@@ -34,7 +34,8 @@ class Regtest::Front::BracketScanner
     [:LEX_UNICODE_CLASS,
       %r!(?:\\p\{\^?|\\P\{)\w+\}! ],
     [:LEX_MINUS,
-      %r!-(?\!\]|\z)! ],     # a letter must succeeds to minus
+      #  %r!-(?\!\]|\z)! ], # somehow this code failed at Ruby 1.9.*
+      /-(?!\]|\z)/ ],       # a letter must succeeds to minus
     [:LEX_AND_AND,
       %r!\&\&! ],
     [:LEX_SPECIAL_LETTER,
