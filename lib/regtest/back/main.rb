@@ -24,10 +24,11 @@ class Regtest::Back::Main
     # generate pre-result of matched string (pre-result contains candidates of letters)
     pre_result = generate_candidates({json: @json_obj})
     return nil unless pre_result
-    TstLog("pre_result:\n" + pre_result.inspect)
+    TstLog("pre_result1:\n" + pre_result.inspect)
     
     # narrow down the candidates
     result = narrow_down_candidates(pre_result)
+    TstLog("pre_result2:\n" + result.inspect)
     return nil if !result || !result.narrow_down
     
     # fixes result
