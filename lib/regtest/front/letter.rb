@@ -4,7 +4,6 @@ require 'regtest/front/char-class'     # character class element
 require 'regtest/front/range'          # range of character point
 require 'regtest/regex-option'
 require 'regtest/front/unicode'
-require 'regtest/front/bracket'
 
 # A letter
 module Regtest::Front::Letter
@@ -50,6 +49,8 @@ module Regtest::Front::Letter
         @obj = generate_unicode_char(val)
       when :LEX_ANY_LETTER
         @obj = generate_any_char(val)
+      when :LEX_SPECIAL_LETTER
+        @obj = generate_special_char(val)
       when :LEX_AND_AND
         raise "Internal error: enexpected LEX_AND_AND"
         @obj = CharClass.new([TRange.new(val)])
@@ -60,15 +61,50 @@ module Regtest::Front::Letter
     
     # generate whole set of letters (depends on option)
     def generate_any_char(val)
-      if( @options[:reg_options].is_multiline? )
-        @obj = CharClass.new(
-                 [ TRange.new("\x20", "\x7e"),  TRange.new("\n")]
-               )
+      if @options[:reg_options].is_unicode?
+        obj = CharClass.new(TstConstUnicodeCharSet)
       else
-        @obj = CharClass.new(
-                 [ TRange.new("\x20", "\x7e") ]
-               )
+        obj = CharClass.new( [ TRange.new("\x20", "\x7e") ] )
       end
+      
+      if( @options[:reg_options].is_multiline? )
+          obj.add_ranges( [ TRange.new("\n") ] )
+      end
+      obj
+    end
+    
+    # generate special character class
+    def generate_special_char(val)
+      @data_type = :LEX_CHAR
+      obj = nil
+      case val
+      when "\\R"
+        if @options[:reg_options].is_unicode?
+          # BUG: "\x0a\x0d" must be supported!
+          obj = CharClass.new(
+                  [ TRange.new("\x0a", "\x0d"), TRange.new("\u{85}"),
+                    TRange.new("\u{2028}", "\u{2029}") ]
+                )
+        else
+          # BUG: "\x0a\x0d" must be supported!
+          obj = CharClass.new(
+                  [ TRange.new("\x0a", "\x0d") ]
+                )
+        end
+      when "\\X"
+        if @options[:reg_options].is_unicode?
+          # BUG: (?>\P{M}\p{M}*)
+          obj = CharClass.new("M")
+          obj.set_reverse(@options)
+        else
+          obj = CharClass.new(
+                  [ TRange.new("\x20", "\x7e"), TRange.new("\n") ]
+                )
+        end
+      else
+        raise "Error: internal error, invalid special char: #{val}"
+      end
+      obj
     end
     
     # generate simplified character class
@@ -113,11 +149,10 @@ module Regtest::Front::Letter
                   TRange.new("\x47", "\x60"), TRange.new("\x67", "\x7e")]
               )
       when "\\s"
-        ascii_ranges = [ TRange.new(' '), TRange.new("\x9"), TRange.new("\xa"), 
-                         TRange.new("\xc"), TRange.new("\xd") ]
+        ascii_ranges = [ TRange.new(' '), TRange.new("\x9", "\xd") ]
         if @options[:reg_options].is_unicode?
           obj = CharClass.new("Line_Separator|Paragraph_Separator|Space_Separator")
-          obj.add_ranges(ascii_ranges)
+          obj.add_ranges(ascii_ranges + [ TRange.new("\u{85}") ])
         else
           obj = CharClass.new(ascii_ranges)
         end
@@ -174,8 +209,9 @@ module Regtest::Front::Letter
     
     # generate POSIX character class (ie. [[:alpha:]], etc.)
     def generate_char_class(val)
-      if(md = val.match(/^\[\:(\w+)\:\]$/))
-        class_name = md[1]
+      if(md = val.match(/^\[\:(\^)?(\w+)\:\]$/))
+        reverse = (md[1] && md[1]=="^")?true:false
+        class_name = md[2]
       else
         raise "internal error, invalid POSIX class name(#{val})"
       end
@@ -184,62 +220,62 @@ module Regtest::Front::Letter
       if @options[:reg_options].is_unicode?
         obj = CharClass.new(class_name)
       else
-        case val
-        when '[:alnum:]'
+        case class_name
+        when 'alnum'
           obj = CharClass.new(
                   [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
                     TRange.new('0', '9') ]
                 )
-        when '[:alpha:]'
+        when 'alpha'
           obj = CharClass.new(
                   [ TRange.new('a', 'z'), TRange.new('A', 'Z') ]
                 )
-        when '[:cntrl:]'
+        when 'cntrl'
           obj = CharClass.new(
                   [ TRange.new("\x00", "\x1f"), TRange.new("\x7f") ]
                 )
-        when '[:lower:]'
+        when 'lower'
           obj = CharClass.new(
                   [ TRange.new('a', 'z') ]
                 )
-        when '[:print:]'
+        when 'print'
           obj = CharClass.new(
                   [ TRange.new("\x20", "\x7e") ]
                 )
-        when '[:space:]'
+        when 'space'
           obj = CharClass.new(
                   [ TRange.new(' '), TRange.new("\n"), TRange.new("\r"), 
                     TRange.new("\t"), TRange.new("\f"), TRange.new("\v") ]
                 )
-        when '[:digit:]'
+        when 'digit'
           obj = CharClass.new(
                   [ TRange.new('0', '9') ]
                 )
-        when '[:upper:]'
+        when 'upper'
           obj = CharClass.new(
                   [ TRange.new('A', 'Z') ]
                 )
-        when '[:blank:]'
+        when 'blank'
           obj = CharClass.new(
                   [ TRange.new(' '), TRange.new("\t")  ]
                 )
-        when '[:graph:]'
+        when 'graph'
           obj = CharClass.new(
                   [ TRange.new("\x21", "\x7e") ]
                 )
-        when '[:punct:]'
+        when 'punct'
           obj = CharClass.new(
                   [ TRange.new("\x21", "\x23"), TRange.new("\x25", "\x2a"), 
                     TRange.new("\x2c", "\x2f"), TRange.new("\x3a", "\x3b"),
                     TRange.new("\x3f", "\x40"), TRange.new("\x5b", "\x5d"),
                     TRange.new("\x5f"), TRange.new("\x7b"), TRange.new("\x7d") ]
                 )
-        when '[:xdigit:]'
+        when 'xdigit'
           obj = CharClass.new(
                   [ TRange.new('a', 'f'), TRange.new('A', 'F'),
                     TRange.new('0', '9') ]
                 )
-        when '[:word:]'
+        when 'word'
           obj = CharClass.new(
                   [ TRange.new('a', 'z'), TRange.new('A', 'Z'),
                     TRange.new('0', '9'), TRange.new('_') ]
@@ -248,6 +284,11 @@ module Regtest::Front::Letter
           raise "Error: Invalid character class #{val}"
         end
       end
+      
+      if reverse
+        obj.set_reverse(@options)
+      end
+      
       obj
     end
     
