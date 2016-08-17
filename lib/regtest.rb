@@ -10,6 +10,7 @@ require 'regtest/front'
 require 'regtest/regex-option'
 require 'regtest/back'
 require 'regtest/regexp'
+require 'timeout'
 
 class Regtest
   include Regtest::Common
@@ -33,7 +34,7 @@ class Regtest
     @seed = set_seed_for_randomizing(@@parse_options[:seed])
 
     # Covert to source string if necessary
-    set_regex(param)
+    set_regex(regex)
 
     # Parse string
     @front_end = Regtest::Front.new(@reg_string, @@parse_options)
@@ -67,7 +68,36 @@ class Regtest
   # @raise [RuntimeError] if something wrong...
   # @raise [Regtest::Common::RegtestTimeout] if detected timeout while verification. Option 'verification: false' may be workaround.
   def generate
-  attr_reader :reason, :seed
+    TstConstRetryMax.times do
+    
+      # generate string
+      @result = @back_end.generate
+      if !@result
+        TstLog "NG: Failed to generate"
+        @reason = :failed_to_generate
+        next
+      end
+      result_string = @result.pre_match + @result.match + @result.post_match
+      
+      # verify generated string
+      if @verification
+        @result = verify(result_string)    # returns a match-object
+        if !@result
+          TstLog "NG: Failed to verify"
+          @reason = :failed_to_verify
+          next
+        end
+        # break if @result is verified
+      else
+        @result = result_string            # returns a string
+      end
+      break
+    end
+    @result
+  end
+  
+  #---------------#
+  private
   
   # Set seed for randomizing
   def set_seed_for_randomizing(seed)
@@ -102,22 +132,6 @@ class Regtest
     end
   end
 
-  # genetate string to be matched with specified regular expression
-  def generate
-    TstConstRetryMax.times do 
-      @result = @back_end.generate
-      if @result
-        @result = verify    # returns a match-object
-      else
-        TstLog "NG: Failed to generate"
-        @reason = :failed_to_generate
-        @result = nil
-      end
-      break if @result
-    end
-    @result
-  end
-  
   # add built-in functions if any
   def check_builtin(param)
     builtin_functions = {}
@@ -167,13 +181,13 @@ class Regtest
     end
     md
   end
-  
 end
 
 # Test program
 if __FILE__ == $0
   # ruby regtest.rb 'regular-expression'    =>  regular-expression
   # ruby regtest.rb '[ab]'                  =>  a
+  include Regtest::Common
 
   begin
     
@@ -206,6 +220,7 @@ if __FILE__ == $0
     end
     
     prog = Regtest.new(reg)
+    
     10.times do
       if(md = prog.generate)
         puts "  " + TstMdPrint(md)     # md.string.inspect
@@ -218,6 +233,10 @@ if __FILE__ == $0
     $stderr.puts "Parse error. #{ex.message}"
     exit(1)
 
+  rescue Regtest::Common::RegtestTimeout => ex
+    $stderr.puts ex.message
+    exit(1)
+    
   rescue RuntimeError => ex
     # Error process. put error message and exit
     $stderr.puts ex.message
