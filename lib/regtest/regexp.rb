@@ -15,7 +15,11 @@ class Regexp
     if num == 1
       sample(option)
     else
-      match_data(num, option).map{|elem| elem.string}
+      if option[:verification] != false
+        match_data(num, option).map{|elem| elem.string}
+      else
+        match_data(num, option)
+      end
     end
   end
   
@@ -27,7 +31,11 @@ class Regexp
   # @return [String] if able to generate matched string
   # @return [nil] if failed to generate matched string
   def sample(option = {})
-    match_data.string
+    if option[:verification] != false
+      match_data(1, option).string
+    else
+      match_data(1, option)
+    end
   end
   
   # generate match-data object(s) of regexp

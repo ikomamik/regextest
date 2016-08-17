@@ -25,6 +25,7 @@ class Regtest
   def initialize(regex, options = {})
     @@parse_options = options
     @@parse_options[:reg_options] ||= Regtest::RegexOption.new
+    @verification = (options && options[:verification] == false)?false:true
     @reg_string = nil
     @reg_exp = nil
     
@@ -138,25 +139,33 @@ class Regtest
   end
   
   # Verifies the result
-  def verify
-    return nil unless(@result)
-    result_string = @result.pre_match + @result.match + @result.post_match
-    if(md = @reg_exp.match(result_string))
+  def verify(result_string)
+    md = nil
+    begin
+      timeout(TstConstTimeout){
+        md = @reg_exp.match(result_string)
+      }
+    rescue Timeout::Error => ex
+      raise(RegtestTimeout,
+            "Timeout(#{TstConstTimeout} sec) detected while verifying string(#{result_string}) matched with regex(#{@reg_exp}).")
+    end
+    
+    if(md)
+      # matched string sometime differs from expected one...
       if(md.pre_match  != @result.pre_match || 
          md.to_a[0]    != @result.match ||
          md.post_match != @result.post_match)
         @reason = :invalid_match_string
-        TstLog "WARN: Invalid matched string"
+        TstLog "WARN: Invalid matched string, expected <--> actual"
         TstLog "  proc: #{md.pre_match.inspect}  <-->  #{@result.pre_match.inspect}"
         TstLog "  body: #{md.to_a[0].inspect}  <-->  #{@result.match.inspect}"
         TstLog "  succ: #{md.post_match.inspect}  <-->  #{@result.post_match.inspect}"
       end
-      md
     else
       @reason = { rc: :not_matched, string: result_string}
-      raise "failed to generate. Not matched regex(#{@reg_string}) string(#{result_string.inspect})"
+      raise("failed to generate. Not matched regex(#{@reg_string}) string(#{result_string.inspect})")
     end
-    # @result = @back_end.generate
+    md
   end
   
 end
