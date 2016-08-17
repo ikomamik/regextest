@@ -35,28 +35,24 @@ Or install it yourself as:
 ```
 
 ## Parameters (environment variables)
-<dl>
-  <dt>REGEXTEST_DEBUG</dt>
-    <dd>Specify "1" to print verbose debugging information</dd>
-  <dt>REGEXTEST_MAX_RETRY</dt>
-    <dd>Retry count for generation. 5 retry by default.</dd>
-  <dt>REGEXTEST_MAX_REPEAT</dt>
-    <dd>Maximum repeat of element when * or + specified. Default value is 32.</dd>
-  <dt>REGEXTEST_MAX_RECURSION</dt>
-    <dd>Maximum nest of \g<..>. Default value is 32.</dd>
-  <dt>REGEXTEST_UNICODE_CHAR_SET</dt>
-    <dd>Whole character set at unicode mode. Specify unicode char-set names joined with "|". Default value is 'ascii|katakana|hiragana'</dd>
-  <dt>REGEXTEST_TIMEOUT</dt>
-    <dd>Specify timeout second for verifying generated string (by ruby regexp). Default value is 1 second. Note no timeout detected for generating string. It can be used for fuzzering.</dd>
-</dl>
+- **REGEXTEST_DEBUG**
+    - Specify "1" to print verbose debugging information
+- **REGEXTEST_MAX_RETRY**
+    - Retry count for generation. 5 retry by default.
+- **REGEXTEST_MAX_REPEAT**
+    - Maximum repeat of element when * or + specified. Default value is 32.
+- **REGEXTEST_MAX_RECURSION**
+    - Maximum nest of \g<..>. Default value is 32.
+- **REGEXTEST_UNICODE_CHAR_SET**
+    - Whole character set at unicode mode. Specify unicode char-set names joined with "|". Default value is 'ascii|katakana|hiragana'
+- **REGEXTEST_TIMEOUT**
+    - Specify timeout second for verifying generated string (by ruby regexp). Default value is 1 second. Note no timeout detected for generating string. It can be used for fuzzering.
 
 
 ## Exceptions
-<dl>
-  <dt>Regextest::Common::REGEXTEST_TIMEOUT</dt>
-    <dd>Timeout detected while verification. It is sub-class of standard exception RuntimeError. For ignoring verification, you can use sample method with 'verification: false' option.
-    </dd>
-</dl>
+- **Regextest::Common::REGEXTEST_TIMEOUT**
+    - Timeout detected while verification. It is sub-class of standard exception RuntimeError. For ignoring verification, you can use sample method with 'verification: false' option.
+    
 ```ruby
   require "regextest"
   /(1|11){100}$/.sample                       #=> raise Regextest::Common::RegextestTimeout: ...
