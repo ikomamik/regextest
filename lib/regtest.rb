@@ -14,8 +14,15 @@ require 'regtest/regexp'
 class Regtest
   include Regtest::Common
 
-  # Constructor
-  def initialize(param, options = {})
+  # Constructor of Regtest class
+  # @param [String|Regexp] regex regular expression object (or string)
+  # @param [Hash] options parameters for generating
+  # @option options [Regtest::RegexOption] :reg_options Regex option parameter
+  # @option options [Fixnum] :seed seed for randomization
+  # @option options [TrueClass] :verification specify true (or not speficy) to verify generated string using ruby Regexp.
+  # @option options [FalseClass] :verification specify false if skip to verify generated string.
+  # @return [Regtest] constructed object
+  def initialize(regex, options = {})
     @@parse_options = options
     @@parse_options[:reg_options] ||= Regtest::RegexOption.new
     @reg_string = nil
@@ -40,6 +47,25 @@ class Regtest
     @reason = nil
   end
   
+  # @!attribute [r] reason
+  #   Reason if failed to generate
+  #   @return [hash] return reasons if failed to generate
+  #   @return [nil] return nil unless error
+  attr_reader :reason
+  
+  # @!attribute [r] seed
+  #   Seed for randomization
+  #   @return [Fixnum] return seed for randomization
+  #   @return [nil] return nil if no seed provided
+  attr_reader :seed
+  
+  # Genetate string matched with specified regular expression
+  # @return [MatchData] if matched and verified.
+  # @return [String] if matched without verification (i.e. return unverified matched string).
+  # @return [nil] nil if failed to generate
+  # @raise [RuntimeError] if something wrong...
+  # @raise [Regtest::Common::RegtestTimeout] if detected timeout while verification. Option 'verification: false' may be workaround.
+  def generate
   attr_reader :reason, :seed
   
   # Set seed for randomizing

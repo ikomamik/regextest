@@ -1,11 +1,11 @@
-# require "bundler/gem_tasks"
-# require "rspec/core/rake_task"
+require "bundler/gem_tasks"
+require "rspec/core/rake_task"
 
-# RSpec::Core::RakeTask.new(:spec)
+RSpec::Core::RakeTask.new(:spec)
 
 # task :default => :spec
 
-task :default => :make
+task :default => [:make, :spec]
 
 # Generating parser
 file 'lib/regtest/front/parser.rb' => 'lib/regtest/front/parser.y' do
@@ -31,11 +31,19 @@ file 'lib/regtest/front/case-folding.rb' => 'lib/pre-case-folding.rb' do
   sh 'ruby  lib/pre-case-folding.rb'
 end
 
+# Generating documents
+file 'doc/index.html' => ['lib/regtest.rb', 'lib/regtest/regexp.rb', 'README.md'] do
+  puts "making document for Regtest"
+  sh 'yardoc lib/regtest.rb lib/regtest/regexp.rb'
+end
+
 task :make =>
         ['lib/regtest/front/parser.rb',
          'lib/regtest/front/bracket-parser.rb',
          'lib/regtest/front/unicode.rb',
-         'lib/regtest/front/case-folding.rb'] do 
+         'lib/regtest/front/case-folding.rb',
+         'doc/index.html',
+        ] do 
   puts "Rake it!"
 end
 
