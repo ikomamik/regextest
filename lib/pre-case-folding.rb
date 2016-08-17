@@ -5,11 +5,11 @@ require "pp"
 # A script for generating case-folding of Unicode
 # This uses tables of Unicode.org, i.e.  
 
-class RegtestPreCaseFolding
+class RegextestPreCaseFolding
   def self.generate(input_file, output_file)
     # Get valid casefoldings from unicode table
     case_foldings = read_unicode_case_folding("./contrib/unicode/CaseFolding.txt")
-    puts_unicode_case_folding('lib/regtest/front/case-folding.rb', case_foldings)
+    puts_unicode_case_folding('lib/regextest/front/case-folding.rb', case_foldings)
   end
 
   # Get list of case-folding pairs from Unicode.org table
@@ -58,7 +58,7 @@ class RegtestPreCaseFolding
       # DO NOT Modify This File Since Automatically Generated
 
       # Range of Unicode
-      class Regtest::Front::CaseFolding
+      class Regextest::Front::CaseFolding
         # return case foldings
         def self.ignore_case(letter_array)
           CASE_FOLDING_HASH[letter_array]
@@ -82,16 +82,16 @@ class RegtestPreCaseFolding
 end
 
 input_file  = "./contrib/unicode/CaseFolding.txt"
-output_file = "./lib/regtest/front/case-folding.rb"
+output_file = "./lib/regextest/front/case-folding.rb"
 
 
-RegtestPreCaseFolding.generate(input_file, output_file)
+RegextestPreCaseFolding.generate(input_file, output_file)
 
 # test code
-require "regtest"
+require "regextest"
 require "#{output_file}"
 
-if Regtest::Front::CaseFolding.ignore_case([65]) == [[97]]
+if Regextest::Front::CaseFolding.ignore_case([65]) == [[97]]
   puts "OK"
 else
   puts "NG"

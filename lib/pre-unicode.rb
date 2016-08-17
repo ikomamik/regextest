@@ -6,12 +6,12 @@ require "pp"
 # It does not use tables of Unicode.org, 
 # but use result of Ruby Regexp execution
 
-class RegtestPreUnicode
+class RegextestPreUnicode
   def self.generate
     # Get valid properties of Ruby
     onig_properties = read_onig_properties("./contrib/Onigmo/UnicodeProps.txt")
     ranges = get_ranges_of_properties(onig_properties)
-    puts_unicode_ranges('lib/regtest/front/unicode.rb', ranges)
+    puts_unicode_ranges('lib/regextest/front/unicode.rb', ranges)
   end
 
   # Get list of Unicode classes from Onigmo manual
@@ -83,7 +83,7 @@ class RegtestPreUnicode
       # DO NOT Modify This File Since Automatically Generated
 
       # Range of Unicode
-      class Regtest::Front::Unicode
+      class Regextest::Front::Unicode
         # Generate hash of properties
         def self.property(class_name)
           case class_name.downcase
@@ -111,4 +111,4 @@ class RegtestPreUnicode
   end
 end
 
-RegtestPreUnicode.generate
+RegextestPreUnicode.generate

@@ -1,11 +1,11 @@
 # encoding: utf-8
 
-require 'regtest'
+require 'regextest'
 require 'kconv'
 require 'timeout'
 require 'pp'
 
-class Regtest::Test
+class Regextest::Test
   def initialize(min_test, max_test)
     results = {
       success: [],
@@ -71,6 +71,9 @@ class Regtest::Test
       rescue ArgumentError => ex
         warn "ArgumentError #{ex}. \nline: line"
         results[:failed].push({type: :argument_error, info: ex, test: line, index: i})
+      #rescue Regextest::Common::RegextestTimeout => ex
+      #  warn "RegextestTimeout #{ex}. \nline:#{line}"
+      #  results[:failed].push({ type: :timeout, test: line, info: ex, index: i})
       rescue RuntimeError => ex
         warn "RuntimeError #{ex}. \nline:#{line}"
         results[:failed].push({ type: RuntimeError, test: line, info: ex, index: i})
@@ -114,7 +117,7 @@ class Regtest::Test
     result = nil
     a_test = /#{reg}/
     # puts a_test.source
-    obj = Regtest.new(a_test)
+    obj = Regextest.new(a_test)
     10.times do | i |
       md = obj.generate
       if(md)
@@ -158,5 +161,5 @@ end
 if __FILE__ == $0
   min_test = ARGV[1]?(ARGV[0].to_i):0
   max_test = ARGV[1]?(ARGV[1].to_i):(ARGV[0]?(ARGV[0].to_i):99999999)
-  Regtest::Test.new(min_test, max_test)
+  Regextest::Test.new(min_test, max_test)
 end

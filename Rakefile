@@ -8,40 +8,40 @@ RSpec::Core::RakeTask.new(:spec)
 task :default => [:make, :spec]
 
 # Generating parser
-file 'lib/regtest/front/parser.rb' => 'lib/regtest/front/parser.y' do
-  puts 'making regtest/front/parser.rb'
-  sh 'racc lib/regtest/front/parser.y -o lib/regtest/front/parser.rb'
+file 'lib/regextest/front/parser.rb' => 'lib/regextest/front/parser.y' do
+  puts 'making regextest/front/parser.rb'
+  sh 'racc lib/regextest/front/parser.y -o lib/regextest/front/parser.rb'
 end
 
 # Generating bracket parser
-file 'lib/regtest/front/bracket-parser.rb' => 'lib/regtest/front/bracket-parser.y' do
-  puts 'making regtest/front/bracket-parser.rb'
-  sh 'racc lib/regtest/front/bracket-parser.y -o lib/regtest/front/bracket-parser.rb'
+file 'lib/regextest/front/bracket-parser.rb' => 'lib/regextest/front/bracket-parser.y' do
+  puts 'making regextest/front/bracket-parser.rb'
+  sh 'racc lib/regextest/front/bracket-parser.y -o lib/regextest/front/bracket-parser.rb'
 end
 
 # Generating Unicode parser
-file 'lib/regtest/front/unicode.rb' => 'lib/pre-unicode.rb' do
-  puts "making regtest/front/unicode.rb"
+file 'lib/regextest/front/unicode.rb' => 'lib/pre-unicode.rb' do
+  puts "making regextest/front/unicode.rb"
   sh 'ruby  lib/pre-unicode.rb'
 end
 
 # Generating case-folding mapping
-file 'lib/regtest/front/case-folding.rb' => 'lib/pre-case-folding.rb' do
-  puts "making regtest/front/case-folding.rb"
+file 'lib/regextest/front/case-folding.rb' => 'lib/pre-case-folding.rb' do
+  puts "making regextest/front/case-folding.rb"
   sh 'ruby  lib/pre-case-folding.rb'
 end
 
 # Generating documents
-file 'doc/index.html' => ['lib/regtest.rb', 'lib/regtest/regexp.rb', 'README.md'] do
-  puts "making document for Regtest"
-  sh 'yardoc lib/regtest.rb lib/regtest/regexp.rb'
+file 'doc/index.html' => ['lib/regextest.rb', 'lib/regextest/regexp.rb', 'README.md'] do
+  puts "making document for Regextest"
+  sh 'yardoc lib/regextest.rb lib/regextest/regexp.rb'
 end
 
 task :make =>
-        ['lib/regtest/front/parser.rb',
-         'lib/regtest/front/bracket-parser.rb',
-         'lib/regtest/front/unicode.rb',
-         'lib/regtest/front/case-folding.rb',
+        ['lib/regextest/front/parser.rb',
+         'lib/regextest/front/bracket-parser.rb',
+         'lib/regextest/front/unicode.rb',
+         'lib/regextest/front/case-folding.rb',
          'doc/index.html',
         ] do 
   puts "Rake it!"

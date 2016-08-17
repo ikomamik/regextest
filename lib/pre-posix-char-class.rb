@@ -119,7 +119,7 @@ def puts_unicode_ranges(unicode_file, ranges)
     # DO NOT Modify This File Since Automatically Generated
 
     # Unicodeのレンジ
-    module Regtest::Front::ParseUnicode
+    module Regextest::Front::ParseUnicode
       class Unicode
         # ハッシュの生成
         def self.ranges()
