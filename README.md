@@ -3,7 +3,7 @@ Regtest generates sample string that matches with regular expression. Unlike sim
 
 ## Installation
 
-Add this line to your application's Gemfile:
+You can use [sample application](https://regtestweb.herokuapp.com/test_data/home) without installation. For using at your local machine, add this line to your application's Gemfile:
 
 ```ruby
 gem 'regtest'
@@ -16,6 +16,7 @@ And then execute:
 Or install it yourself as:
 
     $ gem install regtest
+
 
 ## Usage
 
@@ -34,20 +35,37 @@ Or install it yourself as:
 ```
 
 ## Parameters (environment variables)
-  REGTEST_DEBUG
-    Specify "1" to print verbose debugging information
-  REGTEST_MAX_RETRY
-    Retry count for generation. 5 retry by default.
-  REGTEST_MAX_REPEAT
-    Maximum repeat of element when * or + specified. Default value is 32.
-  REGTEST_MAX_RECURSION
-    Maximum nest of \g<..>. Default value is 32.
-  REGTEST_UNICODE_CHAR_SET
-    Whole character set at unicode mode. Specify unicode char-set names joined with "|". Default value is 'ascii|katakana|hiragana'
+<dl>
+  <dt>REGTEST_DEBUG</dt>
+    <dd>Specify "1" to print verbose debugging information</dd>
+  <dt>REGTEST_MAX_RETRY</dt>
+    <dd>Retry count for generation. 5 retry by default.</dd>
+  <dt>REGTEST_MAX_REPEAT</dt>
+    <dd>Maximum repeat of element when * or + specified. Default value is 32.</dd>
+  <dt>REGTEST_MAX_RECURSION</dt>
+    <dd>Maximum nest of \g<..>. Default value is 32.</dd>
+  <dt>REGTEST_UNICODE_CHAR_SET</dt>
+    <dd>Whole character set at unicode mode. Specify unicode char-set names joined with "|". Default value is 'ascii|katakana|hiragana'</dd>
+  <dt>REGTEST_TIMEOUT</dt>
+    <dd>Specify timeout second for verifying generated string (by ruby regexp). Default value is 1 second. Note no timeout detected for generating string. It can be used for fuzzering.</dd>
+</dl>
+
+
+## Exceptions
+<dl>
+  <dt>Regtest::Common::REGTEST_TIMEOUT</dt>
+    <dd>Timeout detected while verification. It is sub-class of standard exception RuntimeError. For ignoring verification, you can use sample method with 'verification: false' option.
+    </dd>
+</dl>
+```ruby
+  require "regtest"
+  /(1|11){100}$/.sample                       #=> raise Regtest::Common::RegtestTimeout: ...
+  /(1|11){100}$/.sample(verification: false)  #=> '11111111...'
+```
 
 ## Development
 
-  Visit git repository ( https://bitbucket.org/ikomamik/regtest/src ) for developing
+  Visit [git repository](https://bitbucket.org/ikomamik/regtest/src) for developing
 
 ## Contributing
 
@@ -57,10 +75,11 @@ Or install it yourself as:
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
 
-## Bugs
+## Major Bugs/Restrictions
 1. Insufficient support of unicode classes
 2. Too slow to process regex contains "Han" class
 3. Limited support of possesive repeat
 4. Limited support of grapheme cluster (\R or \X)
 
-See issues tracker ( https://bitbucket.org/ikomamik/regtest/issues?status=new&status=open ) for more detail. 
+See [issues tracker](https://bitbucket.org/ikomamik/regtest/issues?status=new&status=open) for more detail. 
+
