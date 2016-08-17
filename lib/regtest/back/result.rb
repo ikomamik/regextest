@@ -1,8 +1,11 @@
 # encoding: utf-8
 
+require 'regtest/common'
 require 'regtest/back/element'
 
 class Regtest::Back::Result
+  include Regtest::Common
+  
   def initialize()
     @results = []
     @look_aheads = []
@@ -126,7 +129,7 @@ class Regtest::Back::Result
     else
       term_offset = offset + sub_results.size
     end
-    try_order = sub_results.size.times.to_a.shuffle
+    try_order = TstShuffle(sub_results.size.times.to_a)
     
     found = false
     # exclude, at least, one element
@@ -230,7 +233,7 @@ class Regtest::Back::Result
       end
     end
     
-    try_order = sub_results.size.times.to_a.shuffle
+    try_order = TstShuffle(sub_results.size.times.to_a)
     found = false
     # exclude, at least, one element
     try_order.each do | j |
@@ -422,7 +425,7 @@ class Regtest::Back::Result
     elsif elem2.non_word_elements?
       elem1.set_word_elements
     else
-      if(rand(2)==0)
+      if(TstRand(2)==0)
         elem1.set_word_elements
         elem2.set_non_word_elements
       else
@@ -447,7 +450,7 @@ class Regtest::Back::Result
     elsif elem2.non_word_elements?
       elem1.set_non_word_elements
     else
-      if(rand(2)==0)
+      if(TstRand(2)==0)
         elem1.set_word_elements
         elem2.set_word_elements
       else

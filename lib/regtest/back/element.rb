@@ -1,7 +1,9 @@
 # encoding: utf-8
 require "pp"
+require 'regtest/common'
 
 class Regtest::Back::Element
+  include Regtest::Common
   def initialize(param)
     @command = param[:cmd]
     @param = param
@@ -13,7 +15,7 @@ class Regtest::Back::Element
   # random fix
   def random_fix
     if @command == :CMD_SELECT
-      result = @candidates[rand(@candidates.size)]
+      result = @candidates[TstRand(@candidates.size)]
       @candidates = [result]   # fixed!
     else
       raise "invalid command at random_fix: #{@command}"

@@ -54,7 +54,7 @@ class Regtest::Back::Main
   # generate pre-result of matched string (pre-result contains candidates of letters)
   def generate_candidates(param)
     target = param[:json]
-    # puts "MATCH type:#{target["type"]} #{rand(10)}"
+    # puts "MATCH type:#{target["type"]}"
     
     result = nil
     case target["type"]
@@ -144,7 +144,7 @@ class Regtest::Back::Main
       # success if there is at least one result
       offsets = (0 ... target["value"].size).to_a
       if !param[:atomic]
-        offsets.shuffle!    # shuffle if not atomic group (this proceduce is not sufficient...)
+        offsets = TstShuffle(offsets)  # shuffle if not atomic group (this proceduce is not sufficient...)
       end
       result = nil
       offsets.each do | offset |
@@ -229,7 +229,7 @@ class Regtest::Back::Main
     if(@quit_mode)
       repeat = target["min_repeat"]
     elsif(target["max_repeat"] > target["min_repeat"])
-      repeat = target["min_repeat"]+rand(target["max_repeat"]-target["min_repeat"]+1)
+      repeat = target["min_repeat"]+TstRand(target["max_repeat"]-target["min_repeat"]+1)
     else
       repeat = target["min_repeat"]
     end

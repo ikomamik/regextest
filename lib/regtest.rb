@@ -166,15 +166,6 @@ if __FILE__ == $0
   # ruby regtest.rb 'regular-expression'    =>  regular-expression
   # ruby regtest.rb '[ab]'                  =>  a
 
-  def md_print(md)
-    # coloring if tty && (!windows)
-    if $stdout.tty? && !RUBY_PLATFORM.downcase.match(/mswin(?!ce)|mingw/)
-      "#{md.pre_match.inspect[1..-2]}\e[36m#{md.to_a[0].inspect[1..-2]}\e[0m#{md.post_match.inspect[1..-2]}"
-    else
-      "#{md.pre_match.inspect[1..-2]} #{md.to_a[0].inspect[1..-2]} #{md.post_match.inspect[1..-2]}"
-    end
-  end
-  
   begin
     
     regex = ARGV[0] || $<
@@ -208,7 +199,7 @@ if __FILE__ == $0
     prog = Regtest.new(reg)
     10.times do
       if(md = prog.generate)
-        puts "  " + md_print(md)     # md.string.inspect
+        puts "  " + TstMdPrint(md)     # md.string.inspect
       else
         puts "Failed to generate regex(#{reg})"
       end
