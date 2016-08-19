@@ -1,11 +1,12 @@
 # encoding: utf-8
 
-# Main class of back-end. Construct candidates array and narrow down
+# Copyright (C) 2016 Mikio Ikoma
 
 require 'regextest/common'
 require 'regextest/back/element'
 require 'regextest/back/result'
 
+# Main class of back-end. Construct candidates array and narrow down
 class Regextest::Back::Main
   include Regextest::Common
   def initialize(json_obj, max_nest)

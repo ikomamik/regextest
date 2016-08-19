@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 require "pp"
 
 # A script for generating case-folding of Unicode

@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 # Common part of regextest
 module Regextest::Common
   # Analyzing options

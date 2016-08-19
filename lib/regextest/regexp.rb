@@ -1,3 +1,7 @@
+# encoding: utf-8
+
+# Copyright (C) 2016 Mikio Ikoma
+
 # Add-on methods (samples, sample, match_data) for Regexp class
 # @raise [RuntimeError] if something wrong...
 # @raise [Regextest::Common::RegextestTimeout] if detected timeout while verification. Option 'verification: false' may be workaround.

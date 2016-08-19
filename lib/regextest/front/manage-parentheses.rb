@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 # A class for managing parentheses
 class Regextest::Front::ManageParentheses
   def initialize()

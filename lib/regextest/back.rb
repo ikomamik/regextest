@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 class Regextest::Back; end
 require 'regextest/common'
 require 'regextest/back/main'

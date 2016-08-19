@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 # This class name will be modified by Rake process
 class RegextestFrontBracketParser
 options no_result_var

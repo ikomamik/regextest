@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 # A class that manages options of regular expression
 class Regextest::RegexOption
   # Constants for the class

@@ -1,4 +1,7 @@
 # encoding: utf-8
+
+# Copyright (C) 2016 Mikio Ikoma
+
 require 'regextest/common'
 
 # Parse back refer element (\1, \k<foo> etc.)

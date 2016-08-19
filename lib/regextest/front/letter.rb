@@ -1,4 +1,7 @@
 # encoding: utf-8
+
+# Copyright (C) 2016 Mikio Ikoma
+
 require 'regextest/common'
 require 'regextest/front/char-class'     # character class element
 require 'regextest/front/range'          # range of character point

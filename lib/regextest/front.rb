@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 # This routine defines front-end of Regextest
 class Regextest::Front; end
 require 'regextest/common'

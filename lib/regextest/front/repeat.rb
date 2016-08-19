@@ -1,5 +1,7 @@
 # encoding: utf-8
 
+# Copyright (C) 2016 Mikio Ikoma
+
 # Quantifier class
 module Regextest::Front::Repeat
   class Repeat
@@ -26,7 +28,7 @@ module Regextest::Front::Repeat
         @min_value = 0
         @max_value = 1
         @option |= TstOptGreedy     if(param.size == 1)
-        @option |= TstOptReluctant  if(param[-1] == "?")
+        @option |= TstOptReluctant  if(param == "??")
         @option |= TstOptPossessive if(param[-1] == "+")
       when '*', '*?', '*+'
         @min_value = 0
@@ -39,7 +41,7 @@ module Regextest::Front::Repeat
         @max_value = TstConstRepeatMax
         @option |= TstOptGreedy     if(param.size == 1)
         @option |= TstOptReluctant  if(param[-1] == "?")
-        @option |= TstOptPossessive if(param[-1] == "+")
+        @option |= TstOptPossessive if(param == "++")
       when /^\{(\d+)\}([\?\+]?)$/         # {3}, etc.
         @min_value = $1.to_i
         @max_value = $1.to_i
