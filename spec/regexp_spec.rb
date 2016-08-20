@@ -19,19 +19,15 @@ describe Regexp do
     expect(/\w/.sample(seed: 100)).to eq(/\w/.sample(seed: 100))
   end
 
-  it 'can generate array of sample strings' do
-    expect(regex.samples(2)).to eq(["foo", "foo"])
+  it 'can raise exception when regex cannot generate string' do
   end
 
-  it 'can generate array of sample strings without verification' do
-    expect(regex.samples(2, verification: false)).to eq(["foo", "foo"])
+  it 'can generate MatchData' do
   end
 
-  it 'can generate same sample strings sequence when same seed provided' do
-    expect(/\w/.samples(100, seed: 100)).to eq(/\w/.samples(100, seed: 100))
+  it 'can generate string by to_json method' do
   end
 
-  it 'can generate array of MatchData' do
-    expect(regex.match_data(2)[1].to_s).to eq("foo")
+  it 'can generate json string' do
   end
 end
