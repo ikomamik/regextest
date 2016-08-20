@@ -236,7 +236,7 @@ class Regextest::Back::Main
       repeat = target["min_repeat"]
     end
     result = []
-    if target["reluctant"] == "yes"
+    if target["repeat_option"].index("reluctant")
       result.push Regextest::Back::Element.new({cmd: :CMD_ANC_RELUCTANT_BEGIN, id: target["id"]})
     end
     # puts "repeat=#{repeat} quit=#{@quit_mode} nest=#{@nest}"
@@ -255,7 +255,7 @@ class Regextest::Back::Main
         break if elem[0].command == :CMD_ANC_STRING_BEGIN
       end
     end
-    if target["reluctant"] == "yes"
+    if target["repeat_option"].index("reluctant")
       result.push Regextest::Back::Element.new({cmd: :CMD_ANC_RELUCTANT_END, id: target["id"]})
     end
     result

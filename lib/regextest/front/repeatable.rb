@@ -54,17 +54,19 @@ module Regextest::Front::Repeatable
       
       if @quant.size > 0
         work = @quant.map do | current |
+          repeat_option = []
+          repeat_option.push "reluctant" if current.is_reluctant?
+          repeat_option.push "possessive" if current.is_possessive?
+          
           " \"offset\": #{@offset}, " +
           " \"length\": #{@length}, " +
           " \"min_repeat\": #{current.min_value}, " +
           " \"max_repeat\": #{current.max_value}, " +
-          " \"reluctant\": #{(current.is_reluctant?)?'"yes"':'"no"'}, " +
-          " \"possessive\": #{(current.is_possessive?)?'"yes"':'"no"'} " +
+          " \"repeat_option\": #{repeat_option} " +
           "}"
         end
         json_string += ", " + work.join(", ")
       end
-      
       json_string
     end
   end
