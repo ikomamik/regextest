@@ -6,6 +6,7 @@
 module Regextest::Common
   # Analyzing options
   @@parse_options = nil
+  @@rand_called = false
   
   # environment variables
   TstConstRetryMax     = (ENV['REGEXTEST_MAX_RETRY'])?(ENV['REGEXTEST_MAX_RETRY'].to_i):5
@@ -31,12 +32,24 @@ module Regextest::Common
   
   # Randomize
   def TstRand(num)
+    @@rand_called = true
     rand(num)
   end
   
   # Shuffle
   def TstShuffle(array)
+    @@rand_called = true
     array.shuffle
+  end
+  
+  # reset random_called
+  def reset_random_called
+    @@rand_called = false
+  end
+  
+  # is_random?
+  def is_random?
+    @@rand_called
   end
   
   # Pretty print of matched data object

@@ -18,7 +18,8 @@ class Regextest::Back::Element
   # random fix
   def random_fix
     if @command == :CMD_SELECT
-      result = @candidates[TstRand(@candidates.size)]
+      offset = (@candidates.size > 1)?TstRand(@candidates.size):0
+      result = @candidates[offset]
       @candidates = [result]   # fixed!
     else
       raise "invalid command at random_fix: #{@command}"

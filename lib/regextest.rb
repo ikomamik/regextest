@@ -17,6 +17,11 @@ require 'timeout'
 class Regextest
   include Regextest::Common
 
+  # exceptions
+  class RegextestError             < RuntimeError; end
+  class RegextestFailedToGenerate  < RuntimeError; end
+  class RegextestTimeout           < RuntimeError; end
+
   # Constructor of Regextest class
   # @param [String|Regexp] regex regular expression object (or string)
   # @param [Hash] options parameters for generating
@@ -68,17 +73,22 @@ class Regextest
   # @return [String] if matched without verification (i.e. return unverified matched string).
   # @return [nil] nil if failed to generate
   # @raise [RuntimeError] if something wrong...
-  # @raise [Regextest::Common::RegextestTimeout] if detected timeout while verification. Option 'verification: false' may be workaround.
+  # @raise [Regextest::RegextestTimeout] if detected timeout while verification. Option 'verification: false' may be workaround.
   def generate
     TstConstRetryMax.times do
     
       # generate string
+      reset_random_called
       @result = @back_end.generate
       if !@result
         TstLog "NG: Failed to generate"
         @reason = :failed_to_generate
+        if !is_random?
+          raise(RegextestError, "It is impossible to generate sample string of #{@reg_string}.")
+        end
         next
       end
+
       result_string = @result.pre_match + @result.match + @result.post_match
       
       # verify generated string
@@ -94,6 +104,10 @@ class Regextest
         @result = result_string            # returns a string
       end
       break
+    end
+    
+    if !@result
+      raise(RegextestFailedToGenerate, "Regextest failed to generate sample string of #{@reg_string}.")
     end
     @result
   end
@@ -240,7 +254,7 @@ if __FILE__ == $0
     $stderr.puts "Parse error. #{ex.message}"
     exit(1)
 
-  rescue Regextest::Common::RegextestTimeout => ex
+  rescue Regextest::RegextestTimeout => ex
     $stderr.puts ex.message
     exit(1)
     

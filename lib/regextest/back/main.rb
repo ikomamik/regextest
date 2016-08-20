@@ -144,7 +144,7 @@ class Regextest::Back::Main
     else
       # success if there is at least one result
       offsets = (0 ... target["value"].size).to_a
-      if !param[:atomic]
+      if !param[:atomic] && offsets.size > 1
         offsets = TstShuffle(offsets)  # shuffle if not atomic group (this proceduce is not sufficient...)
       end
       result = nil
