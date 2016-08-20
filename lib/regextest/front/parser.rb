@@ -21,7 +21,7 @@ require 'regextest/front/bracket-parser' # bracket parser
 
 class RegextestFrontParser < Racc::Parser
 
-module_eval(<<'...end parser.y/module_eval...', 'parser.y', 221)
+module_eval(<<'...end parser.y/module_eval...', 'parser.y', 223)
 # modules for sharing procedures with bracket parser
 include Regextest::Front::Empty
 include Regextest::Front::Letter
@@ -699,589 +699,589 @@ Racc_debug_parser = false
 
 # reduce 1 omitted
 
-module_eval(<<'.,.,', 'parser.y', 10)
+module_eval(<<'.,.,', 'parser.y', 12)
   def _reduce_2(val, _values)
     TEmpty.new
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 12)
+module_eval(<<'.,.,', 'parser.y', 14)
   def _reduce_3(val, _values)
     Selectable.new(val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 14)
+module_eval(<<'.,.,', 'parser.y', 16)
   def _reduce_4(val, _values)
     val[0].add(val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 16)
+module_eval(<<'.,.,', 'parser.y', 18)
   def _reduce_5(val, _values)
     val[0].add(TEmpty.new)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 18)
+module_eval(<<'.,.,', 'parser.y', 20)
   def _reduce_6(val, _values)
     Selectable.new(TEmpty.new).add(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 22)
+module_eval(<<'.,.,', 'parser.y', 24)
   def _reduce_7(val, _values)
     Sequence.new(val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 24)
+module_eval(<<'.,.,', 'parser.y', 26)
   def _reduce_8(val, _values)
     val[0].add(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 26)
+module_eval(<<'.,.,', 'parser.y', 28)
   def _reduce_9(val, _values)
     Sequence.new(Paren.new(val[0])).concatinate(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 28)
+module_eval(<<'.,.,', 'parser.y', 30)
   def _reduce_10(val, _values)
     val[0].add(Paren.new(val[1])).concatinate(val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 30)
+module_eval(<<'.,.,', 'parser.y', 32)
   def _reduce_11(val, _values)
     Sequence.new(Paren.new(val[0])).concatinate(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 32)
+module_eval(<<'.,.,', 'parser.y', 34)
   def _reduce_12(val, _values)
     val[0].add(Paren.new(val[1])).concatinate(val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 34)
+module_eval(<<'.,.,', 'parser.y', 36)
   def _reduce_13(val, _values)
     Sequence.new(Paren.new(val[0]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 36)
+module_eval(<<'.,.,', 'parser.y', 38)
   def _reduce_14(val, _values)
     Sequence.new(Paren.new(val[0]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 40)
+module_eval(<<'.,.,', 'parser.y', 42)
   def _reduce_15(val, _values)
     Repeatable.new(val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 42)
+module_eval(<<'.,.,', 'parser.y', 44)
   def _reduce_16(val, _values)
     val[0].set_quant(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 46)
+module_eval(<<'.,.,', 'parser.y', 48)
   def _reduce_17(val, _values)
     val[0]
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 48)
+module_eval(<<'.,.,', 'parser.y', 50)
   def _reduce_18(val, _values)
     @options[:parens].add(Paren.new(val[0], val[1], val[2]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 50)
+module_eval(<<'.,.,', 'parser.y', 52)
   def _reduce_19(val, _values)
     @options[:parens].add(Paren.new(val[0], val[1], val[2]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 52)
+module_eval(<<'.,.,', 'parser.y', 54)
   def _reduce_20(val, _values)
     @options[:parens].add(Paren.new(val[0], val[1], val[2]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 55)
+module_eval(<<'.,.,', 'parser.y', 57)
   def _reduce_21(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 56)
+module_eval(<<'.,.,', 'parser.y', 58)
   def _reduce_22(val, _values)
     TLetter.new(:LEX_OCTET,          val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 57)
+module_eval(<<'.,.,', 'parser.y', 59)
   def _reduce_23(val, _values)
     BackRefer.new(:LEX_BACK_REFER,   val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 58)
+module_eval(<<'.,.,', 'parser.y', 60)
   def _reduce_24(val, _values)
     TLetter.new(:LEX_CODE_LITERAL,   val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 59)
+module_eval(<<'.,.,', 'parser.y', 61)
   def _reduce_25(val, _values)
     BackRefer.new(:LEX_NAMED_REFER,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 60)
+module_eval(<<'.,.,', 'parser.y', 62)
   def _reduce_26(val, _values)
     BackRefer.new(:LEX_NAMED_GENERATE, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 61)
+module_eval(<<'.,.,', 'parser.y', 63)
   def _reduce_27(val, _values)
     TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 62)
+module_eval(<<'.,.,', 'parser.y', 64)
   def _reduce_28(val, _values)
     TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 63)
+module_eval(<<'.,.,', 'parser.y', 65)
   def _reduce_29(val, _values)
     TLetter.new(:LEX_ESCAPED_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 64)
+module_eval(<<'.,.,', 'parser.y', 66)
   def _reduce_30(val, _values)
     TLetter.new(:LEX_UNICODE,        val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 65)
+module_eval(<<'.,.,', 'parser.y', 67)
   def _reduce_31(val, _values)
     TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 66)
+module_eval(<<'.,.,', 'parser.y', 68)
   def _reduce_32(val, _values)
     TLetter.new(:LEX_UNICODE_CLASS,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 67)
+module_eval(<<'.,.,', 'parser.y', 69)
   def _reduce_33(val, _values)
     @bracket_parser.parse(val[0], @options)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 68)
+module_eval(<<'.,.,', 'parser.y', 70)
   def _reduce_34(val, _values)
     Anchor.new(:LEX_ANC_LINE_BEGIN,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 69)
+module_eval(<<'.,.,', 'parser.y', 71)
   def _reduce_35(val, _values)
     Anchor.new(:LEX_ANC_LINE_END,    val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 70)
+module_eval(<<'.,.,', 'parser.y', 72)
   def _reduce_36(val, _values)
     Anchor.new(:LEX_ANC_WORD_BOUND,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 71)
+module_eval(<<'.,.,', 'parser.y', 73)
   def _reduce_37(val, _values)
     Anchor.new(:LEX_ANC_WORD_UNBOUND, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 72)
+module_eval(<<'.,.,', 'parser.y', 74)
   def _reduce_38(val, _values)
     Anchor.new(:LEX_ANC_STRING_BEGIN, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 73)
+module_eval(<<'.,.,', 'parser.y', 75)
   def _reduce_39(val, _values)
     Anchor.new(:LEX_ANC_STRING_END,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 74)
+module_eval(<<'.,.,', 'parser.y', 76)
   def _reduce_40(val, _values)
     Anchor.new(:LEX_ANC_STRING_END2, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 75)
+module_eval(<<'.,.,', 'parser.y', 77)
   def _reduce_41(val, _values)
     Anchor.new(:LEX_ANC_LOOK_BEHIND2, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 76)
+module_eval(<<'.,.,', 'parser.y', 78)
   def _reduce_42(val, _values)
     Anchor.new(:LEX_ANC_MATCH_START, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 77)
+module_eval(<<'.,.,', 'parser.y', 79)
   def _reduce_43(val, _values)
     TLetter.new(:LEX_SPECIAL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 78)
+module_eval(<<'.,.,', 'parser.y', 80)
   def _reduce_44(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 79)
+module_eval(<<'.,.,', 'parser.y', 81)
   def _reduce_45(val, _values)
     TLetter.new(:LEX_AND_AND,        val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 80)
+module_eval(<<'.,.,', 'parser.y', 82)
   def _reduce_46(val, _values)
     TLetter.new(:LEX_SPACE,          val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 81)
+module_eval(<<'.,.,', 'parser.y', 83)
   def _reduce_47(val, _values)
     TLetter.new(:LEX_SIMPLE_ESCAPE,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 82)
+module_eval(<<'.,.,', 'parser.y', 84)
   def _reduce_48(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 83)
+module_eval(<<'.,.,', 'parser.y', 85)
   def _reduce_49(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 84)
+module_eval(<<'.,.,', 'parser.y', 86)
   def _reduce_50(val, _values)
     TLetter.new(:LEX_ANY_LETTER,     val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 89)
+module_eval(<<'.,.,', 'parser.y', 91)
   def _reduce_51(val, _values)
     TEmpty.new
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 91)
+module_eval(<<'.,.,', 'parser.y', 93)
   def _reduce_52(val, _values)
     Selectable.new(val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 93)
+module_eval(<<'.,.,', 'parser.y', 95)
   def _reduce_53(val, _values)
     val[0].add(val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 95)
+module_eval(<<'.,.,', 'parser.y', 97)
   def _reduce_54(val, _values)
     val[0].add(TEmpty.new)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 97)
+module_eval(<<'.,.,', 'parser.y', 99)
   def _reduce_55(val, _values)
     Selectable.new(TEmpty.new).add(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 101)
+module_eval(<<'.,.,', 'parser.y', 103)
   def _reduce_56(val, _values)
     Sequence.new(val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 103)
+module_eval(<<'.,.,', 'parser.y', 105)
   def _reduce_57(val, _values)
     val[0].add(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 105)
+module_eval(<<'.,.,', 'parser.y', 107)
   def _reduce_58(val, _values)
     Sequence.new(Paren.new(val[0])).concatinate(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 107)
+module_eval(<<'.,.,', 'parser.y', 109)
   def _reduce_59(val, _values)
     val[0].add(Paren.new(val[1])).concatinate(val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 109)
+module_eval(<<'.,.,', 'parser.y', 111)
   def _reduce_60(val, _values)
     Sequence.new(Paren.new(val[0])).concatinate(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 111)
+module_eval(<<'.,.,', 'parser.y', 113)
   def _reduce_61(val, _values)
     val[0].add(Paren.new(val[1])).concatinate(val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 113)
+module_eval(<<'.,.,', 'parser.y', 115)
   def _reduce_62(val, _values)
     Sequence.new(Paren.new(val[0]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 115)
+module_eval(<<'.,.,', 'parser.y', 117)
   def _reduce_63(val, _values)
     Sequence.new(Paren.new(val[0]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 119)
+module_eval(<<'.,.,', 'parser.y', 121)
   def _reduce_64(val, _values)
     Repeatable.new(val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 121)
+module_eval(<<'.,.,', 'parser.y', 123)
   def _reduce_65(val, _values)
     val[0].set_quant(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 125)
+module_eval(<<'.,.,', 'parser.y', 127)
   def _reduce_66(val, _values)
     val[0]
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 127)
+module_eval(<<'.,.,', 'parser.y', 129)
   def _reduce_67(val, _values)
     @options[:parens].add(Paren.new(val[0], val[1], val[2]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 129)
+module_eval(<<'.,.,', 'parser.y', 131)
   def _reduce_68(val, _values)
     @options[:parens].add(Paren.new(val[0], val[1], val[2]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 131)
+module_eval(<<'.,.,', 'parser.y', 133)
   def _reduce_69(val, _values)
     @options[:parens].add(Paren.new(val[0], val[1], val[2]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 134)
+module_eval(<<'.,.,', 'parser.y', 136)
   def _reduce_70(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 135)
+module_eval(<<'.,.,', 'parser.y', 137)
   def _reduce_71(val, _values)
     TLetter.new(:LEX_OCTET,          val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 136)
+module_eval(<<'.,.,', 'parser.y', 138)
   def _reduce_72(val, _values)
     BackRefer.new(:LEX_BACK_REFER,   val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 137)
+module_eval(<<'.,.,', 'parser.y', 139)
   def _reduce_73(val, _values)
     TLetter.new(:LEX_CODE_LITERAL,   val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 138)
+module_eval(<<'.,.,', 'parser.y', 140)
   def _reduce_74(val, _values)
     BackRefer.new(:LEX_NAMED_REFER,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 139)
+module_eval(<<'.,.,', 'parser.y', 141)
   def _reduce_75(val, _values)
     BackRefer.new(:LEX_NAMED_GENERATE, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 140)
+module_eval(<<'.,.,', 'parser.y', 142)
   def _reduce_76(val, _values)
     TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 141)
+module_eval(<<'.,.,', 'parser.y', 143)
   def _reduce_77(val, _values)
     TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 142)
+module_eval(<<'.,.,', 'parser.y', 144)
   def _reduce_78(val, _values)
     TLetter.new(:LEX_ESCAPED_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 143)
+module_eval(<<'.,.,', 'parser.y', 145)
   def _reduce_79(val, _values)
     TLetter.new(:LEX_UNICODE,        val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 144)
+module_eval(<<'.,.,', 'parser.y', 146)
   def _reduce_80(val, _values)
     TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 145)
+module_eval(<<'.,.,', 'parser.y', 147)
   def _reduce_81(val, _values)
     TLetter.new(:LEX_UNICODE_CLASS,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 146)
+module_eval(<<'.,.,', 'parser.y', 148)
   def _reduce_82(val, _values)
     @bracket_parser.parse(val[0], @options)
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 147)
+module_eval(<<'.,.,', 'parser.y', 149)
   def _reduce_83(val, _values)
     Anchor.new(:LEX_ANC_LINE_BEGIN,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 148)
+module_eval(<<'.,.,', 'parser.y', 150)
   def _reduce_84(val, _values)
     Anchor.new(:LEX_ANC_LINE_END,    val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 149)
+module_eval(<<'.,.,', 'parser.y', 151)
   def _reduce_85(val, _values)
     Anchor.new(:LEX_ANC_WORD_BOUND,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 150)
+module_eval(<<'.,.,', 'parser.y', 152)
   def _reduce_86(val, _values)
     Anchor.new(:LEX_ANC_WORD_UNBOUND, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 151)
+module_eval(<<'.,.,', 'parser.y', 153)
   def _reduce_87(val, _values)
     Anchor.new(:LEX_ANC_STRING_BEGIN, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 152)
+module_eval(<<'.,.,', 'parser.y', 154)
   def _reduce_88(val, _values)
     Anchor.new(:LEX_ANC_STRING_END,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 153)
+module_eval(<<'.,.,', 'parser.y', 155)
   def _reduce_89(val, _values)
     Anchor.new(:LEX_ANC_STRING_END2, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 154)
+module_eval(<<'.,.,', 'parser.y', 156)
   def _reduce_90(val, _values)
     Anchor.new(:LEX_ANC_LOOK_BEHIND2, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 155)
+module_eval(<<'.,.,', 'parser.y', 157)
   def _reduce_91(val, _values)
     Anchor.new(:LEX_ANC_MATCH_START, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 156)
+module_eval(<<'.,.,', 'parser.y', 158)
   def _reduce_92(val, _values)
     TLetter.new(:LEX_SPECIAL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 157)
+module_eval(<<'.,.,', 'parser.y', 159)
   def _reduce_93(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 158)
+module_eval(<<'.,.,', 'parser.y', 160)
   def _reduce_94(val, _values)
     TLetter.new(:LEX_AND_AND,        val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 159)
+module_eval(<<'.,.,', 'parser.y', 161)
   def _reduce_95(val, _values)
     TEmpty.new
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 160)
+module_eval(<<'.,.,', 'parser.y', 162)
   def _reduce_96(val, _values)
     TEmpty.new
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 161)
+module_eval(<<'.,.,', 'parser.y', 163)
   def _reduce_97(val, _values)
     TLetter.new(:LEX_SIMPLE_ESCAPE,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 162)
+module_eval(<<'.,.,', 'parser.y', 164)
   def _reduce_98(val, _values)
     TLetter.new(:LEX_ANY_LETTER,     val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'parser.y', 163)
+module_eval(<<'.,.,', 'parser.y', 165)
   def _reduce_99(val, _values)
     TEmpty.new
   end

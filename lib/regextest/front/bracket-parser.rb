@@ -15,7 +15,7 @@ require 'regextest/front/bracket'          # parser class for a bracket
 
 class RegextestFrontBracketParser < Racc::Parser
 
-module_eval(<<'...end bracket-parser.y/module_eval...', 'bracket-parser.y', 71)
+module_eval(<<'...end bracket-parser.y/module_eval...', 'bracket-parser.y', 73)
 # modules for sharing procedures with main (regex) parser
 include Regextest::Front::Range
 include Regextest::Front::Letter
@@ -235,25 +235,25 @@ Racc_debug_parser = false
 
 # reduce 0 omitted
 
-module_eval(<<'.,.,', 'bracket-parser.y', 8)
+module_eval(<<'.,.,', 'bracket-parser.y', 10)
   def _reduce_1(val, _values)
     val[0]
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 10)
+module_eval(<<'.,.,', 'bracket-parser.y', 12)
   def _reduce_2(val, _values)
     val[0].and(val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 14)
+module_eval(<<'.,.,', 'bracket-parser.y', 16)
   def _reduce_3(val, _values)
     val[1].add(TLetter.new(:LEX_CHAR,val[0]))
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 16)
+module_eval(<<'.,.,', 'bracket-parser.y', 18)
   def _reduce_4(val, _values)
     CharClass.new(TLetter.new(:LEX_CHAR,val[0]))
   end
@@ -261,133 +261,133 @@ module_eval(<<'.,.,', 'bracket-parser.y', 16)
 
 # reduce 5 omitted
 
-module_eval(<<'.,.,', 'bracket-parser.y', 21)
+module_eval(<<'.,.,', 'bracket-parser.y', 23)
   def _reduce_6(val, _values)
     CharClass.new(val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 23)
+module_eval(<<'.,.,', 'bracket-parser.y', 25)
   def _reduce_7(val, _values)
     val[0].add(val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 27)
+module_eval(<<'.,.,', 'bracket-parser.y', 29)
   def _reduce_8(val, _values)
     TRange.new(val[0], val[2])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 29)
+module_eval(<<'.,.,', 'bracket-parser.y', 31)
   def _reduce_9(val, _values)
     val[0]
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 31)
+module_eval(<<'.,.,', 'bracket-parser.y', 33)
   def _reduce_10(val, _values)
     val[0]
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 33)
+module_eval(<<'.,.,', 'bracket-parser.y', 35)
   def _reduce_11(val, _values)
     val[0]
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 37)
+module_eval(<<'.,.,', 'bracket-parser.y', 39)
   def _reduce_12(val, _values)
     Bracket.new(val[0], val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 39)
+module_eval(<<'.,.,', 'bracket-parser.y', 41)
   def _reduce_13(val, _values)
     Bracket.new(val[0], val[1])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 42)
+module_eval(<<'.,.,', 'bracket-parser.y', 44)
   def _reduce_14(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 43)
+module_eval(<<'.,.,', 'bracket-parser.y', 45)
   def _reduce_15(val, _values)
     TLetter.new(:LEX_OCTET,          val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 44)
+module_eval(<<'.,.,', 'bracket-parser.y', 46)
   def _reduce_16(val, _values)
     TLetter.new(:LEX_SIMPLE_ESCAPE,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 45)
+module_eval(<<'.,.,', 'bracket-parser.y', 47)
   def _reduce_17(val, _values)
     TLetter.new(:LEX_CHAR,           val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 46)
+module_eval(<<'.,.,', 'bracket-parser.y', 48)
   def _reduce_18(val, _values)
     TLetter.new(:LEX_CODE_LITERAL,   val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 47)
+module_eval(<<'.,.,', 'bracket-parser.y', 49)
   def _reduce_19(val, _values)
     TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 48)
+module_eval(<<'.,.,', 'bracket-parser.y', 50)
   def _reduce_20(val, _values)
     TLetter.new(:LEX_CONTROL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 49)
+module_eval(<<'.,.,', 'bracket-parser.y', 51)
   def _reduce_21(val, _values)
     TLetter.new(:LEX_ESCAPED_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 50)
+module_eval(<<'.,.,', 'bracket-parser.y', 52)
   def _reduce_22(val, _values)
     TLetter.new(:LEX_UNICODE,        val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 53)
+module_eval(<<'.,.,', 'bracket-parser.y', 55)
   def _reduce_23(val, _values)
     TLetter.new(:LEX_POSIX_CHAR_CLASS, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 54)
+module_eval(<<'.,.,', 'bracket-parser.y', 56)
   def _reduce_24(val, _values)
     TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 55)
+module_eval(<<'.,.,', 'bracket-parser.y', 57)
   def _reduce_25(val, _values)
     TLetter.new(:LEX_UNICODE_CLASS,  val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 56)
+module_eval(<<'.,.,', 'bracket-parser.y', 58)
   def _reduce_26(val, _values)
     TLetter.new(:LEX_SPECIAL_LETTER, val[0])
   end
 .,.,
 
-module_eval(<<'.,.,', 'bracket-parser.y', 57)
+module_eval(<<'.,.,', 'bracket-parser.y', 59)
   def _reduce_27(val, _values)
     TLetter.new(:LEX_SPACE,          val[0])
   end
