@@ -8,6 +8,7 @@ require 'regextest/common'
 require 'regextest/front/scanner'        # scanner class (for splitting the string)
 require 'regextest/front/parser'         # parser class (using racc)
 require 'regextest/front/manage-parentheses'   # management class of parentheses
+require "json"
 
 # Front end processes
 class Regextest::Front
@@ -39,11 +40,17 @@ class Regextest::Front
 
   # Output JSON format parse result of the regex
   def get_json_obj(result = @obj)
-    require "json"
     option = { max_nesting: 999}  # work around for ruby 1.9.*
     json_obj = JSON.parse(result.json, option)
     TstLog("JSON param:\n" + JSON.pretty_generate(json_obj, option))
     json_obj
+  end
+
+  # Return JSON string
+  def get_json_string(result = @obj)
+    json_obj = get_json_obj(result)
+    option = { max_nesting: 999}  # work around for ruby 1.9.*
+    JSON.pretty_generate(json_obj, option)
   end
 
 end

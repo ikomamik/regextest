@@ -98,6 +98,11 @@ class Regextest
     @result
   end
   
+  # Get parsed result as JSON string
+  # @return [String] parsed result as JSON string
+  def to_json
+    @front_end.get_json_string
+  end
   #---------------#
   private
   

@@ -60,4 +60,12 @@ class Regexp
     end
   end
   
+  # parse regexp and return json data
+  # @return [String] return parsed json string
+  # @return [nil] if failed to parse
+  def to_json
+    regextest = Regextest.new(self, {})
+    regextest.to_json
+  end
+  
 end
