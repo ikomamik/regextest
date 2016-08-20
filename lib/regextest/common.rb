@@ -18,9 +18,6 @@ module Regextest::Common
   # whole character set if unicode mode. specify as 'ascii|kana', 'ascii|han|kana', etc.
   TstConstUnicodeCharSet  = (ENV['REGEXTEST_UNICODE_CHAR_SET'] || "ascii|katakana|hiragana").downcase
 
-  # exceptions
-  class RegextestTimeout < RuntimeError; end
-
   # Log
   def TstLog(msg)
     # if(!defined? Rails)  # not output debug message when rails env (even if development mode)
