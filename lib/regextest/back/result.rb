@@ -58,7 +58,7 @@ class Regextest::Back::Result
     @positional_anchors[cmd].push @end_offset
   end
 
-  # Adds relrctant repeat information
+  # Adds reluctant repeat information
   def add_reluctant_repeat(elem)
     repeat_id = elem.param[:id]
     case elem.command
@@ -296,7 +296,7 @@ class Regextest::Back::Result
   
   # narrow down candidate by anchors
   def narrow_down
-    narrow_down_by_anchors
+    narrow_down_by_anchors &&
     narrow_down_by_reluctant_repeat
   end
   
@@ -307,11 +307,16 @@ class Regextest::Back::Result
       succeed_part = @results[offsets[1]..-1]
       # puts "id=#{repeat_id}, start=#{repeat_part}, end=#{succeed_part}"
       
-      # reluctant repeat is equivalent to not_look_ahead!
-      (offsets[0]..(offsets[1] - succeed_part.size)).to_a.each do | offset |
-        merge_not_look_ahead_elems(offset, succeed_part)
+      if succeed_part.size > 0
+        # reluctant repeat is equivalent to not_look_ahead!
+        (offsets[0]..(offsets[1] - succeed_part.size)).to_a.each do | offset |
+          if !merge_not_look_ahead_elems(offset, succeed_part)
+            return false
+          end
+        end
       end
     end
+    return true
   end
   
   # narrow down candidate by anchors
