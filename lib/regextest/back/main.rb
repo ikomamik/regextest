@@ -213,8 +213,9 @@ class Regextest::Back::Main
     target = param[:json]
     results = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: []})
     target["value"].each do | elem |
-      sub_results = generate_candidates({json: elem})
-      results.union sub_results
+      if sub_results = generate_candidates({json: elem})
+        results.union sub_results
+      end
     end
     if results.size > 0
       result = results
