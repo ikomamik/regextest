@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'json'
 
 describe Regexp do
   let(:regex) { /foo/ }
@@ -20,14 +21,18 @@ describe Regexp do
   end
 
   it 'can raise exception when regex cannot generate string' do
+    expect{/foo\Abar/.sample}.to raise_error(Regextest::RegextestError)
   end
 
   it 'can generate MatchData' do
+    expect(regex.match_data.to_s).to eq("foo")
   end
 
   it 'can generate string by to_json method' do
+    expect(regex.to_json).to be_a(String)
   end
 
   it 'can generate json string' do
+    expect(JSON.load(regex.to_json)).to be_a(Hash)
   end
 end

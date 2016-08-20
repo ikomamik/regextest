@@ -11,7 +11,9 @@ class Regextest::Test
   def initialize(min_test, max_test)
     results = {
       success: [],
+      bug: [],
       failed: [],
+      impossible: [],
       others: [],
       not_scope: [],
       timeout: [],
@@ -24,28 +26,23 @@ class Regextest::Test
   
   def print_results(results)
     puts ""
-    exceptions = get_exceptions
-    ignore = 0
-    results[:failed].each do | failed_hash |
+    (results[:failed] + results[:bug]).each do | failed_hash |
       regex = failed_hash[:test] || failed_hash[:result][:reg]
-      if !exceptions[regex]
-        puts "======="
-        puts "  type: #{failed_hash[:type] || failed_hash[:result][:result]}"
-        puts "  test: #{regex}"
-        puts "  info: #{failed_hash[:info] || failed_hash[:result][:reason]}"
-        puts "  indx: #{failed_hash[:index]}"
-        pp failed_hash
-      else
-        ignore += 1
-      end
+      puts "======="
+      puts "  type: #{failed_hash[:type] || failed_hash[:result][:result]}"
+      puts "  test: #{regex}"
+      puts "  info: #{failed_hash[:info] || failed_hash[:result][:reason]}"
+      puts "  indx: #{failed_hash[:index]}"
+      pp failed_hash
     end
 
     puts "======"
-    puts "success:   #{results[:success].size}"
-    puts "failed:    #{results[:failed].size - ignore}"
-    puts "ignore:    #{ignore}"
-    puts "others:    #{results[:others].size}"
-    puts "timeout:   #{results[:timeout].size}"
+    puts "success:    #{results[:success].size}"
+    puts "bug:        #{results[:bug].size}"
+    puts "failed:     #{results[:failed].size}"
+    puts "impossible: #{results[:impossible].size}"
+    puts "others:     #{results[:others].size}"
+    puts "timeout:    #{results[:timeout].size}"
     puts "regexp error: #{results[:not_scope].size}"
     puts "perl_syntax:  #{results[:perl_syntax].size}"
   end
@@ -76,9 +73,15 @@ class Regextest::Test
       #rescue Regextest::Common::RegextestTimeout => ex
       #  warn "RegextestTimeout #{ex}. \nline:#{line}"
       #  results[:failed].push({ type: :timeout, test: line, info: ex, index: i})
+      rescue Regextest::RegextestError => ex
+        warn "RegextestError #{ex}. \nline:#{line}"
+        results[:impossible].push({ type: Regextest::RegextestError, test: line, info: ex, index: i})
+      rescue Regextest::RegextestFailedToGenerate => ex
+        warn "RegextestFailedToGenerate #{ex}. \nline:#{line}"
+        results[:failed].push({ type: Regextest::RegextestFailedToGenerate, test: line, info: ex, index: i})
       rescue RuntimeError => ex
         warn "RuntimeError #{ex}. \nline:#{line}"
-        results[:failed].push({ type: RuntimeError, test: line, info: ex, index: i})
+        results[:bug].push({ type: RuntimeError, test: line, info: ex, index: i})
       rescue SyntaxError => ex
         warn "SyntaxError #{ex}. \nline:#{line}"
         results[:failed].push({ type: SyntaxError, test: line, info: ex, index: i})
@@ -146,17 +149,6 @@ class Regextest::Test
     check_normal_test(reg)
   end
 
-end
-
-def get_exceptions
-  {
-    /az\G/  => true,
-    /az\A/  => true,
-    /a\Az/  => true,
-    /とて\G/  => true,
-    /まみ\A/  => true,
-    /ま\Aみ/  => true,
-  }
 end
 
 # Test suite (execute when this file is specified in command line)

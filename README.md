@@ -21,17 +21,18 @@ Or install it yourself as:
 ## Usage
 
 ```ruby
-  require "regextest"
-  /\d{5}/.sample                   #=> "62853"
-  /\w{5}/.samples(3)               #=> ["50183", "10646", "35114", "93966", "20186"]
-  /(?<=pre)body(?=post)/.sample    #=> "prebodypost"
-  /(?=[a-z])\w{5}(?<=_\d)/.samples(4)      #=> ["nCc_0", "nxP_6", "cMl_3", "riQ_9"]
-  
-  /(?<=pre)body(?=post)/.match_data        #=> #<MatchData "body">
-  
-  palindrome = /\A(?<a>|.|(?:(?<b>.)\g<a>\k<b+0>))\z/
-  palindrome.sample                #=> "a]r\\CC\\r]a"
-  palindrome.match_data            #=> #<MatchData "z2#2z" a:"z2#2z" b:"2">
+require "regextest"
+
+/\d{5}/.sample                   #=> "62853"
+5.times.map{/\w{5}/.sample}      #=> ["mCcA5", "1s3Ae", "9HYbe", "x3T0A", "TJHlQ"]
+/(?<=pre)body(?=post)/.sample    #=> "prebodypost"
+/(?=[a-z])\w{5}(?<=_\d)/.sample  #=> "nCc_0"
+
+/(?<=pre)body(?=post)/.match_data        #=> #<MatchData "body">
+
+palindrome = /\A(?<a>|.|(?:(?<b>.)\g<a>\k<b+0>))\z/
+palindrome.sample                #=> "a]r\\CC\\r]a"
+palindrome.match_data            #=> #<MatchData "z2#2z" a:"z2#2z" b:"2">
 ```
 
 ## Parameters (environment variables)
@@ -50,9 +51,15 @@ Or install it yourself as:
 
 
 ## Exceptions
-- **Regextest::Common::REGEXTEST_TIMEOUT**
-    - Timeout detected while verification. It is sub-class of standard exception RuntimeError. For ignoring verification, you can use sample method with 'verification: false' option.
-    
+- **Regextest::RegextestError**
+    - Impossible to generate string. It is sub-class of standard exception RuntimeError. 
+- **Regextest::RegextestFailedToGenerate**
+    - Failed to generate string. It is sub-class of standard exception RuntimeError. In many cases, caused by Regextest's restriction)
+- **RuntimeError**
+    - Bug of Regextest
+- **Regextest::RegextestTimeout**
+    - Timeout (default is 1 sec) detected while verification. It is sub-class of standard exception RuntimeError. For ignoring verification, you can use sample method with 'verification: false' option.
+
 ```ruby
   require "regextest"
   /(1|11){100}$/.sample                       #=> raise Regextest::Common::RegextestTimeout: ...
