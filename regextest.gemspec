@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{A ruby library for generating sample data of regular expression}
   spec.description   = %q{This library generates data matched with specified regular expression.}
   spec.homepage      = "https://bitbucket.org/ikomamik/regextest"
-  spec.license       = "MIT"
+  spec.license       = "2-clause BSD license (see the file LICENSE.txt)"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
