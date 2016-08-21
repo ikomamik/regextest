@@ -314,7 +314,6 @@ class Regextest::Back::Main
   
   # narrow down candidates considering anchors
   def narrow_down_candidates(candidate_array)
-    # pp candidate_array
     results = Regextest::Back::Result.new
     candidate_array.each do | elem |
       command = elem.command
