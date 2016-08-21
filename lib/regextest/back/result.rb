@@ -113,7 +113,7 @@ class Regextest::Back::Result
     offset.step(term_offset-1) do | i |
       sub_elem = sub_results[i-offset]
       
-      if i < @end_offset
+      if i < @results.size   # it is NOT @end_offset
         if(!@results[i].intersect(sub_elem))
           return nil
         end
@@ -126,10 +126,10 @@ class Regextest::Back::Result
 
   # Merge each elements of not-look-aheads
   def merge_not_look_ahead_elems(offset, sub_results)
-    if Regextest::Back::Element === sub_results
-      term_offset = offset + sub_results.end_offset
+    if Regextest::Back::Result === sub_results
+      term_offset = offset + sub_results.end_offset - 1
     else
-      term_offset = offset + sub_results.size
+      term_offset = offset + sub_results.size - 1
     end
     try_order = TstShuffle(sub_results.size.times.to_a)
     
@@ -142,7 +142,7 @@ class Regextest::Back::Result
       offset.step(term_offset-1).each do | i |
         sub_elem = sub_results[i-offset]
         
-        if i < @end_offset
+        if i < results_work.size   # it is NOT @end_offset
           if i == cur_offset
             if(!results_work[i].exclude(sub_elem))
               next
