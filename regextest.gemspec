@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["mikio.ikoma@gmail.com"]
 
   spec.summary       = %q{A ruby library for generating sample data of regular expression}
-  spec.description   = %q{This library generates data matched with specified regular expression.}
+  spec.description   = %q{Regextest generates sample string that matches with regular expression. Unlike similar tools, it recognizes anchors, charactor classes and other advanced notation of ruby regex. Target users are programmers or students for debugging/learning regular expression. You can use [sample application](http://goo.gl/5miiF4) without installation. }
   spec.homepage      = "https://bitbucket.org/ikomamik/regextest"
   spec.license       = "2-clause BSD license (see the file LICENSE.txt)"
 

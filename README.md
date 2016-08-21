@@ -3,7 +3,7 @@ Regextest generates sample string that matches with regular expression. Unlike s
 
 ## Installation
 
-You can use [sample application](https://regtestweb.herokuapp.com/test_data/home) without installation. For using at your local machine, add this line to your application's Gemfile:
+You can use [sample application](http://goo.gl/5miiF4) without installation. For using at your local machine, add this line to your application's Gemfile:
 
 ```ruby
 gem 'regextest'
