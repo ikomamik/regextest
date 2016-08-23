@@ -127,7 +127,7 @@ class Regextest::Back::Result
   # Merge each elements of not-look-aheads
   def merge_not_look_ahead_elems(offset, sub_results)
     if Regextest::Back::Result === sub_results
-      term_offset = offset + sub_results.end_offset - 1
+      term_offset = offset + sub_results.end_offset
     else
       term_offset = offset + sub_results.size - 1
     end
