@@ -129,16 +129,16 @@ class Regextest::Back::Result
     if Regextest::Back::Result === sub_results
       term_offset = offset + sub_results.end_offset
     else
-      term_offset = offset + sub_results.size - 1
+      term_offset = offset + sub_results.size
     end
     try_order = TstShuffle(sub_results.size.times.to_a)
-    
     found = false
     # exclude, at least, one element
     try_order.each do | j |
       results_work = @results.dup
       cur_offset = offset + j
     
+      # puts "offset=#{offset} term_offset=#{term_offset}"
       offset.step(term_offset-1).each do | i |
         sub_elem = sub_results[i-offset]
         
