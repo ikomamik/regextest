@@ -31,6 +31,12 @@ file 'lib/regextest/front/case-folding.rb' => 'lib/pre-case-folding.rb' do
   sh 'ruby  lib/pre-case-folding.rb'
 end
 
+# Generating regression test suite
+file 'spec/regression_spec.rb' => 'lib/pre-generate-spec.rb' do
+  puts "making spec/regression_spec.rb"
+  sh 'ruby  lib/pre-generate-spec.rb'
+end
+
 # Generating documents
 file 'doc/index.html' => ['lib/regextest.rb', 'lib/regextest/regexp.rb', 'README.md'] do
   puts "making document for Regextest"
@@ -42,6 +48,7 @@ task :make =>
          'lib/regextest/front/bracket-parser.rb',
          'lib/regextest/front/unicode.rb',
          'lib/regextest/front/case-folding.rb',
+         'spec/regression_spec.rb',
          'doc/index.html',
         ] do 
   puts "Rake it!"
