@@ -8,6 +8,7 @@ require 'regextest/common'
 class Regextest::Back::Element
   include Regextest::Common
   def initialize(param)
+    # puts "Element param:#{param[:cmd]} data:#{param[:data].size}"
     @command = param[:cmd]
     @param = param
     @candidates = param[:data] if @command == :CMD_SELECT
@@ -24,7 +25,7 @@ class Regextest::Back::Element
     else
       raise "invalid command at random_fix: #{@command}"
     end
-    result
+    [result].pack("U*")   # tranforms from code point to a letter
   end
   
   # size of candidates
@@ -96,32 +97,34 @@ class Regextest::Back::Element
   
   # Includes new line or not
   def new_line?
-    @candidates.index("\n")
+    @candidates.index(0xa)
   end
   
   # Sets new line
   def set_new_line
-    @candidates = ["\n"]
+    @candidates = [0xa]
   end
   
   # Is word-elements only?
   def word_elements?
-    @candidates.join("").match(/^\p{Word}+$/)
+    letters = @candidates.map{|elem| [elem].pack("U*")}
+    letters.join("").match(/^\p{Word}+$/)
   end
   
   # is non-word-elements only?
   def non_word_elements?
-    @candidates.join("").match(/^\p{^Word}+$/)
+    letters = @candidates.map{|elem| [elem].pack("U*")}
+    letters.join("").match(/^\p{^Word}+$/)
   end
 
   # set word-elements
   def set_word_elements
-    @candidates.select!{|elem| elem.match(/^\w$/)}
+    @candidates.select!{|elem| [elem].pack("U*").match(/^\w$/)}
   end
   
   # set non_word-elements
   def set_non_word_elements
-    @candidates.select!{|elem| elem.match(/^\W$/)}
+    @candidates.select!{|elem| [elem].pack("U*").match(/^\W$/)}
   end
   
   # checks empty
@@ -132,12 +135,12 @@ class Regextest::Back::Element
   # factory method to generate any char element
   def self.any_char
     # BUG: must consider other character set!
-    Regextest::Back::Element.new({cmd: :CMD_SELECT, data:  (" ".."\x7e").to_a})
+    Regextest::Back::Element.new({cmd: :CMD_SELECT, data:  (0x20..0x7e).to_a})
   end
   
   # factory method to generate any char element
   def reverse
-    @candidates = ((" ".."\x7e").to_a) - @candidates
+    @candidates = ((0x20..0x7e).to_a) - @candidates
     self
   end
   

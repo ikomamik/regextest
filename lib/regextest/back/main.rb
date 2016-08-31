@@ -266,8 +266,7 @@ class Regextest::Back::Main
     target = param[:json]
     letter = []
     codepoints = (target["begin"]..target["end"]).to_a
-    letter = codepoints.map{| codepoint | [codepoint].pack("U*")}   # to be faster
-    result = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: letter})
+    result = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: codepoints})
   end
   
   # back_refer
@@ -305,7 +304,8 @@ class Regextest::Back::Main
     target = param[:json]
     case target["value"]
     when String
-      result = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: [target["value"]]})
+      codepoint = target["value"].unpack("U*")[0]
+      result = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: [codepoint]})
     else
       result = generate_candidates({json: target["value"]})
     end
@@ -314,6 +314,7 @@ class Regextest::Back::Main
   
   # narrow down candidates considering anchors
   def narrow_down_candidates(candidate_array)
+    # pp candidate_array
     results = Regextest::Back::Result.new
     candidate_array.each do | elem |
       command = elem.command
