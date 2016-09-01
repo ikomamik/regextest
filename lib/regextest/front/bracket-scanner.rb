@@ -40,8 +40,8 @@ class Regextest::Front::BracketScanner
       /-(?!\]|\z)/ ],       # a letter must succeeds to minus
     [:LEX_AND_AND,
       %r!\&\&! ],
-    [:LEX_SPECIAL_LETTER,
-      %r!\\[RX]! ],
+    # [:LEX_SPECIAL_LETTER,  # special letters are not valid in bracket
+    #   %r!\\[RX]! ],
     [:LEX_ESCAPED_LETTER,
       %r!\\.! ],    # \b is valid within character class
     [:LEX_SPACE,
