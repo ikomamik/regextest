@@ -182,23 +182,17 @@ module Regextest::Front::Letter
         class_name = md[3].downcase
         reverse = (md[2] && md[2]=="^")?true:false
         
-        # if not found at cache
-        if !@@unicode_ranges[class_name]
-          @@unicode_ranges[class_name] = CharClass.new(class_name)
-        end
+        obj = CharClass.new(class_name)
       else
         raise "Internal error, inconsistent Unicode class #{val}"
       end
       
       # ￥P{^...} is equivalent to \p{...}
       if((md[1] == "p" && !reverse) || (md[1] == "P" && reverse))
-        @@unicode_ranges[class_name]
+        obj
       else      # \P{}  or \p{^}
-        @@unicode_ranges[class_name].set_reverse(@options)
+        obj.set_reverse(@options)
       end
-    end
-    
-    def classname_to_ranges(arrays)
     end
     
     # generate POSIX character class (ie. [[:alpha:]], etc.)
