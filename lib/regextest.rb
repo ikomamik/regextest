@@ -75,11 +75,11 @@ class Regextest
   # @raise [RuntimeError] if something wrong...
   # @raise [Regextest::RegextestTimeout] if detected timeout while verification. Option 'verification: false' may be workaround.
   def generate
-    TstConstRetryMax.times do
+    TstConstRetryMax.times do | retry_count |
     
       # generate string
       reset_random_called
-      @result = @back_end.generate
+      @result = @back_end.generate(retry_count)
       if !@result
         TstLog "NG: Failed to generate"
         @reason = :failed_to_generate

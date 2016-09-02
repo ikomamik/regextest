@@ -26,8 +26,8 @@ class Regextest::Back
   end
   
   # A public method that generates string to match the regexp
-  def generate
-    generate_obj = Regextest::Back::Main.new(@json_obj, @max_nest)
+  def generate(retry_count = 0)
+    generate_obj = Regextest::Back::Main.new(@json_obj, @max_nest, retry_count)
     generate_obj.generate
   end
   
