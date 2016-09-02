@@ -147,7 +147,7 @@ class Regextest
     when Regexp
       @reg_exp = param
       @@parse_options[:reg_options].set(@reg_exp.options)   # inner regex options have priorty
-      @reg_string = @reg_exp.source
+      @reg_string = "#{@reg_exp}"    # this generates string with options
     else
       raise "Error: string or regular expression required"
     end
@@ -213,20 +213,22 @@ if __FILE__ == $0
   begin
     
     regex = ARGV[0] || $<
+    
     if(regex == "reg")
-      regex = /ab # comment
+      regex = /(?ix:ab # comment
       [a-z]{5,10}
-      cd	   /ix
+      cd	   )/
     end
+    
     if(regex == "reg2")
-      regex = %r(
+      regex = %r((?x:
       (?<name> [a-zA-Z_:]+ ){0}
       (?<stag> < \g<name>  > ){0}
-      (?<content> ||\w+|\w+|\w+ (\g<element> | \w+)* ){0}
+      (?<content> \w+ (\g<element> | \w+)* ){0}
       (?<etag> </ \k<name+1> >){0}
       (?<element> \g<stag> \g<content>* \g<etag> ){0}
       \g<element>
-      )x
+      ))x
     end
     
     begin
