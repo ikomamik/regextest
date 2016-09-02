@@ -16,6 +16,9 @@ class Regextest::Front
   def initialize(reg_string, options)
     @options = options
   
+    # Json option as a workaround for ruby 1.9.*
+    @json_option = { max_nesting: 999 }  
+    
     # scanning the string
     scanner = Regextest::Front::Scanner.new
     lex_words = scanner.scan(reg_string)
@@ -27,30 +30,31 @@ class Regextest::Front
     @parser = RegextestFrontParser.new
     
     # Do parse
-    @obj = @parser.parse(lex_words, @options)
+    @parse_result = @parser.parse(lex_words, @options)
     
     # process options
-    @obj.set_options(options)
+    @parse_result.set_options(options)
     
     # sort parentheses, since number of parenthesis is by offset-order (not by parsing-order)
     @options[:parens].sort
     
-    @obj    
+    @parse_result    
   end
 
   # Output JSON format parse result of the regex
-  def get_json_obj(result = @obj)
-    option = { max_nesting: 999}  # work around for ruby 1.9.*
-    json_obj = JSON.parse(result.json, option)
-    TstLog("JSON param:\n" + JSON.pretty_generate(json_obj, option))
-    json_obj
+  def get_object
+    json_obj = JSON.parse(@parse_result.json, @json_option)
+    parsed_object = {
+      "regex"  => json_obj,
+      "source" => @options[:reg_source]
+    }
+    TstLog("JSON param:\n" + JSON.pretty_generate(parsed_object, @json_option))
+    parsed_object
   end
 
   # Return JSON string
-  def get_json_string(result = @obj)
-    json_obj = get_json_obj(result)
-    option = { max_nesting: 999}  # work around for ruby 1.9.*
-    JSON.pretty_generate(json_obj, option)
+  def get_json_string
+    JSON.pretty_generate(get_object, @json_option)
   end
 
 end
