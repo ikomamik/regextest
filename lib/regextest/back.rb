@@ -11,15 +11,17 @@ class Regextest::Back
   include Regextest::Common
   
   # Constructor
-  def initialize(json_obj)
-    @reg_source = @@parse_options[:reg_source]
-    @json_obj = json_obj
+  def initialize(front_end)
+    # To json (use json format for backend)
+    @parsed_object = front_end.get_object
+    @parse_result = @parsed_object["regex"]
+    @reg_source = @parsed_object["source"]
     
     # COMMENTED OUT at present
     # make a hash to manage names and corresponding objects
-    # @name_hash = make_name_hash(@json_obj, {})
+    # @name_hash = make_name_hash(@parse_result, {})
     # get test cases (commented at present)
-    # @test_info = Regextest::Back::TestCase.new(@json_obj, @name_hash)
+    # @test_info = Regextest::Back::TestCase.new(@parse_result, @name_hash)
     
     # default max recursion is 8.
     @max_nest = TstConstRecursionMax
@@ -27,7 +29,7 @@ class Regextest::Back
   
   # A public method that generates string to match the regexp
   def generate(retry_count = 0)
-    generate_obj = Regextest::Back::Main.new(@json_obj, @max_nest, retry_count)
+    generate_obj = Regextest::Back::Main.new(@parse_result, @max_nest, retry_count)
     generate_obj.generate
   end
   

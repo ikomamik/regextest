@@ -46,11 +46,8 @@ class Regextest
     # Parse string
     @front_end = Regextest::Front.new(@reg_string, @@parse_options)
     
-    # To json (use json format for backend)
-    @json_obj = @front_end.get_json_obj
-    
     # Prepare back-end process. (use generate method for generating string)
-    @back_end = Regextest::Back.new(@json_obj)
+    @back_end = Regextest::Back.new(@front_end)
     
     @result = nil
     @reason = nil
@@ -143,7 +140,6 @@ class Regextest
         @reg_string = new_param
         @reg_exp = /#{@reg_string}/
       end
-      @@parse_options[:reg_source] = @reg_string
     when Regexp
       @reg_exp = param
       @@parse_options[:reg_options].set(@reg_exp.options)   # inner regex options have priorty
@@ -151,6 +147,7 @@ class Regextest
     else
       raise "Error: string or regular expression required"
     end
+    @@parse_options[:reg_source] = @reg_string
   end
 
   # add built-in functions if any
