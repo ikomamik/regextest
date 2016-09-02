@@ -6,7 +6,7 @@ require 'regextest/common'
 require 'regextest/front/range'          # Range of character
 require 'regextest/front/case-folding'   # case folding class
 require 'regextest/regex-option'         # Options of regex
-require 'regextest/front/unicode'
+require 'regextest/unicode'
 
 # character class elements
 module Regextest::Front::CharClass
@@ -40,7 +40,7 @@ module Regextest::Front::CharClass
         class_names = value
         @candidates = []
         class_names.split("|").each do | class_name |
-          work = Regextest::Front::Unicode.property(class_name) ||
+          work = Regextest::Unicode.property(class_name) ||
             raise("Invalid Unicode class #{class_name}")
           # construct char class
           @candidates += work.map{|elem| TRange.new(elem[0], elem[1])}
@@ -153,19 +153,16 @@ module Regextest::Front::CharClass
     
     # Get whole code set of ascii
     def get_ascii_whole_set
-      # require 'regextest/front/unicode'
-      # same as  [ TRange.new("\x20", "\x7e") ]
-      ascii_set = Regextest::Front::Unicode.enumerate("ascii")
-      print_set = Regextest::Front::Unicode.enumerate("print")
+      ascii_set = Regextest::Unicode.enumerate("ascii")
+      print_set = Regextest::Unicode.enumerate("print")
       ascii_set & print_set
     end
     
     # Get whole code set of unicode
     def get_unicode_whole_set
-      # require 'regextest/front/unicode'
       char_set = []
       TstConstUnicodeCharSet.split("|").each do | elem |
-        char_set |= Regextest::Front::Unicode.enumerate(elem)
+        char_set |= Regextest::Unicode.enumerate(elem)
       end
       char_set
     end

@@ -13,7 +13,7 @@ class RegextestPreUnicode
     # Get valid properties of Ruby
     onig_properties = read_onig_properties("./contrib/Onigmo/UnicodeProps.txt")
     ranges = get_ranges_of_properties(onig_properties)
-    puts_unicode_ranges('lib/regextest/front/unicode.rb', ranges)
+    puts_unicode_ranges('lib/regextest/unicode.rb', ranges)
   end
 
   # Get list of Unicode classes from Onigmo manual
@@ -85,13 +85,14 @@ class RegextestPreUnicode
       # DO NOT Modify This File Since Automatically Generated
 
       # Range of Unicode
-      class Regextest::Front::Unicode
+      class Regextest::Unicode
         # Generate hash of properties
         def self.property(class_name)
           case class_name.downcase
 #{ranges_source}
           else
-            raise "Internal error. Class name (#\{class_name\}) not found"
+            warn "Class name (#\{class_name\}) not found. Ignored."
+            []
           end
         end
         

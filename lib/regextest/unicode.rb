@@ -2,7 +2,7 @@
 # DO NOT Modify This File Since Automatically Generated
 
 # Range of Unicode
-class Regextest::Front::Unicode
+class Regextest::Unicode
   # Generate hash of properties
   def self.property(class_name)
     case class_name.downcase
@@ -1257,7 +1257,8 @@ class Regextest::Front::Unicode
         when "in_no_block"
           ([[2144, 2207], [6832, 6911], [7296, 7359], [12256, 12271], [43488, 43519], [43824, 43967], [66048, 66175], [66272, 66303], [66384, 66431], [66528, 66559], [66736, 67583], [67680, 67839], [67904, 67967], [68224, 68351], [68480, 68607], [68688, 69215], [69248, 69631], [69968, 70015], [70112, 71295], [71376, 73727], [74880, 77823], [78896, 92159], [92736, 93951], [94112, 110591], [110848, 118783], [119376, 119551], [119680, 119807], [120832, 126463], [126720, 126975], [128592, 128639], [128896, 131071], [173792, 173823], [178208, 194559], [195104, 917503], [917632, 917759], [918000, 983039]])
     else
-      raise "Internal error. Class name (#{class_name}) not found"
+      warn "Class name (#{class_name}) not found. Ignored."
+      []
     end
   end
   

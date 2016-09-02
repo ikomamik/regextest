@@ -20,8 +20,8 @@ file 'lib/regextest/front/bracket-parser.rb' => 'lib/regextest/front/bracket-par
 end
 
 # Generating Unicode parser
-file 'lib/regextest/front/unicode.rb' => 'lib/pre/unicode.rb' do
-  puts "making regextest/front/unicode.rb"
+file 'lib/regextest/unicode.rb' => 'lib/pre/unicode.rb' do
+  puts "making regextest/unicode.rb"
   sh 'ruby  lib/pre/unicode.rb'
 end
 
@@ -46,8 +46,8 @@ end
 task :make =>
         ['lib/regextest/front/parser.rb',
          'lib/regextest/front/bracket-parser.rb',
-         'lib/regextest/front/unicode.rb',
          'lib/regextest/front/case-folding.rb',
+         'lib/regextest/unicode.rb',
          'spec/regression_spec.rb',
          'doc/index.html',
         ] do 

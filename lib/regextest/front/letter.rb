@@ -6,7 +6,6 @@ require 'regextest/common'
 require 'regextest/front/char-class'     # character class element
 require 'regextest/front/range'          # range of character point
 require 'regextest/regex-option'
-require 'regextest/front/unicode'
 
 # A letter
 module Regextest::Front::Letter
@@ -179,20 +178,12 @@ module Regextest::Front::Letter
     
     # generate Unicode class (ie. \p{...} | \P{...})
     def generate_unicode_char(val)
-      # Dynamic loading of Unicode regarding modules (for better performance).
-      # commented out since this code not executed at ruby 2.0.0
-      # require 'regextest/front/unicode'
-      
       if(md = val.match(/(p|P)\{(\^?)(\w+)\}/))
         class_name = md[3].downcase
         reverse = (md[2] && md[2]=="^")?true:false
         
         # if not found at cache
         if !@@unicode_ranges[class_name]
-          #work = Regextest::Front::Unicode.property(class_name) ||
-          #  raise("Invalid Unicode class #{class_name} in #{val}")
-          # construct char class
-          #work = work.map{|elem| TRange.new(elem[0], elem[1])}
           @@unicode_ranges[class_name] = CharClass.new(class_name)
         end
       else
