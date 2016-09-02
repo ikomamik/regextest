@@ -281,7 +281,13 @@ class Regextest::Back::Main
   def generate_candidates_back_refer(param)
     target = param[:json]
     if @parens_hash[target["refer_name"]][:generated]
-      relative_num = (target["relative_num"]=="")?(-1):(@nest + target["relative_num"].to_i)
+      relative_num = -1   # default value
+      if target["relative_num"] != ""
+        work = @nest + target["relative_num"].to_i
+        return nil if(work < 0 || !@parens_hash[target["refer_name"]][:generated][work])
+        relative_num = work
+      end
+      # puts "relative: #{relative_num}, nest=#{@nest}, :#{target}"
       result = @parens_hash[target["refer_name"]][:generated][relative_num]
     else
       result = nil

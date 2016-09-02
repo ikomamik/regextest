@@ -45,7 +45,7 @@ module Regextest::Front::BackRefer
             raise "internal error: unexpected refer #{value}"
           end
           if md[5]
-            @relative_num = md[3].to_i
+            @relative_num = md[5].to_i
           end
         else
           raise "Error: Internal error, invalid named reference"
