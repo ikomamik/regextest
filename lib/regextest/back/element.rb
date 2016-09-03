@@ -8,10 +8,13 @@ require 'regextest/common'
 class Regextest::Back::Element
   include Regextest::Common
   def initialize(param)
-    # puts "Element param:#{param[:cmd]} data:#{param[:data].size}"
+    # puts "Element param:#{param[:cmd]} data:#{param[:ranges].size}"
     @command = param[:cmd]
     @param = param
-    @candidates = param[:data] if @command == :CMD_SELECT
+    if @command == :CMD_SELECT
+      @candidates = param[:ranges].inject([]){|result, range| result += range.to_a}
+    end
+    # @candidates = param[:data] if @command == :CMD_SELECT
   end
   
   attr_reader :param, :command, :candidates
@@ -82,7 +85,7 @@ class Regextest::Back::Element
       if(@candidates)
         @candidates.inspect
       else
-        @param[:data].inspect
+        @param[:ranges].inspect
       end
     when :CMD_LOOK_BEHIND, :CMD_LOOK_AHEAD, :CMD_NOT_LOOK_BEHIND, :CMD_NOT_LOOK_AHEAD
       @param.inspect
@@ -135,7 +138,7 @@ class Regextest::Back::Element
   # factory method to generate any char element
   def self.any_char
     # BUG: must consider other character set!
-    Regextest::Back::Element.new({cmd: :CMD_SELECT, data:  (0x20..0x7e).to_a})
+    Regextest::Back::Element.new({cmd: :CMD_SELECT, ranges:  [0x20..0x7e]})
   end
   
   # factory method to generate any char element

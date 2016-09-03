@@ -212,7 +212,7 @@ class Regextest::Back::Main
   # char class
   def generate_candidates_char_class(param)
     target = param[:json]
-    results = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: []})
+    results = Regextest::Back::Element.new({cmd: :CMD_SELECT, ranges: []})
     target["value"].each do | elem |
       if sub_results = generate_candidates({json: elem})
         results.union sub_results
@@ -273,8 +273,8 @@ class Regextest::Back::Main
   def generate_candidates_range(param)
     target = param[:json]
     letter = []
-    codepoints = (target["begin"]..target["end"]).to_a
-    result = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: codepoints})
+    codepoints = (target["begin"]..target["end"])
+    result = Regextest::Back::Element.new({cmd: :CMD_SELECT, ranges: [codepoints]})
   end
   
   # back_refer
@@ -319,7 +319,7 @@ class Regextest::Back::Main
     case target["value"]
     when String
       codepoint = target["value"].unpack("U*")[0]
-      result = Regextest::Back::Element.new({cmd: :CMD_SELECT, data: [codepoint]})
+      result = Regextest::Back::Element.new({cmd: :CMD_SELECT, ranges: [codepoint..codepoint]})
     else
       result = generate_candidates({json: target["value"]})
     end
