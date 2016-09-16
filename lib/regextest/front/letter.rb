@@ -51,7 +51,9 @@ module Regextest::Front::Letter
       when :LEX_POSIX_CHAR_CLASS
         @obj = generate_char_class(val)
       when :LEX_UNICODE_CLASS
-        @obj = generate_unicode_char(val)
+        @obj = generate_unicode_char(val, type)
+      when :LEX_UNICODE_CLASS_BRACKET
+        @obj = generate_unicode_char(val, type)
       when :LEX_ANY_LETTER
         @obj = generate_any_char(val)
       when :LEX_SPECIAL_LETTER

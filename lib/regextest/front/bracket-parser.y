@@ -56,7 +56,7 @@ rule
   # a character class
   brc_lt2: LEX_POSIX_CHAR_CLASS   {TLetter.new(:LEX_POSIX_CHAR_CLASS, val[0])}
          | LEX_SIMPLIFIED_CLASS   {TLetter.new(:LEX_SIMPLIFIED_CLASS, val[0])}
-         | LEX_UNICODE_CLASS      {TLetter.new(:LEX_UNICODE_CLASS,  val[0])}
+         | LEX_UNICODE_CLASS      {TLetter.new(:LEX_UNICODE_CLASS_BRACKET,  val[0])}
          | LEX_SPECIAL_LETTER     {TLetter.new(:LEX_SPECIAL_LETTER, val[0])}
          | LEX_SPACE              {TLetter.new(:LEX_SPACE,          val[0])}
          

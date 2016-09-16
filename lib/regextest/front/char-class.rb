@@ -209,7 +209,11 @@ module Regextest::Front::CharClass
       
       and_process(options) if @other_char_classes.size > 0
 
-      ignore_process(options)
+      # somehow ignore process must be skipped when unicode
+      # class (\p{lower} etc.) in outside of bracket 
+      if @caller_type != :LEX_UNICODE_CLASS
+        ignore_process(options)
+      end
       
       # reverse char set
       if @is_reverse
