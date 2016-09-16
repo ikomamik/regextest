@@ -103,6 +103,18 @@ class Regextest::RegexOption
   end
       
   # get charset ("a", "u", or "d")
+  def charset
+    case @char_set
+    when TstRegOptDefault
+      "d"
+    when TstRegOptAscii
+      "a"
+    when TstRegOptUnicode
+      "u"
+    else
+      raise "Internal error. Invalid char_set (#{@char_set})"
+    end
+  end
 
   # methods for checking each flag
   def is_ignore?

@@ -9,8 +9,9 @@ class Regextest::Back::Element
   include Regextest::Common
   def initialize(param)
     # puts "Element param:#{param[:cmd]} data:#{param[:ranges].size}"
-    @command = param[:cmd]
     @param = param
+    @command = param[:cmd]
+    @charset = param[:charset]
     if @command == :CMD_SELECT
       @candidates = param[:ranges].inject([]){|result, range| result += range.to_a}
     end
@@ -36,7 +37,8 @@ class Regextest::Back::Element
     if(@candidates)
       @candidates.size
     else
-      raise "internal error: candidates not found at size-method"
+      # raise "internal error: candidates not found at size-method"
+      0
     end
   end
   
@@ -91,7 +93,8 @@ class Regextest::Back::Element
       @param.inspect
     when :CMD_ANC_LINE_BEGIN, :CMD_ANC_LINE_END, :CMD_ANC_WORD_BOUND, :CMD_ANC_WORD_UNBOUND,
          :CMD_ANC_STRING_BEGIN, :CMD_ANC_STRING_END, :CMD_ANC_STRING_END2, :CMD_ANC_MATCH_START,
-         :CMD_ANC_LOOK_BEHIND2, :CMD_ANC_RELUCTANT_BEGIN, :CMD_ANC_RELUCTANT_END
+         :CMD_ANC_LOOK_BEHIND2, :CMD_ANC_RELUCTANT_BEGIN, :CMD_ANC_RELUCTANT_END,
+         :CMD_ANC_POSSESSIVE_BEGIN, :CMD_ANC_POSSESSIVE_END
       @param.inspect
     else
       raise "inner error, invalid command #{@command}"
@@ -110,24 +113,41 @@ class Regextest::Back::Element
   
   # Is word-elements only?
   def word_elements?
-    letters = @candidates.map{|elem| [elem].pack("U*")}
-    letters.join("").match(/^\p{Word}+$/)
+    letters = @candidates.map{|elem| [elem].pack("U*")}.join("")
+    if @charset == "u" || @charset == "d"
+      letters.match(/^\p{Word}+$/)
+    else
+      letters.match(/^\w+$/)
+    end
   end
   
   # is non-word-elements only?
   def non_word_elements?
-    letters = @candidates.map{|elem| [elem].pack("U*")}
-    letters.join("").match(/^\p{^Word}+$/)
+    letters = @candidates.map{|elem| [elem].pack("U*")}.join("")
+    if @charset == "u" || @charset == "d"
+      letters.match(/^\p{^Word}+$/)
+    else
+      letters.match(/^\W+$/)
+    end
   end
 
   # set word-elements
   def set_word_elements
-    @candidates.select!{|elem| [elem].pack("U*").match(/^\w$/)}
+    if @charset == "u" || @charset == "d"
+      @candidates.select!{|elem| [elem].pack("U*").match(/^\p{Word}$/)}
+    else
+      @candidates.select!{|elem| [elem].pack("U*").match(/^\w$/)}
+    end
   end
   
   # set non_word-elements
   def set_non_word_elements
-    @candidates.select!{|elem| [elem].pack("U*").match(/^\W$/)}
+    if @charset == "u" || @charset == "d"
+      @candidates.select!{|elem| [elem].pack("U*").match(/^\p{^Word}$/)}
+      #@candidates.select!{|elem| [elem].pack("U*").match(/^[[:^word:]]$/)}
+    else
+      @candidates.select!{|elem| [elem].pack("U*").match(/^[[:^word:]]$/)}
+    end
   end
   
   # checks empty

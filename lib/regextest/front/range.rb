@@ -14,6 +14,7 @@ module Regextest::Front::Range
     # Constructor
     def initialize(letter_begin, letter_end = nil)
       TstLog("TRange: #{letter_begin}-#{letter_end}")
+      @options = nil
       @begin = parse_letter(letter_begin)
       if letter_end 
         @end = parse_letter(letter_end)
@@ -46,10 +47,27 @@ module Regextest::Front::Range
       (@begin..@end).to_a
     end
     
+    # set options
+    def set_options(options)
+      TstLog("Range set_options: #{options[:reg_options].inspect}")
+      @options = options
+    end
+    
     # transform to json format (using codepoints of Unicode)
     def json
       @@id += 1
-      "{\"type\": \"LEX_RANGE\", \"id\": \"G#{@@id}\", \"begin\": #{@begin}, \"end\": #{@end}}"
+      if @options
+        charset = @options[:reg_options].charset
+      else
+        charset = "d"
+      end
+      "{" +
+        "\"type\": \"LEX_RANGE\", " +
+        "\"id\": \"G#{@@id}\", " +
+        "\"begin\": #{@begin}, " +
+        "\"end\": #{@end}, " +
+        "\"charset\": \"#{charset}\"" +
+      "}"
     end
   end
 end

@@ -20,13 +20,13 @@ module Regextest::Front::CharClass
     attr_reader :candidates, :offset, :length
 
     # Constructor
-    def initialize(value)
+    def initialize(value, caller_type = nil)
       TstLog("CharClass: #{value}")
       @@ascii_whole_set ||= get_ascii_whole_set
       @@unicode_whole_set ||= get_unicode_whole_set
+      @caller_type = caller_type
       
-      
-      @reg_options = @@parse_options[:reg_options]
+      @options = nil
       case value
       when Array
         @candidates = value
@@ -198,6 +198,7 @@ module Regextest::Front::CharClass
     # fixes charset using options
     def set_options(options)
       TstLog("CharClass set_options: #{options[:reg_options].inspect}")
+      @options = options
       
       # call set_options of other bracket
       @candidates.each do |candidate|
@@ -222,11 +223,14 @@ module Regextest::Front::CharClass
     def json
       #if @candidates.size > 1
         @@id += 1
+        charset = @options[:reg_options].charset
         "{" +
           "\"type\": \"LEX_CHAR_CLASS\", \"id\": \"CC#{@@id}\", " +
           "\"offset\": #{@offset}, \"length\": #{@length}, " +
           "\"value\": [" + @candidates.map{|elem| elem.json}.join(",") +
-        "]}"
+          "], " +
+          "\"charset\": \"#{charset}\"" +
+        "}"
       #else
       #  @candidates[0].json
       #end

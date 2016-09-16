@@ -204,12 +204,12 @@ module Regextest::Front::Letter
     end
     
     # generate Unicode class (ie. \p{...} | \P{...})
-    def generate_unicode_char(val)
+    def generate_unicode_char(val, type)
       if(md = val.match(/(p|P)\{(\^?)(\w+)\}/))
         class_name = md[3].downcase
         reverse = (md[2] && md[2]=="^")?true:false
         
-        obj = CharClass.new(class_name)
+        obj = CharClass.new(class_name, type)
       else
         raise "Internal error, inconsistent Unicode class #{val}"
       end
@@ -324,9 +324,11 @@ module Regextest::Front::Letter
     # transform to json format
     def json
       @@id += 1
+      charset = @options[:reg_options].charset
       "{" +
         "\"type\": \"#{@data_type}\", \"id\": \"L#{@@id}\", \"value\": #{@obj.json}, " +
-         "\"offset\": #{@offset}, \"length\": #{@length}" +
+         "\"offset\": #{@offset}, \"length\": #{@length}, " +
+         "\"charset\": \"#{charset}\"" +
       "}"
     end
   end
