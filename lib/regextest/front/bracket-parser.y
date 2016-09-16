@@ -28,6 +28,8 @@ rule
   # a element (a letter, a character class, a range or another bracket)
   brc_elm: brc_lt1 LEX_MINUS brc_lt1
            {TRange.new(val[0], val[2])}
+         | brc_lt1 LEX_MINUS  # [a-&&] pattern
+           {CharClass.new(val[0]).add(TLetter.new(:LEX_CHAR, val[1]))}
          | brc_lt1
            {val[0]}
          | brc_lt2

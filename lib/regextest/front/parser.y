@@ -167,7 +167,8 @@ rule
          | LEX_SHARP reg_comment_ex  {TEmpty.new}
   
   # comment of extended mode
-  reg_comment_ex: LEX_NEW_LINE    # end of the comment
+  reg_comment_ex:
+         | LEX_NEW_LINE    # end of the comment
          | LEX_CHAR               reg_comment_ex
          | LEX_OCTET              reg_comment_ex
          | LEX_BACK_REFER         reg_comment_ex
