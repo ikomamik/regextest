@@ -10,10 +10,12 @@ module Regextest::Common
   
   # environment variables
   TstConstRetryMax     = (ENV['REGEXTEST_MAX_RETRY'])?(ENV['REGEXTEST_MAX_RETRY'].to_i):5
+  TstConstRetryMaxSecond = (ENV['REGEXTEST_MAX_RETRY_SECOND'])?(ENV['REGEXTEST_MAX_RETRY_SECOND'].to_f):0.01
   TstConstRepeatMax    = (ENV['REGEXTEST_MAX_REPEAT'])?(ENV['REGEXTEST_MAX_REPEAT'].to_i):32
   TstConstRecursionMax = (ENV['REGEXTEST_MAX_RECURSION'])?(ENV['REGEXTEST_MAX_RECURSION'].to_i):32
   TstConstDebug        = (ENV['REGEXTEST_DEBUG'])?true:false
   TstConstTimeout      = (ENV['REGEXTEST_TIMEOUT'])?(ENV['REGEXTEST_TIMEOUT'].to_f):1.0 # default is 1 second
+  TstFixnumMax         = 2 ** 64
   
   # whole character set if unicode mode. specify as 'ascii|kana', 'ascii|han|kana', etc.
   TstConstUnicodeCharSet  = (ENV['REGEXTEST_UNICODE_CHAR_SET'] || "ascii|katakana|hiragana").downcase

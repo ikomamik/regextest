@@ -72,8 +72,11 @@ class Regextest
   # @raise [RuntimeError] if something wrong...
   # @raise [Regextest::RegextestTimeout] if detected timeout while verification. Option 'verification: false' may be workaround.
   def generate
-    TstConstRetryMax.times do | retry_count |
-    
+    start_time = Time.now
+    0.step(TstFixnumMax) do | retry_count |
+      duration = Time.now - start_time
+      break if retry_count >= TstConstRetryMax && duration >= TstConstRetryMaxSecond
+      
       # generate string
       reset_random_called
       @result = @back_end.generate(retry_count)
@@ -114,6 +117,7 @@ class Regextest
   def to_json
     @front_end.get_json_string
   end
+  
   #---------------#
   private
   
