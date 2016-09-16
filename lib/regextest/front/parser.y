@@ -78,7 +78,7 @@ rule
          | LEX_ANC_STRING_END2    {Anchor.new(:LEX_ANC_STRING_END2, val[0])}
          | LEX_ANC_LOOK_BEHIND2   {Anchor.new(:LEX_ANC_LOOK_BEHIND2, val[0])}
          | LEX_ANC_MATCH_START    {Anchor.new(:LEX_ANC_MATCH_START, val[0])}
-         | LEX_SPECIAL_LETTER     {TLetter.new(:LEX_SPECIAL_LETTER, val[0])}
+         | LEX_SPECIAL_LETTER     {SpecialLetter.new(val[0])}
          | LEX_MINUS              {TLetter.new(:LEX_CHAR,           val[0])}  # no special meaning at basic mode
          | LEX_AND_AND            {TLetter.new(:LEX_AND_AND,        val[0])}
          | LEX_SPACE              {TLetter.new(:LEX_SPACE,          val[0])}
@@ -157,7 +157,7 @@ rule
          | LEX_ANC_STRING_END2    {Anchor.new(:LEX_ANC_STRING_END2, val[0])}
          | LEX_ANC_LOOK_BEHIND2   {Anchor.new(:LEX_ANC_LOOK_BEHIND2, val[0])}
          | LEX_ANC_MATCH_START    {Anchor.new(:LEX_ANC_MATCH_START, val[0])}
-         | LEX_SPECIAL_LETTER     {TLetter.new(:LEX_SPECIAL_LETTER, val[0])}
+         | LEX_SPECIAL_LETTER     {SpecialLetter.new(val[0])}
          | LEX_MINUS              {TLetter.new(:LEX_CHAR,           val[0])}
          | LEX_AND_AND            {TLetter.new(:LEX_AND_AND,        val[0])}
          | LEX_NEW_LINE           {TEmpty.new}                                # ignore new line at extended mode
@@ -171,6 +171,7 @@ rule
          | LEX_CHAR               reg_comment_ex
          | LEX_OCTET              reg_comment_ex
          | LEX_BACK_REFER         reg_comment_ex
+         | LEX_SPECIAL_LETTER     reg_comment_ex
          | LEX_CODE_LITERAL       reg_comment_ex
          | LEX_NAMED_REFER        reg_comment_ex
          | LEX_NAMED_GENERATE     reg_comment_ex
@@ -218,6 +219,7 @@ require 'regextest/front/sequence'       # parser class for a sequence of elemen
 require 'regextest/front/bracket'        # parser class for a character class (bracket)
 require 'regextest/front/anchor'         # parser class for a anchor
 require 'regextest/front/back-refer'     # parser class for a back reference
+require 'regextest/front/special-letter' # parser class for a special letter
 require 'regextest/front/bracket-parser' # bracket parser
 
 ---- inner
@@ -232,6 +234,7 @@ include Regextest::Front::Sequence
 include Regextest::Front::Bracket
 include Regextest::Front::Anchor
 include Regextest::Front::BackRefer
+include Regextest::Front::SpecialLetter
 
 # execute to parse
 def parse(lex_words, options)
