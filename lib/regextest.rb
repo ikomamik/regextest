@@ -143,7 +143,7 @@ class Regextest
     when Regexp
       @reg_exp = param
       @@parse_options[:reg_options].set(@reg_exp.options)   # inner regex options have priorty
-      @reg_string = "#{@reg_exp}"    # this generates string with options
+      @reg_string = @@parse_options[:reg_options].prefix_reg + @reg_exp.source
     else
       raise "Error: string or regular expression required"
     end

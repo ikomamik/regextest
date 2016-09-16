@@ -88,6 +88,21 @@ class Regextest::RegexOption
     @reg_options |= options
   end
       
+  # generate prefix regex
+  def prefix_reg
+    prefix = ""
+    prefix += "i" if is_ignore?
+    prefix += "m" if is_multiline?
+    prefix += "x" if is_extended?
+    
+    if prefix.size > 0
+      "(?#{prefix})"
+    else
+      ""
+    end
+  end
+      
+  # get charset ("a", "u", or "d")
 
   # methods for checking each flag
   def is_ignore?
