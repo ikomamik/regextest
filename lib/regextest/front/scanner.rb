@@ -20,9 +20,9 @@ class Regextest::Front::Scanner
     [:LEX_CODE_LITERAL,
      LexCodeLiteral ],
     [:LEX_NAMED_REFER,
-     %r!\\k[<'](?:\-?\d+|\w+)(?:[\+\-]\d+)?[>']! ],
+     %r!(?u:\\k[<'](?:\-?\d+|\w+)(?:[\+\-]\d+)?[>'])! ],
     [:LEX_NAMED_GENERATE,
-     %r!\\g[<'][\+\-]?\w+[>']! ],
+     %r!(?u:\\g[<'][\+\-]?\w+[>'])! ],
     [:LEX_CONTROL_LETTER,
      %r!\\c[a-zA-Z]|\\C-[a-zA-Z]|\\c\\\\|\\C-\\\\! ],
     [:LEX_META_LETTER,
@@ -50,15 +50,16 @@ class Regextest::Front::Scanner
     [:LEX_PAREN_START_EX2,
      %r!\(\?[imxdau]*(?:\-(?=\w*x)[imx]+)?(?::|(?=\)))! ],   # (?im-x: ... )
     [:LEX_PAREN_START,
-     %r!\(\?<\w+>|
-        \(\?'\w+'|
-        \(\?\(\d+\)|
-        \(\?\(<\w+>\)|
-        \(\?\('\w+'\)|
-        \(\?[imdau]*(?:\-[im]*)?(?::|(?=\)))|    # expressions independent of "x"
-        \(\?\<[\=\!]|
-        \(\?.|    # for better error message
-        \(
+     %r!(?u:\(\?<\w+>|
+            \(\?'\w+'|
+            \(\?\(\d+\)|
+            \(\?\(<\w+>\)|
+            \(\?\('\w+'\)|
+            \(\?[imdau]*(?:\-[im]*)?(?::|(?=\)))|    # expressions independent of "x"
+            \(\?\<[\=\!]|
+            \(\?.|    # for better error message
+            \(
+        )
        !x ],
     [:LEX_PAREN_END,
      %r!\)! ],

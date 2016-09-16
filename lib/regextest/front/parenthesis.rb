@@ -50,7 +50,7 @@ module Regextest::Front::Parenthesis
 
     # get name of parenthesis (if any)
     def get_name(prefix)
-      if(md = prefix.match(/^[<'](\w+)[>']$/))
+      if(md = prefix.match(/(?u:^[<'](\w+)[>']$)/))
         md[1]
       else
         nil
@@ -65,7 +65,7 @@ module Regextest::Front::Parenthesis
         if !condition_name
           raise "condition number #{prefix} is invalid"
         end
-      elsif(md = prefix.match(/^\(<(\w+)>\)|\('(\w+)'\)$/))
+      elsif(md = prefix.match(/(?u:^\(<(\w+)>\)|\('(\w+)'\)$)/))
         match_string = md[1] || md[2]
         condition_name = @options[:parens].get_paren(match_string)
         if !condition_name

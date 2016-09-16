@@ -34,7 +34,7 @@ module Regextest::Front::BackRefer
           raise "Error: Internal error, invalid back reference"
         end
       when :LEX_NAMED_REFER   # a pattern like \k<foo>, \k<1>, \k<-1>
-        if(md = value.match(/^\\k[<']((\-\d+)|(\d+)|(\w+))(?:([\+\-]\d+))?[>']$/))
+        if(md = value.match(/(?u:^\\k[<']((\-\d+)|(\d+)|(\w+))(?:([\+\-]\d+))?[>']$)/))
           if md[2]       # \k<-1>
             @paren_obj = @options[:parens].get_paren(md[1], @offset)
           elsif md[3]    # \k<1> 
@@ -51,7 +51,7 @@ module Regextest::Front::BackRefer
           raise "Error: Internal error, invalid named reference"
         end
       when :LEX_NAMED_GENERATE # a pattern like \g<foo>
-        if(md = value.match(/^\\g[<'](([\-\+]\d+)|(\d+)|(\w+))[>']$/))
+        if(md = value.match(/(?u:^\\g[<'](([\-\+]\d+)|(\d+)|(\w+))[>']$)/))
           if md[2]       # \k<-1>
             @paren_obj = @options[:parens].get_paren(md[1], @offset)
           elsif md[3]    # \k<1> 
