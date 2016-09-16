@@ -89,6 +89,11 @@ class RegextestPreUnicode
         # Generate hash of properties
         def self.property(class_name)
           case class_name.downcase
+          # Regextest defined char classes (from underscore)
+          when "_asciiprint"
+            ([[32, 126]])
+            
+          # Unicode.org defined char classes
 #{ranges_source}
           else
             warn "Class name (#\{class_name\}) not found. Ignored."

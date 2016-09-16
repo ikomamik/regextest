@@ -18,7 +18,8 @@ module Regextest::Common
   TstFixnumMax         = 2 ** 64
   
   # whole character set if unicode mode. specify as 'ascii|kana', 'ascii|han|kana', etc.
-  TstConstUnicodeCharSet  = (ENV['REGEXTEST_UNICODE_CHAR_SET'] || "ascii|katakana|hiragana").downcase
+  # where "_asciiprint is codepoints range 32..126
+  TstConstUnicodeCharSet  = (ENV['REGEXTEST_UNICODE_CHAR_SET'] || "_asciiprint|katakana|hiragana").downcase
 
   # Log
   def TstLog(msg)

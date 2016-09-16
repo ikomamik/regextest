@@ -95,9 +95,11 @@ module Regextest::Front::Letter
       if @options[:reg_options].is_unicode?
         obj = CharClass.new(TstConstUnicodeCharSet)
       else
-        obj = CharClass.new( [ TRange.new("\x20", "\x7e") ] )
+        obj = CharClass.new(TstConstUnicodeCharSet)
+        # obj = CharClass.new( [ TRange.new("\x20", "\x7e") ] )
       end
       
+      # add new-line if multi-line option specified
       if( @options[:reg_options].is_multiline? )
           obj.add_ranges( [ TRange.new("\n") ] )
       end

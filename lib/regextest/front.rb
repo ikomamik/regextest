@@ -57,6 +57,11 @@ class Regextest::Front
     JSON.pretty_generate(get_object, @json_option)
   end
 
+  # Return JSON of regex
+  def get_json_regex
+    JSON.pretty_generate(get_object["regex"], @json_option)
+  end
+
 end
 
 # Test suite (execute when this file is specified in command line)
