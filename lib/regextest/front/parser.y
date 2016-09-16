@@ -62,6 +62,7 @@ rule
          | LEX_NAMED_REFER        {BackRefer.new(:LEX_NAMED_REFER,  val[0])}
          | LEX_NAMED_GENERATE     {BackRefer.new(:LEX_NAMED_GENERATE, val[0])}
          | LEX_CONTROL_LETTER     {TLetter.new(:LEX_CONTROL_LETTER, val[0])}
+         | LEX_META_CONTROL_LETTER {TLetter.new(:LEX_META_CONTROL_LETTER, val[0])}
          | LEX_META_LETTER        {TLetter.new(:LEX_CONTROL_LETTER, val[0])}
          | LEX_ESCAPED_LETTER     {TLetter.new(:LEX_ESCAPED_LETTER, val[0])}
          | LEX_UNICODE            {TLetter.new(:LEX_UNICODE,        val[0])}

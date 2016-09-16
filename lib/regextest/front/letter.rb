@@ -38,9 +38,12 @@ module Regextest::Front::Letter
       when :LEX_SIMPLE_ESCAPE
         @data_type = :LEX_CHAR
         @obj = CharClass.new([ TRange.new(val[1..1])])
-      when :LEX_CODE_LITERAL, :LEX_ESCAPED_LETTER, :LEX_UNICODE, :LEX_CONTROL_LETTER, :LEX_META_LETTER, :LEX_OCTET
+      when :LEX_CODE_LITERAL, :LEX_ESCAPED_LETTER, :LEX_UNICODE, :LEX_OCTET
         @data_type = :LEX_CHAR
         @obj = CharClass.new([ TRange.new(eval('"'+ val + '"'))])   # convert using ruby's eval
+      when :LEX_CONTROL_LETTER, :LEX_META_LETTER
+        @data_type = :LEX_CHAR
+        @obj = generate_control_letter(val, type)
       when :LEX_BRACKET
         @obj = Regextest::Front::Bracket.new(val)
       when :LEX_SIMPLIFIED_CLASS
@@ -59,6 +62,30 @@ module Regextest::Front::Letter
       else
         raise "Error: internal error, type:#{type} not implemented"
       end
+    end
+    
+    # generate control letter \c-x, \m-x
+    def generate_control_letter(val, type)
+      suffix = val[-1..-1]
+      codepoint = suffix.unpack("U*")[0]
+      case type
+      when :LEX_CONTROL_LETTER
+        if    ('0'..'?').include?(suffix)
+          result = codepoint - 0x20
+        elsif ('@'..'_').include?(suffix)
+          result = codepoint - 0x40
+        elsif ('`'..'~').include?(suffix)
+          result = codepoint - 0x60
+        else
+          raise "Internal error: invalid control letter (#{val})"
+        end
+      when :LEX_META_LETTER
+        result = codepoint + 0x80
+        pp [result].pack("U*")
+      else
+        raise "Internal error: invalid type #{type}"
+      end
+      @obj = CharClass.new([ TRange.new([result].pack("U*"))])
     end
     
     # generate whole set of letters (depends on option)

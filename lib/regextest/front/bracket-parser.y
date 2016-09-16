@@ -48,6 +48,7 @@ rule
          | LEX_MINUS              {TLetter.new(:LEX_CHAR,           val[0])}   # minus as a first letter
          | LEX_CODE_LITERAL       {TLetter.new(:LEX_CODE_LITERAL,   val[0])}
          | LEX_CONTROL_LETTER     {TLetter.new(:LEX_CONTROL_LETTER, val[0])}
+         | LEX_META_CONTROL_LETTER {TLetter.new(:LEX_META_CONTROL_LETTER, val[0])}
          | LEX_META_LETTER        {TLetter.new(:LEX_CONTROL_LETTER, val[0])}
          | LEX_ESCAPED_LETTER     {TLetter.new(:LEX_ESCAPED_LETTER, val[0])}
          | LEX_UNICODE            {TLetter.new(:LEX_UNICODE,        val[0])}

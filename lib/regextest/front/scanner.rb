@@ -24,9 +24,11 @@ class Regextest::Front::Scanner
     [:LEX_NAMED_GENERATE,
      %r!(?u:\\g[<'][\+\-]?\w+[>'])! ],
     [:LEX_CONTROL_LETTER,
-     %r!\\c[a-zA-Z]|\\C-[a-zA-Z]|\\c\\\\|\\C-\\\\! ],
+     %r!\\c\\\\|\\C-\\\\|\\c[0-~]|\\C-[0-~]! ],
+    [:LEX_META_CONTROL_LETTER,
+     %r!\\M-\\C-[0-~]! ],
     [:LEX_META_LETTER,
-     %r!\\M-(?:[a-zA-Z]|\\C-[a-zA-Z])! ],
+     %r!\\M-[0-~]! ],
     [:LEX_ESCAPED_LETTER,
      %r!\\[tvnrfae #\{\}\[\]\(\)]! ],   # \b is an anchor out of bracket
     [:LEX_UNICODE,
