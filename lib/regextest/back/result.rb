@@ -14,6 +14,7 @@ class Regextest::Back::Result
     @look_behinds = []
     @positional_anchors = {}
     @reluctant_repeat = {}
+    @possessive_repeat = {}
     @start_offset = 0
     @end_offset = 0
     @pre_match = nil
@@ -58,7 +59,7 @@ class Regextest::Back::Result
     @positional_anchors[cmd].push @end_offset
   end
 
-  # Adds reluctant repeat information
+  # Adds reluctant / possessive repeat information
   def add_reluctant_repeat(elem)
     repeat_id = elem.param[:id]
     case elem.command
@@ -70,8 +71,16 @@ class Regextest::Back::Result
       else
         raise "internal error, invalid reluctant_repeat_end command"
       end
+    when :CMD_ANC_POSSESSIVE_BEGIN
+      @possessive_repeat[repeat_id] = [@end_offset]
+    when :CMD_ANC_POSSESSIVE_END
+      if @possessive_repeat[repeat_id]
+        @possessive_repeat[repeat_id].push @end_offset
+      else
+        raise "internal error, invalid possessive_repeat_end command"
+      end
     else
-      raise "internal error, invalid reluctant_repeat command"
+      raise "internal error, invalid reluctant / possessive repeat command"
     end
   end
 
@@ -107,7 +116,8 @@ class Regextest::Back::Result
   
   # Merge each elements of look aheads
   def merge_look_ahead_elems(offset, sub_results)
-    term_offset = offset + sub_results.end_offset
+    term_offset = offset + sub_results.size
+    # puts "offset=#{offset}, end_offset=#{sub_results.size}, term_offset=#{term_offset}"
     
     # intersect elems
     offset.step(term_offset-1) do | i |
@@ -201,7 +211,7 @@ class Regextest::Back::Result
   
   # Merge each elements of look behinds
   def merge_look_behind_elems(offset, sub_results)
-    unshift_length = sub_results.end_offset - offset
+    unshift_length = offset - sub_results.end_offset
     if unshift_length > 0
       # @results = sub_results[0..(unshift_length-1)] + @results
       if !unshift_params(unshift_length)
@@ -210,14 +220,14 @@ class Regextest::Back::Result
     end
 
     # intersect elems
-    results_offset = (unshift_length > 0)?0:(offset-sub_results.end_offset)
+    sub_offset = (unshift_length >=0)?unshift_length:(-unshift_length)
     pre_part = []
     0.step(sub_results.end_offset-1) do | i |
       sub_elem = sub_results[i]
-      if i < unshift_length
+      if i < sub_offset
         pre_part.push sub_elem
       else
-        if(!@results[i-unshift_length].intersect(sub_elem))
+        if(!@results[i-sub_offset].intersect(sub_elem))
           return nil
         end
       end
@@ -243,10 +253,11 @@ class Regextest::Back::Result
 
       # intersect elems
       results_offset = (unshift_length > 0)?0:(offset-sub_results.end_offset)
+      sub_offset = (unshift_length >=0)?unshift_length:(-unshift_length)
       0.step(sub_results.end_offset-1) do | i |
         sub_elem = sub_results[i]
         
-        if i < unshift_length
+        if i < sub_offset
           if i == j
             results_work.unshift (sub_elem.reverse)
             found = true
